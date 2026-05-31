@@ -162,9 +162,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         </div>
         <div class="ctl-label">Overlays</div>
         <div class="row" id="metroChips">
-          <div class="chip" id="metroToggle">🚇 Metro</div>
+          <div class="chip active" id="metroToggle">🚇 Metro</div>
           <div class="chip active" id="futureToggle">+ Future lines</div>
-          <div class="chip" id="buildsToggle">🏗️ New builds</div>
+          <div class="chip active" id="buildsToggle">🏗️ New builds</div>
           <div class="chip" id="conceptToggle">🧭 Vision (concept)</div>
           <div class="chip" id="heatToggle">🔥 Heatmap</div>
         </div>
@@ -180,8 +180,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="grad" id="legendGrad"></div>
         <div class="lbls" id="legendLbls"><span>low</span><span>high</span></div>
       </div>
-      <div class="legend" id="metroLegend" style="top:auto;left:12px;bottom:104px;right:auto;max-width:160px;display:none"></div>
-      <div class="legend" id="projLegend" style="top:12px;left:12px;right:auto;max-width:205px;max-height:240px;overflow:auto;display:none"></div>
+      <div class="legend" id="metroLegend" style="top:auto;left:12px;bottom:104px;right:auto;max-width:160px;display:block"></div>
+      <div class="legend" id="projLegend" style="top:12px;left:12px;right:auto;max-width:205px;max-height:240px;overflow:auto;display:block"></div>
       <div class="timebar">
         <div class="tt">
           <div><span class="now" id="tNow">2026 Q2</span><span class="badge actual" id="tBadge">actual</span></div>
@@ -466,7 +466,7 @@ document.getElementById('play').onclick=function(){
 // ---------- metro overlay ----------
 map.createPane('metroLines');map.getPane('metroLines').style.zIndex=410;
 map.createPane('metroStations');map.getPane('metroStations').style.zIndex=440;
-let metroOn=false, metroFuture=true;
+let metroOn=true, metroFuture=true;
 const metroLineLayers=[], metroStationLayers=[], metroP4=[];
 function selYearF(){return 2019+timeIdx/4;}
 function haversine(a,b,c,d){const R=6371,toR=x=>x*Math.PI/180;const dLat=toR(c-a),dLng=toR(d-b);const x=Math.sin(dLat/2)**2+Math.cos(toR(a))*Math.cos(toR(c))*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
@@ -553,7 +553,7 @@ function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
 }
 // ---------- builder projects overlay ----------
 map.createPane('projectPane');map.getPane('projectPane').style.zIndex=520;
-let projectsOn=false;
+let projectsOn=true;
 const projectLayers=[];
 PROJECTS.projects.forEach(pr=>{
   const icon=L.divIcon({className:'projpin',iconSize:[12,12],html:'<div style="width:11px;height:11px;background:'+pr.color+';border:1.5px solid #fff;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(0,0,0,.55)"></div>'});
