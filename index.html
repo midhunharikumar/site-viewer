@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>BengaluruValue — Bangalore Property Price Map, Index &amp; Metro (2019–2029)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -14,10 +14,10 @@
   --shadow:0 6px 24px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt)}
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none;-webkit-text-size-adjust:100%}
 a{color:var(--accent)}
-#app{display:flex;flex-direction:column;height:100vh}
-header{display:flex;align-items:center;gap:18px;padding:10px 18px;background:linear-gradient(90deg,#141a23,#1a2330);border-bottom:1px solid var(--line);flex-wrap:wrap}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+header{display:flex;align-items:center;gap:18px;padding:10px 18px;padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(90deg,#141a23,#1a2330);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{font-weight:800;font-size:19px;letter-spacing:.3px;white-space:nowrap}
 .brand span{color:var(--accent)}
 .tagline{color:var(--muted);font-size:12px;margin-left:-10px}
@@ -87,10 +87,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .foot{padding:8px 12px;font-size:10.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--panel2)}
 .leaflet-tooltip.pin{background:#0f1722;border:1px solid var(--line);color:var(--txt);font-size:12px;box-shadow:var(--shadow)}
 .leaflet-tooltip.pin b{color:#fff}
+.scrim{display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:680;-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px)}
 @media(max-width:860px){
-  #sidebar{position:absolute;z-index:700;height:100%;transform:translateX(-105%);transition:transform .28s}
+  #sidebar{position:absolute;z-index:700;height:100%;width:min(330px,86vw);transform:translateX(-105%);transition:transform .28s;box-shadow:var(--shadow)}
   #sidebar.open{transform:translateX(0)}
   .menubtn{display:inline-block!important}
+  .scrim.show{display:block}
 }
 .menubtn{display:none;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 10px;cursor:pointer}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
@@ -103,6 +105,44 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .modal p{color:var(--txt);font-size:13px;line-height:1.65;margin:0 0 9px}
 .modal .x{position:absolute;top:12px;right:15px;background:none;border:0;color:var(--muted);font-size:25px;cursor:pointer;line-height:1}
 .modal a{color:var(--accent)}
+/* ---------- phone-friendly layout ---------- */
+@media(max-width:640px){
+  header{gap:8px 10px;padding:7px 12px;padding-top:max(7px,env(safe-area-inset-top))}
+  .menubtn{padding:6px 11px;font-size:16px}
+  .brand{font-size:16px}
+  .tagline{display:none}
+  .abt-label{display:none}
+  .aboutbtn{font-size:15px;padding:5px 9px;margin-left:auto}
+  /* KPIs drop to their own horizontally-scrollable row */
+  .kpis{order:3;flex:1 0 100%;margin-left:0;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:1px;scrollbar-width:none}
+  .kpis::-webkit-scrollbar{display:none}
+  .kpi{flex:none;min-width:max-content;padding:5px 10px}
+  .kpi .v{font-size:14px}
+  .kpi .l{font-size:9px}
+  /* bigger, comfier touch targets */
+  .search{padding:11px 12px;font-size:16px}
+  .chip{padding:7px 12px;font-size:12px}
+  .seg button{padding:9px 4px;font-size:12px}
+  .item{padding:11px 12px}
+  /* detail panel becomes a full-screen sheet */
+  #detail{width:100%;max-width:100%}
+  .dhd{padding:13px 14px;padding-top:max(13px,env(safe-area-inset-top))}
+  .dhd .x{font-size:30px;padding:0 4px}
+  .dbody{padding:13px 14px}
+  /* keep the time scrubber full width even when detail is open */
+  #mapwrap:has(#detail.open) .timebar{width:min(660px,calc(100% - 24px))}
+  .timebar{left:12px;bottom:max(12px,env(safe-area-inset-bottom));width:calc(100% - 24px);padding:8px 12px}
+  /* shrink the on-map legends so they don't swallow the map */
+  .legend{font-size:9.5px;padding:7px 9px}
+  .legend .grad{width:42vw;max-width:150px}
+  #projLegend{max-width:42vw;max-height:120px;font-size:9px}
+  #metroLegend{max-width:38vw;max-height:120px;overflow:auto;bottom:calc(72px + env(safe-area-inset-bottom));font-size:9px}
+  .leaflet-control-attribution{font-size:9px}
+}
+@media(max-width:380px){
+  .brand{font-size:15px}
+  .legend .lt{font-size:10px}
+}
 </style>
 <meta name="description" content="Interactive Bengaluru (Bangalore) property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, new-launch projects, and schools, water &amp; safety livability across 119 localities. A Zillow-style heatmap for Bangalore."/>
 <meta name="keywords" content="Bangalore property prices, Bengaluru real estate, property price map, Namma Metro map, Bangalore localities, price per sqft, Whitefield, Sarjapur, Electronic City, HSR Layout, property heatmap, Cauvery water, BengaluruValue"/>
@@ -130,10 +170,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div id="app">
   <h1 class="sr-only">BengaluruValue — Bangalore (Bengaluru) property price map, historical index 2019–2026, 3-year projections, Namma Metro overlay and livability across 119 localities</h1>
   <header>
-    <button class="menubtn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <button class="menubtn" aria-label="Toggle locality list" onclick="toggleSidebar()">☰</button>
     <div class="brand">Bengaluru<span>Value</span></div>
     <div class="tagline">property price index &amp; map · 2019–2029</div>
-    <button class="aboutbtn" onclick="document.getElementById('aboutModal').style.display='flex'">ⓘ About &amp; disclaimer</button>
+    <button class="aboutbtn" onclick="document.getElementById('aboutModal').style.display='flex'">ⓘ<span class="abt-label"> About &amp; disclaimer</span></button>
     <div class="kpis">
       <div class="kpi"><div class="v" id="kpiCount">–</div><div class="l">Localities</div></div>
       <div class="kpi"><div class="v" id="kpiNow">–</div><div class="l">Timeline</div></div>
@@ -173,6 +213,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div id="list"></div>
       <div class="foot">Best-effort real + modeled data. Tap a locality for its history &amp; 3-yr projection.</div>
     </aside>
+    <div id="scrim" class="scrim" onclick="toggleSidebar(false)"></div>
     <section id="mapwrap">
       <div id="map"></div>
       <div class="legend">
@@ -392,9 +433,17 @@ function refreshTime(){
 
 // ---------- detail panel + chart ----------
 let chart=null;
+var isMobile=()=>window.matchMedia('(max-width:860px)').matches;
+function toggleSidebar(open){
+  const sb=document.getElementById('sidebar'),sc=document.getElementById('scrim');
+  const willOpen=(open===undefined)?!sb.classList.contains('open'):open;
+  sb.classList.toggle('open',willOpen);
+  sc.classList.toggle('show',willOpen);
+}
 function openDetail(name){
   const loc=DATA.localities.find(l=>l.name===name);if(!loc)return;
   selected=name;
+  if(isMobile())toggleSidebar(false);
   document.getElementById('detail').classList.add('open');
   document.getElementById('dName').textContent=loc.name;
   document.getElementById('dSub').textContent=`${loc.zone} Bengaluru · ${loc.lat.toFixed(3)}, ${loc.lng.toFixed(3)}`;
@@ -661,8 +710,8 @@ document.getElementById('heatToggle').onclick=function(){heatmapOn=!heatmapOn;th
 function renderAll(){refreshMap();refreshLegend();refreshList();refreshKPI();refreshTime();refreshMetro();refreshHeatmap();}
 document.getElementById('kpiCount2')&&0;
 renderAll();
-// open a flagship locality by default
-setTimeout(()=>openDetail('Whitefield'),300);
+// open a flagship locality by default (desktop only — keep the map clear on phones)
+if(!isMobile())setTimeout(()=>openDetail('Whitefield'),300);
 </script>
 <div id="aboutModal" class="modal-bg" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
