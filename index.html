@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>BengaluruValue — Bangalore Property Price Map, Index &amp; Metro (2019–2029)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onerror="window.__cdnFail=1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" onerror="window.__cdnFail=1"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.__cdnFail||typeof L==='undefined'||typeof Chart==='undefined'){var el=document.getElementById('cdnfail');if(el)el.style.display='flex';}});</script>
 <style>
 :root{
   --bg:#0f1419; --panel:#171d26; --panel2:#1d2530; --line:#2a3441;
@@ -17,7 +18,7 @@
 html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none;-webkit-text-size-adjust:100%}
 a{color:var(--accent)}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh}
-header{display:flex;align-items:center;gap:18px;padding:10px 18px;padding-top:max(10px,env(safe-area-inset-top));background:linear-gradient(90deg,#141a23,#1a2330);border-bottom:1px solid var(--line);flex-wrap:wrap}
+header{display:flex;align-items:center;gap:18px;padding:10px 18px;padding-top:max(10px,env(safe-area-inset-top));background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{font-weight:800;font-size:19px;letter-spacing:.3px;white-space:nowrap}
 .brand span{color:var(--accent)}
 .tagline{color:var(--muted);font-size:12px;margin-left:-10px}
@@ -34,7 +35,7 @@ main{display:flex;flex:1;min-height:0}
 .chip.active{background:var(--accent);color:#04101f;border-color:var(--accent);font-weight:600}
 .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{flex:1;background:var(--panel2);color:var(--muted);border:0;padding:6px 4px;font-size:11.5px;cursor:pointer}
-.seg button.active{background:var(--accent2);color:#04130d;font-weight:600}
+.seg button.active{background:var(--accent);color:#04101f;font-weight:600}
 .ctl-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:4px 0 2px;font-weight:600}
 .seg+.seg{margin-top:4px}
 .listhdr{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line)}
@@ -143,6 +144,96 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   .brand{font-size:15px}
   .legend .lt{font-size:10px}
 }
+/* ============ v2: audit fixes ============ */
+.ic{display:inline-block;vertical-align:-2px;flex:none}
+.chip .ic,.seg button .ic{margin-right:5px}
+/* C3: unified metric control */
+.metricgrp{display:flex;flex-direction:column;gap:4px}
+.sublabel{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:3px 0 1px;display:flex;align-items:center;gap:6px}
+.sublabel::after{content:"";flex:1;height:1px;background:var(--line)}
+/* C4: legend stack */
+#legendStack{position:absolute;top:12px;right:12px;z-index:500;display:flex;flex-direction:column;gap:8px;align-items:flex-end;max-height:calc(100% - 150px);overflow-y:auto;overflow-x:hidden;padding-right:1px;scrollbar-width:thin}
+#legendStack .legend{position:static;top:auto;right:auto;left:auto;bottom:auto;margin:0;width:max-content;max-width:200px}
+.legend .lt{display:flex;align-items:center;gap:5px;justify-content:space-between}
+.legendhead{display:flex;align-items:center;gap:6px;background:rgba(18,24,32,.92);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:10.5px;font-weight:700;cursor:pointer;user-select:none;box-shadow:var(--shadow)}
+.legendhead .caret{margin-left:2px;color:var(--muted);transition:transform .2s}
+#legendStack.collapsed .legend{display:none!important}
+#legendStack.collapsed .legendhead .caret{transform:rotate(-90deg)}
+/* H5: scrubber axis */
+.taxis{position:relative;height:15px;margin-top:5px;font-size:8.5px;color:var(--muted)}
+.taxis .proj{position:absolute;top:0;bottom:0;background:rgba(255,206,122,.10);border-left:1px dashed rgba(255,206,122,.5)}
+.taxis .tk{position:absolute;top:3px;transform:translateX(-50%);white-space:nowrap}
+.taxis .nowm{position:absolute;top:-19px;transform:translateX(-50%);color:var(--accent);font-weight:700;font-size:9px;white-space:nowrap}
+.taxis .nowm::after{content:"";position:absolute;left:50%;top:13px;width:1px;height:11px;background:var(--accent)}
+input[type=range].split{background:linear-gradient(90deg,rgba(127,193,255,.25) 0 var(--split,67%),rgba(255,206,122,.25) var(--split,67%) 100%);height:5px;border-radius:4px;-webkit-appearance:none;appearance:none}
+input[type=range].split::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);border:2px solid #04101f;cursor:pointer}
+input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);border:2px solid #04101f;cursor:pointer}
+/* H1: detail action buttons */
+.dacts{display:flex;gap:6px;margin-left:auto;align-items:center}
+.iconbtn{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:8px;width:32px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.iconbtn:hover{color:var(--txt);border-color:var(--accent)}
+.iconbtn.on{color:var(--accent);border-color:var(--accent)}
+.dhd .x{position:static;margin-left:0}
+/* C1/H4: capture + CTA */
+.cta{background:linear-gradient(135deg,#16263a,#1a2330);border:1px solid #2c4a6b;border-radius:12px;padding:13px 14px}
+.cta h4{margin:0 0 3px;font-size:14px}
+.cta p{margin:0 0 9px;font-size:11.5px;color:var(--muted);line-height:1.45}
+.capform{display:flex;gap:6px}
+.capform input{flex:1;min-width:0;padding:9px 11px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--txt);font-size:13px}
+.capform input:focus{outline:none;border-color:var(--accent)}
+.btn{background:var(--accent);color:#04101f;border:0;border-radius:9px;padding:0 14px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn.busy{opacity:.6;pointer-events:none}
+.capok{font-size:12px;color:var(--accent2);display:flex;align-items:center;gap:6px;padding:4px 0}
+.caperr{font-size:11.5px;color:#ff8f8f;margin-top:4px}
+.alertrow{display:flex;gap:6px;align-items:center;margin-top:8px}
+.alertrow input.thr{width:96px;flex:none}
+/* H4: empty state */
+.empty{padding:26px 18px;text-align:center;color:var(--muted)}
+.empty .big{font-size:14px;color:var(--txt);margin-bottom:4px}
+.empty .near{color:var(--accent);cursor:pointer;text-decoration:underline}
+/* H2: compare */
+.pinbtn{flex:none;width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:6px}
+.pinbtn:hover{color:var(--accent);border-color:var(--accent)}
+.pinbtn.on{color:var(--accent);border-color:var(--accent);background:rgba(79,157,255,.12)}
+#compareTray{position:absolute;left:14px;right:14px;bottom:84px;z-index:560;background:rgba(18,24,32,.97);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);backdrop-filter:blur(6px);display:none;max-height:46%;overflow:auto}
+#compareTray.show{display:block}
+#mapwrap:has(#detail.open) #compareTray{right:474px}
+.cmphd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cmphd .ttl{font-weight:700;font-size:13px}
+.cmpchips{display:flex;gap:6px;flex-wrap:wrap}
+.cmpchip{display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 6px 3px 10px;font-size:11.5px}
+.cmpchip .rm{cursor:pointer;color:var(--muted);font-size:14px;line-height:1}
+.cmpchip .rm:hover{color:#ff8f8f}
+.cmpbody{display:flex;gap:14px;align-items:stretch}
+.cmpchartbox{flex:1;min-width:0;height:150px}
+.cmptable{font-size:11px;border-collapse:collapse;white-space:nowrap}
+.cmptable td,.cmptable th{padding:2px 7px;text-align:right}
+.cmptable th{color:var(--muted);font-weight:600;text-align:left}
+@media(max-width:640px){#compareTray{left:8px;right:8px;bottom:76px;padding:10px;max-height:54%}.cmpbody{flex-direction:column;gap:8px}.cmpchartbox{height:118px}#mapwrap:has(#detail.open) #compareTray{right:8px}}
+/* H3: pulse */
+@keyframes pulsering{0%{stroke-width:1.4;opacity:1}70%{stroke-width:9;opacity:0}100%{opacity:0}}
+.leaflet-localityPane-pane path.pulse{animation:pulsering 1.8s ease-out infinite;stroke:var(--accent)}
+/* toast */
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--panel2);border:1px solid var(--accent);color:var(--txt);padding:10px 16px;border-radius:10px;font-size:13px;z-index:3000;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* N5: loading + cdn fail */
+.skel{background:linear-gradient(90deg,#1d2530 25%,#222c39 50%,#1d2530 75%);background-size:200% 100%;animation:shimmer 1.3s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+#cdnfail{display:none;position:fixed;inset:0;z-index:4000;background:var(--bg);color:var(--txt);align-items:center;justify-content:center;text-align:center;padding:30px;flex-direction:column;gap:10px}
+/* H3 coach + first-load tip */
+.coach{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:520;background:var(--accent);color:#04101f;font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;animation:floaty 2.4s ease-in-out infinite}
+.coach .cx{cursor:pointer;font-size:15px;line-height:1;opacity:.7}
+@keyframes floaty{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+/* N4: mobile layers FAB + popover */
+.fab{display:none;position:absolute;right:12px;bottom:78px;z-index:540;width:46px;height:46px;border-radius:50%;background:var(--accent);color:#04101f;border:0;cursor:pointer;box-shadow:var(--shadow);align-items:center;justify-content:center}
+#layersPop{display:none;position:absolute;right:12px;bottom:132px;z-index:545;background:rgba(18,24,32,.97);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);max-width:74vw}
+#layersPop.show{display:block}
+#layersPop .ctl-label{margin-top:0}
+@media(max-width:860px){
+  .fab{display:inline-flex}
+  #legendStack{max-width:46vw;top:10px;right:10px}
+}
 </style>
 <meta name="description" content="Interactive Bengaluru (Bangalore) property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, new-launch projects, and schools, water &amp; safety livability across 119 localities. A Zillow-style heatmap for Bangalore."/>
 <meta name="keywords" content="Bangalore property prices, Bengaluru real estate, property price map, Namma Metro map, Bangalore localities, price per sqft, Whitefield, Sarjapur, Electronic City, HSR Layout, property heatmap, Cauvery water, BengaluruValue"/>
@@ -187,26 +278,33 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <input class="search" id="search" placeholder="Search a locality… (e.g. Whitefield, HSR)"/>
         <div class="ctl-label">Filter zone</div>
         <div class="row" id="zoneChips"></div>
-        <div class="ctl-label">Colour map by</div>
-        <div class="seg" id="metricSeg">
-          <button data-m="price" class="active">₹/sqft</button>
-          <button data-m="cagr">Growth</button>
-          <button data-m="pcagr">Proj.</button>
-          <button data-m="yield">Yield</button>
+        <div class="ctl-label">Colour map by <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">· pick one</span></div>
+        <div class="metricgrp">
+          <div class="seg" id="metricSeg">
+            <button data-m="price" class="active">₹/sqft</button>
+            <button data-m="cagr">Growth</button>
+            <button data-m="pcagr">Proj.</button>
+            <button data-m="yield">Yield</button>
+          </div>
+          <div class="sublabel">Livability</div>
+          <div class="seg" id="livSeg">
+            <button data-m="sch">Schools</button>
+            <button data-m="saf">Safety</button>
+            <button data-m="wat">Water</button>
+            <button data-m="cauv">Cauvery</button>
+          </div>
         </div>
-        <div class="seg" id="livSeg">
-          <button data-m="sch">Schools</button>
-          <button data-m="saf">Safety</button>
-          <button data-m="wat">Water</button>
-          <button data-m="cauv">Cauvery</button>
-        </div>
-        <div class="ctl-label">Overlays</div>
-        <div class="row" id="metroChips">
-          <div class="chip active" id="metroToggle">🚇 Metro</div>
-          <div class="chip active" id="futureToggle">+ Future lines</div>
-          <div class="chip active" id="buildsToggle">🏗️ New builds</div>
-          <div class="chip" id="conceptToggle">🧭 Vision (concept)</div>
-          <div class="chip" id="heatToggle">🔥 Heatmap</div>
+        <div id="overlaysBlock">
+          <div class="ctl-label">Overlays</div>
+          <div class="row" id="metroChips">
+            <div class="chip active" id="metroToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M4 11h16M7 16l-2 5M17 16l2 5"/></svg>Metro</div>
+            <div class="chip active" id="futureToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 0 0 0-8H9a4 4 0 0 1 0-8h1"/></svg>Future lines</div>
+            <div class="chip" id="buildsToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 21v-4h6v4M9 7h.01M12 7h.01M15 7h.01M9 11h.01M12 11h.01M15 11h.01"/></svg>New builds</div>
+            <div class="chip" id="schoolsToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg>Schools</div>
+            <div class="chip" id="conceptToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>Vision</div>
+            <div class="chip" id="heatToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>Heatmap</div>
+            <div class="chip" id="sunwindToggle"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M5 5l1.5 1.5M17.5 17.5 19 19M2 12h2M20 12h2M5 19l1.5-1.5M17.5 6.5 19 5"/></svg>Sun &amp; wind</div>
+          </div>
         </div>
       </div>
       <div class="listhdr"><span id="listCount">–</span><span id="sortLbl" style="cursor:pointer;user-select:none" title="Click to flip ascending / descending">sorted by price ▾</span></div>
@@ -216,22 +314,28 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div id="scrim" class="scrim" onclick="toggleSidebar(false)"></div>
     <section id="mapwrap">
       <div id="map"></div>
-      <div class="legend">
-        <div class="lt" id="legendTitle">Price ₹/sqft</div>
-        <div class="grad" id="legendGrad"></div>
-        <div class="lbls" id="legendLbls"><span>low</span><span>high</span></div>
+      <div id="legendStack">
+        <div class="legendhead" id="legendCollapse" title="Show / hide legends">Legend<span class="caret">▾</span></div>
+        <div class="legend" id="priceLegend">
+          <div class="lt" id="legendTitle">Price ₹/sqft</div>
+          <div class="grad" id="legendGrad"></div>
+          <div class="lbls" id="legendLbls"><span>low</span><span>high</span></div>
+        </div>
+        <div class="legend" id="metroLegend" style="max-width:170px;display:block"></div>
+        <div class="legend" id="projLegend" style="max-width:200px;max-height:230px;overflow:auto;display:block"></div>
+        <div class="legend" id="schoolLegend" style="max-width:170px;display:block"></div>
+        <div class="legend" id="sunwindPanel" style="max-width:200px;display:none"></div>
       </div>
-      <div class="legend" id="metroLegend" style="top:auto;left:12px;bottom:104px;right:auto;max-width:160px;display:block"></div>
-      <div class="legend" id="projLegend" style="top:12px;left:12px;right:auto;max-width:205px;max-height:240px;overflow:auto;display:block"></div>
       <div class="timebar">
         <div class="tt">
           <div><span class="now" id="tNow">2026 Q2</span><span class="badge actual" id="tBadge">actual</span></div>
           <div class="muted" id="tHint">drag to scrub time · ▶ to animate</div>
         </div>
         <div class="tslide">
-          <button class="playbtn" id="play">▶</button>
-          <input type="range" id="time" min="0" max="43" value="29" step="1"/>
+          <button class="playbtn" id="play" aria-label="Animate timeline">▶</button>
+          <input type="range" class="split" id="time" min="0" max="43" value="29" step="1"/>
         </div>
+        <div class="taxis" id="taxis"></div>
       </div>
       <div id="detail">
         <div class="dhd">
@@ -239,10 +343,27 @@ input[type=range]{width:100%;accent-color:var(--accent)}
             <h2 id="dName">—</h2>
             <div class="sub" id="dSub">—</div>
           </div>
-          <button class="x" onclick="closeDetail()">×</button>
+          <div class="dacts">
+            <button class="iconbtn" id="dCompare" title="Add to compare" onclick="toggleCompareCurrent()">⇄</button>
+            <button class="iconbtn" id="dShare" title="Copy shareable link" onclick="copyShareLink()">🔗</button>
+            <button class="x" aria-label="Close" onclick="closeDetail()">×</button>
+          </div>
         </div>
         <div class="dbody" id="dBody"></div>
       </div>
+      <div id="compareTray">
+        <div class="cmphd">
+          <span class="ttl">⇄ Compare</span>
+          <div class="cmpchips" id="cmpChips"></div>
+          <button class="iconbtn" style="margin-left:auto" title="Clear all" onclick="clearCompare()">×</button>
+        </div>
+        <div class="cmpbody">
+          <div class="cmpchartbox"><canvas id="cmpChart"></canvas></div>
+          <div id="cmpTableWrap"></div>
+        </div>
+      </div>
+      <button class="fab" id="layersFab" aria-label="Map layers" onclick="toggleLayersPop()">⧉</button>
+      <div id="layersPop"></div>
     </section>
   </main>
 </div>
@@ -252,7 +373,7 @@ const DATA = {"meta":{"city":"Bengaluru (Bangalore)","updated":"2026-05-29","his
 <script>
 const METRO = {"lines":[{"name":"Purple Line","short":"Purple","color":"#7e2a8e","status":"op","announced":"2006 (Phase 1)","completion":"2011\\u20132023","projYear":2011,"note":"East\\u2013West spine (Whitefield/Kadugodi \\u2194 Challaghatta). First line opened Oct 2011; extended to Whitefield & Challaghatta in 2023.","stations":[{"n":"Whitefield (Kadugodi)","lat":12.99507,"lng":77.75777,"st":"op","yr":2023},{"n":"Hopefarm Channasandra","lat":12.98793,"lng":77.75409,"st":"op","yr":2023},{"n":"Kadugodi Tree Park","lat":12.98565,"lng":77.7469,"st":"op","yr":2023},{"n":"Pattandur Agrahara","lat":12.98761,"lng":77.73821,"st":"op","yr":2023},{"n":"Sri Sathya Sai Hospital","lat":12.98102,"lng":77.72762,"st":"op","yr":2023},{"n":"Nallurhalli","lat":12.97653,"lng":77.72476,"st":"op","yr":2023},{"n":"Kundalahalli","lat":12.97746,"lng":77.71576,"st":"op","yr":2023},{"n":"Seetharampalya","lat":12.9831,"lng":77.71352,"st":"op","yr":2023},{"n":"Hoodi","lat":12.98873,"lng":77.71127,"st":"op","yr":2023},{"n":"Garudacharpalya","lat":12.99356,"lng":77.70376,"st":"op","yr":2023},{"n":"Singayyanapalya","lat":12.99678,"lng":77.69217,"st":"op","yr":2023},{"n":"Krishnarajapura (KR Pura)","lat":12.99999,"lng":77.67794,"st":"op","yr":2023},{"n":"Benniganahalli","lat":12.99655,"lng":77.66828,"st":"op","yr":2023},{"n":"Baiyappanahalli","lat":12.99076,"lng":77.65247,"st":"op","yr":2011},{"n":"Swami Vivekananda Road","lat":12.98596,"lng":77.64494,"st":"op","yr":2011},{"n":"Indiranagar","lat":12.9786,"lng":77.6388,"st":"op","yr":2011},{"n":"Halasuru","lat":12.97566,"lng":77.62628,"st":"op","yr":2011},{"n":"Trinity","lat":12.97295,"lng":77.61704,"st":"op","yr":2011},{"n":"Mahatma Gandhi Road","lat":12.97554,"lng":77.60683,"st":"op","yr":2011},{"n":"Cubbon Park","lat":12.98074,"lng":77.59841,"st":"op","yr":2016},{"n":"Vidhana Soudha","lat":12.97982,"lng":77.59275,"st":"op","yr":2016},{"n":"Central College","lat":12.97776,"lng":77.58279,"st":"op","yr":2016},{"n":"Majestic (Kempegowda)","lat":12.97569,"lng":77.57284,"st":"op","yr":2016},{"n":"KSR Railway Station","lat":12.97581,"lng":77.56571,"st":"op","yr":2016},{"n":"Magadi Road","lat":12.97558,"lng":77.55543,"st":"op","yr":2015},{"n":"Hosahalli","lat":12.97418,"lng":77.54554,"st":"op","yr":2015},{"n":"Vijayanagara","lat":12.9708,"lng":77.53729,"st":"op","yr":2015},{"n":"Attiguppe","lat":12.96149,"lng":77.53711,"st":"op","yr":2015},{"n":"Deepanjali Nagar","lat":12.95219,"lng":77.53694,"st":"op","yr":2015},{"n":"Mysuru Road","lat":12.94651,"lng":77.52978,"st":"op","yr":2015},{"n":"Pantharapalya\\u2013Nayandahalli","lat":12.94682,"lng":77.53132,"st":"op","yr":2021},{"n":"Rajarajeshwari Nagar","lat":12.93673,"lng":77.51958,"st":"op","yr":2021},{"n":"Jnanabharathi","lat":12.93556,"lng":77.51202,"st":"op","yr":2021},{"n":"Pattanagere","lat":12.92441,"lng":77.49826,"st":"op","yr":2021},{"n":"Kengeri Bus Terminal","lat":12.9149,"lng":77.48759,"st":"op","yr":2021},{"n":"Kengeri","lat":12.908,"lng":77.4765,"st":"op","yr":2021},{"n":"Challaghatta","lat":12.89742,"lng":77.46124,"st":"op","yr":2023}]},{"name":"Green Line","short":"Green","color":"#16a34a","status":"op","announced":"2006 (Phase 1)","completion":"2014\\u20132024","projYear":2014,"note":"North\\u2013South line (Madavara/BIEC \\u2194 Silk Institute). Opened 2014; final Madavara extension Nov 2024.","stations":[{"n":"Madavara (BIEC)","lat":13.05743,"lng":77.47295,"st":"op","yr":2024},{"n":"Chikkabidarakallu","lat":13.05241,"lng":77.48792,"st":"op","yr":2024},{"n":"Manjunath Nagar","lat":13.05014,"lng":77.49441,"st":"op","yr":2024},{"n":"Nagasandra","lat":13.04804,"lng":77.50009,"st":"op","yr":2015},{"n":"Dasarahalli","lat":13.04357,"lng":77.51246,"st":"op","yr":2015},{"n":"Jalahalli","lat":13.03949,"lng":77.5197,"st":"op","yr":2015},{"n":"Peenya Industry","lat":13.03634,"lng":77.52547,"st":"op","yr":2014},{"n":"Peenya","lat":13.03292,"lng":77.5333,"st":"op","yr":2014},{"n":"Goraguntepalya","lat":13.02837,"lng":77.54075,"st":"op","yr":2014},{"n":"Yeshwanthpur","lat":13.02318,"lng":77.54994,"st":"op","yr":2014},{"n":"Sandal Soap Factory","lat":13.01471,"lng":77.55396,"st":"op","yr":2014},{"n":"Mahalakshmi","lat":13.00822,"lng":77.54882,"st":"op","yr":2014},{"n":"Rajajinagara","lat":13.00033,"lng":77.5497,"st":"op","yr":2014},{"n":"Kuvempu Road","lat":12.99846,"lng":77.55695,"st":"op","yr":2014},{"n":"Srirampura","lat":12.99651,"lng":77.56328,"st":"op","yr":2014},{"n":"Sampige Road","lat":12.99051,"lng":77.57073,"st":"op","yr":2014},{"n":"Majestic (Kempegowda)","lat":12.97569,"lng":77.57284,"st":"op","yr":2017},{"n":"Chickpete","lat":12.96676,"lng":77.57478,"st":"op","yr":2017},{"n":"KR Market","lat":12.96135,"lng":77.57457,"st":"op","yr":2017},{"n":"National College","lat":12.95055,"lng":77.57371,"st":"op","yr":2017},{"n":"Lalbagh","lat":12.94636,"lng":77.58005,"st":"op","yr":2017},{"n":"South End Circle","lat":12.9423,"lng":77.58006,"st":"op","yr":2017},{"n":"Jayanagara","lat":12.93824,"lng":77.58008,"st":"op","yr":2017},{"n":"RV Road","lat":12.92146,"lng":77.58038,"st":"op","yr":2017},{"n":"Banashankari","lat":12.91438,"lng":77.57675,"st":"op","yr":2017},{"n":"Jaya Prakash Nagar","lat":12.9073,"lng":77.57313,"st":"op","yr":2017},{"n":"Yelachenahalli","lat":12.89598,"lng":77.57016,"st":"op","yr":2017},{"n":"Konanakunte Cross","lat":12.88474,"lng":77.5529,"st":"op","yr":2021},{"n":"Doddakallasandra","lat":12.88471,"lng":77.55285,"st":"op","yr":2021},{"n":"Vajarahalli","lat":12.87745,"lng":77.54459,"st":"op","yr":2021},{"n":"Thalaghattapura","lat":12.87168,"lng":77.53876,"st":"op","yr":2021},{"n":"Silk Institute","lat":12.86186,"lng":77.53001,"st":"op","yr":2021}]},{"name":"Yellow Line","short":"Yellow","color":"#eab308","status":"op","announced":"2014 (Phase 2 approval)","completion":"Aug 2025","projYear":2025,"note":"RV Road \\u2194 Bommasandra (Electronic City corridor). Driverless. Opened Aug 2025 after rolling-stock delays.","stations":[{"n":"RV Road","lat":12.92146,"lng":77.58038,"st":"op","yr":2025},{"n":"Ragigudda","lat":12.917,"lng":77.5884,"st":"op","yr":2025},{"n":"Jayadeva Hospital","lat":12.91674,"lng":77.60012,"st":"op","yr":2025},{"n":"BTM Layout","lat":12.91656,"lng":77.60825,"st":"op","yr":2025},{"n":"Central Silk Board","lat":12.91652,"lng":77.62056,"st":"op","yr":2025},{"n":"Bommanahalli","lat":12.91066,"lng":77.62657,"st":"op","yr":2025},{"n":"Hongasandra","lat":12.90165,"lng":77.63208,"st":"op","yr":2025},{"n":"Kudlu Gate","lat":12.88992,"lng":77.63929,"st":"op","yr":2025},{"n":"Singasandra","lat":12.88069,"lng":77.64498,"st":"op","yr":2025},{"n":"Hosa Road","lat":12.87078,"lng":77.65248,"st":"op","yr":2025},{"n":"Beratena Agrahara","lat":12.86385,"lng":77.65798,"st":"op","yr":2025},{"n":"Infosys Konappana Agrahara","lat":12.85648,"lng":77.66361,"st":"op","yr":2025},{"n":"Electronic City","lat":12.84649,"lng":77.67112,"st":"op","yr":2025},{"n":"Huskur Road","lat":12.83901,"lng":77.67754,"st":"op","yr":2025},{"n":"Biocon Hebbagodi","lat":12.82909,"lng":77.68133,"st":"op","yr":2025},{"n":"Bommasandra","lat":12.81933,"lng":77.68834,"st":"op","yr":2025}]},{"name":"Blue Line (ORR + Airport)","short":"Blue","color":"#2563eb","status":"uc","announced":"2016\\u20132021","completion":"2026 (ORR) \\u2013 2027 (Airport)","projYear":2027,"note":"Central Silk Board \\u2192 KR Pura (ORR tech belt, Phase 2A, ~2026) \\u2192 Hebbal \\u2192 KIA Airport (Phase 2B, ~2027). The airport line.","stations":[{"n":"Central Silk Board","lat":12.91652,"lng":77.62056,"st":"uc","yr":2026},{"n":"HSR Layout","lat":12.91649,"lng":77.63304,"st":"uc","yr":2026},{"n":"Agara","lat":12.92053,"lng":77.64359,"st":"uc","yr":2026},{"n":"Ibbaluru","lat":12.92125,"lng":77.6625,"st":"uc","yr":2026},{"n":"Prestige Bellandur","lat":12.92799,"lng":77.68077,"st":"uc","yr":2026},{"n":"Embassy TechVillage","lat":12.93012,"lng":77.68419,"st":"uc","yr":2026},{"n":"Kadubeesanahalli","lat":12.93225,"lng":77.68761,"st":"uc","yr":2026},{"n":"Marathahalli","lat":12.95824,"lng":77.70127,"st":"uc","yr":2026},{"n":"ISRO","lat":12.969,"lng":77.70115,"st":"uc","yr":2026},{"n":"Doddanekundi","lat":12.97563,"lng":77.69712,"st":"uc","yr":2026},{"n":"DRDO Sports Complex","lat":12.98589,"lng":77.69083,"st":"uc","yr":2026},{"n":"Saraswathi Nagar","lat":12.98076,"lng":77.69397,"st":"uc","yr":2026},{"n":"Krishnarajapura (KR Pura)","lat":12.99999,"lng":77.67794,"st":"uc","yr":2026},{"n":"Kasturi Nagar","lat":13.0085,"lng":77.66915,"st":"uc","yr":2027},{"n":"Horamavu","lat":13.01702,"lng":77.66035,"st":"uc","yr":2027},{"n":"HRBR Layout","lat":13.02254,"lng":77.64739,"st":"uc","yr":2027},{"n":"Kalyan Nagar","lat":13.02626,"lng":77.6378,"st":"uc","yr":2027},{"n":"HBR Layout","lat":13.0328,"lng":77.6297,"st":"uc","yr":2027},{"n":"Nagawara","lat":13.04051,"lng":77.62466,"st":"uc","yr":2027},{"n":"Veerannapalya","lat":13.04116,"lng":77.61814,"st":"uc","yr":2027},{"n":"Kempapura","lat":13.04272,"lng":77.6054,"st":"uc","yr":2027},{"n":"Hebbal","lat":13.04429,"lng":77.59267,"st":"uc","yr":2027},{"n":"Kodigehalli","lat":13.05702,"lng":77.59386,"st":"uc","yr":2027},{"n":"Jakkur Cross","lat":13.07038,"lng":77.59347,"st":"uc","yr":2027},{"n":"Yelahanka","lat":13.1021,"lng":77.60035,"st":"uc","yr":2027},{"n":"Bagalur Cross","lat":13.12061,"lng":77.61056,"st":"uc","yr":2027},{"n":"Doddajala","lat":13.1886,"lng":77.64487,"st":"uc","yr":2027},{"n":"Airport City (KIADB)","lat":13.19833,"lng":77.68717,"st":"uc","yr":2027},{"n":"KIA Terminals","lat":13.19809,"lng":77.71245,"st":"uc","yr":2027}]},{"name":"Pink Line","short":"Pink","color":"#db2777","status":"uc","announced":"2014 (Phase 2 approval)","completion":"2026 (phased)","projYear":2026,"note":"Kalena Agrahara \\u2194 Nagawara (2nd N\\u2013S corridor, mostly underground through CBD). Elevated south ~mid-2026; underground ~Dec 2026.","stations":[{"n":"Kalena Agrahara","lat":12.87158,"lng":77.59363,"st":"uc","yr":2026},{"n":"Hulimavu","lat":12.88108,"lng":77.59579,"st":"uc","yr":2026},{"n":"IIMB","lat":12.89564,"lng":77.59967,"st":"uc","yr":2026},{"n":"JP Nagar 4th Phase","lat":12.90984,"lng":77.60024,"st":"uc","yr":2026},{"n":"Jayadeva Hospital","lat":12.91674,"lng":77.60012,"st":"uc","yr":2026},{"n":"Tavarekere","lat":12.92942,"lng":77.60049,"st":"uc","yr":2026},{"n":"Dairy Circle","lat":12.94045,"lng":77.60235,"st":"uc","yr":2026},{"n":"Lakkasandra","lat":12.94934,"lng":77.60308,"st":"uc","yr":2026},{"n":"Langford Town","lat":12.95714,"lng":77.60615,"st":"uc","yr":2026},{"n":"National Military School","lat":12.96443,"lng":77.60704,"st":"uc","yr":2026},{"n":"MG Road","lat":12.97554,"lng":77.60683,"st":"uc","yr":2026},{"n":"Shivajinagar","lat":12.98358,"lng":77.60306,"st":"uc","yr":2026},{"n":"Cantonment","lat":12.99142,"lng":77.60606,"st":"uc","yr":2026},{"n":"Pottery Town","lat":13.00049,"lng":77.60934,"st":"uc","yr":2026},{"n":"Tannery Road","lat":13.00899,"lng":77.61349,"st":"uc","yr":2026},{"n":"Venkateshpura","lat":13.01757,"lng":77.61789,"st":"uc","yr":2026},{"n":"Kadugundanahalli","lat":13.02984,"lng":77.62066,"st":"uc","yr":2026},{"n":"Nagawara","lat":13.04051,"lng":77.62466,"st":"uc","yr":2026}]},{"name":"Orange Line (Phase 3)","short":"Orange","color":"#f97316","status":"approved","announced":"Aug 2024 (Cabinet)","completion":"~2030\\u20132031","projYear":2031,"note":"JP Nagar 4th Phase \\u2194 Kempapura along western ORR. Approved Aug 2024; foundation 2025; realistic completion 2030\\u201331. Coordinates approximate.","stations":[{"n":"JP Nagar 4th Phase","lat":12.9082,"lng":77.5855,"st":"fut","yr":2031},{"n":"JP Nagar 5th Phase","lat":12.909,"lng":77.579,"st":"fut","yr":2031},{"n":"JP Nagar","lat":12.9072,"lng":77.573,"st":"fut","yr":2031},{"n":"Kadirenahalli","lat":12.918,"lng":77.565,"st":"fut","yr":2031},{"n":"Kamakya Junction","lat":12.925,"lng":77.559,"st":"fut","yr":2031},{"n":"Hosakerehalli","lat":12.933,"lng":77.552,"st":"fut","yr":2031},{"n":"Dwaraka Nagar","lat":12.94,"lng":77.545,"st":"fut","yr":2031},{"n":"Mysuru Road","lat":12.9486,"lng":77.539,"st":"fut","yr":2031},{"n":"Nagarbhavi Circle","lat":12.961,"lng":77.521,"st":"fut","yr":2031},{"n":"Vinayaka Layout","lat":12.968,"lng":77.516,"st":"fut","yr":2031},{"n":"Papireddy Palya","lat":12.974,"lng":77.513,"st":"fut","yr":2031},{"n":"BDA Complex Nagarbhavi","lat":12.979,"lng":77.51,"st":"fut","yr":2031},{"n":"Sumanahalli Cross","lat":13.001,"lng":77.517,"st":"fut","yr":2031},{"n":"Chowdeshwari Nagar","lat":13.012,"lng":77.523,"st":"fut","yr":2031},{"n":"Freedom Fighters Colony","lat":13.019,"lng":77.528,"st":"fut","yr":2031},{"n":"Kanteerava Studio","lat":13.026,"lng":77.536,"st":"fut","yr":2031},{"n":"Peenya","lat":13.033,"lng":77.519,"st":"fut","yr":2031},{"n":"Muthyalanagar","lat":13.04,"lng":77.553,"st":"fut","yr":2031},{"n":"BEL Circle","lat":13.033,"lng":77.565,"st":"fut","yr":2031},{"n":"Nagashetty Halli","lat":13.029,"lng":77.579,"st":"fut","yr":2031},{"n":"Hebbal","lat":13.0358,"lng":77.597,"st":"fut","yr":2031},{"n":"Kempapura","lat":13.047,"lng":77.602,"st":"fut","yr":2031}]},{"name":"Silver Line (Phase 3 C2)","short":"Silver","color":"#94a3b8","status":"approved","announced":"Aug 2024 (Cabinet)","completion":"~2030\\u20132031","projYear":2031,"note":"Hosahalli \\u2194 Kadabagere along Magadi Road (western suburbs). Approved Aug 2024. Color provisional. Coordinates approximate.","stations":[{"n":"Hosahalli","lat":12.976,"lng":77.538,"st":"fut","yr":2031},{"n":"KHB Colony","lat":12.982,"lng":77.53,"st":"fut","yr":2031},{"n":"Kamakshipalya","lat":12.987,"lng":77.523,"st":"fut","yr":2031},{"n":"Anjana Nagar","lat":13.001,"lng":77.517,"st":"fut","yr":2031},{"n":"Sunkadakatte","lat":12.992,"lng":77.506,"st":"fut","yr":2031},{"n":"Herohalli","lat":12.996,"lng":77.496,"st":"fut","yr":2031},{"n":"Byadarahalli","lat":13.0,"lng":77.483,"st":"fut","yr":2031},{"n":"Kamath Layout","lat":13.004,"lng":77.472,"st":"fut","yr":2031},{"n":"Kadabagere","lat":13.008,"lng":77.46,"st":"fut","yr":2031}]},{"name":"Red Line (Phase 3A)","short":"Red","color":"#dc2626","status":"approved","announced":"Dec 2024 (State Cabinet)","completion":"~2032\\u20132033","projYear":2033,"note":"Sarjapur \\u2194 Hebbal via Koramangala & CBD (SE tech corridor to North). State-approved Dec 2024; central approval pending. ~28 stations, partly underground. Coordinates approximate.","stations":[{"n":"Sarjapur","lat":12.859,"lng":77.786,"st":"fut","yr":2033},{"n":"Kada Agrahara Road","lat":12.868,"lng":77.77,"st":"fut","yr":2033},{"n":"Sompura","lat":12.877,"lng":77.756,"st":"fut","yr":2033},{"n":"Dommasandra","lat":12.887,"lng":77.742,"st":"fut","yr":2033},{"n":"Muthanallur Cross","lat":12.896,"lng":77.729,"st":"fut","yr":2033},{"n":"Kodathi Gate","lat":12.905,"lng":77.715,"st":"fut","yr":2033},{"n":"Ambedkar Nagar","lat":12.912,"lng":77.705,"st":"fut","yr":2033},{"n":"Carmelaram","lat":12.917,"lng":77.695,"st":"fut","yr":2033},{"n":"Doddakanalli","lat":12.923,"lng":77.685,"st":"fut","yr":2033},{"n":"Kaikondrahalli","lat":12.927,"lng":77.676,"st":"fut","yr":2033},{"n":"Bellandur Gate","lat":12.93,"lng":77.668,"st":"fut","yr":2033},{"n":"Ibbalur","lat":12.923,"lng":77.648,"st":"fut","yr":2033},{"n":"Agara","lat":12.923,"lng":77.636,"st":"fut","yr":2033},{"n":"Jakkasandra","lat":12.93,"lng":77.628,"st":"fut","yr":2033},{"n":"Koramangala 3rd Block","lat":12.934,"lng":77.624,"st":"fut","yr":2033},{"n":"Koramangala 2nd Block","lat":12.938,"lng":77.618,"st":"fut","yr":2033},{"n":"Dairy Circle","lat":12.941,"lng":77.602,"st":"fut","yr":2033},{"n":"NIMHANS","lat":12.942,"lng":77.596,"st":"fut","yr":2033},{"n":"Shantinagara","lat":12.956,"lng":77.593,"st":"fut","yr":2033},{"n":"Town Hall","lat":12.965,"lng":77.587,"st":"fut","yr":2033},{"n":"KR Circle","lat":12.974,"lng":77.587,"st":"fut","yr":2033},{"n":"Basaveshwara Circle","lat":12.985,"lng":77.59,"st":"fut","yr":2033},{"n":"Bengaluru Golf Course","lat":12.993,"lng":77.592,"st":"fut","yr":2033},{"n":"Palace Guttahalli","lat":13.001,"lng":77.587,"st":"fut","yr":2033},{"n":"Mekhri Circle","lat":13.009,"lng":77.587,"st":"fut","yr":2033},{"n":"Veterinary College","lat":13.025,"lng":77.587,"st":"fut","yr":2033},{"n":"Ganga Nagar","lat":13.03,"lng":77.592,"st":"fut","yr":2033},{"n":"Hebbal","lat":13.0358,"lng":77.597,"st":"fut","yr":2033}]}],"phase4":[{"name":"KR Pura \\u2192 Hoskote (proposed)","color":"#2563eb","from":[12.99999,77.67794],"to":[13.071,77.798]},{"name":"Challaghatta \\u2192 Bidadi (proposed)","color":"#7e2a8e","from":[12.89742,77.46124],"to":[12.798,77.386]},{"name":"Madavara \\u2192 Nelamangala (proposed)","color":"#16a34a","from":[13.05743,77.47295],"to":[13.099,77.394]},{"name":"Silk Institute \\u2192 Harohalli (proposed)","color":"#16a34a","from":[12.86186,77.53001],"to":[12.78,77.495]},{"name":"Bommasandra \\u2192 Attibele (proposed)","color":"#eab308","from":[12.81933,77.68834],"to":[12.766,77.77]}],"meta":{"source":"Wikipedia per-line articles, BMRCL, themetrorailguy, PIB; compiled May 2026. Future-line coordinates approximate.","statusLegend":{"op":"Operational","uc":"Under construction","approved":"Approved / planned","fut":"Future station"}}};
 const LIVE = {"Lavelle Road":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"Modeled"},"Sadashivanagar":{"sch":4,"schN":"Premium central; elite legacy (Cluny, Sophia).","wat":1,"watN":"Reliable Cauvery.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Upscale, embassies, private security, gated \u2014 among safest.","conf":"High"},"Cunningham Road":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"Modeled"},"Vasanth Nagar":{"sch":4,"schN":"Heritage convent/ICSE (Sophia, Mount Carmel).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Indiranagar":{"sch":5,"schN":"Legacy ICSE/CBSE (NPS, Baldwin Boys, New Horizon).","wat":1,"watN":"Reliable Cauvery old core.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Upscale nightlife but high security, well-lit, constant patrols.","conf":"High"},"MG Road":{"sch":3,"schN":"Relies on adjacent heritage schools (Bishop Cotton, St. Joseph's).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":3,"fldN":"Commercial core; junction waterlogging.","saf":3,"safN":"Commercial + nightlife core; pickpocketing/late-night incidents, heavy policing.","conf":"High"},"Richmond Town":{"sch":4,"schN":"Heritage premium ICSE (St. Joseph's, Bishop Cotton).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Haralur Road":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Hebbal":{"sch":4,"schN":"Strong, well-connected (KV Hebbal, Air Force School).","wat":3,"watN":"Among first dry-tap high-rises in 2024.","fld":4,"fldN":"Hebbal lake/valley flood corridor.","saf":4,"safN":"Lakeside residential; safe perception.","conf":"High"},"Malleshwaram":{"sch":5,"schN":"Legacy CBSE/ICSE heritage hub (MES, Cluny, BHS).","wat":1,"watN":"Reliable Cauvery old core.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"One of the safest, family-knit areas; low crime.","conf":"High"},"Koramangala":{"sch":5,"schN":"Dense legacy ICSE/CBSE (Bethany, NPS, St. Francis).","wat":1,"watN":"Reliable Cauvery supply.","fld":4,"fldN":"Sony World/Sony Signal junction is a flagged flood hotspot.","saf":3,"safN":"Vibrant nightlife \u2014 well-policed but rising late-night street/theft reports.","conf":"High"},"Hoodi":{"sch":3,"schN":"Adequate CBSE; Whitefield-belt.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Jayanagar":{"sch":5,"schN":"Many established schools (NPS, Carmel).","wat":1,"watN":"Reliable Cauvery old core.","fld":2,"fldN":"Localized waterlogging only.","saf":5,"safN":"Old well-planned layout, low crime, active RWAs.","conf":"High"},"Bellandur":{"sch":4,"schN":"IB/premium (Neev Academy, GEAR).","wat":5,"watN":"Tanker-dependent; lake sewage; among worst 2024.","fld":5,"fldN":"Bellandur Lake toxic froth/fire & Sept 2022 overflow into homes.","saf":4,"safN":"Tech-park dense; gated/secure, safe perception.","conf":"High"},"Mahadevapura":{"sch":3,"schN":"Adequate IT-corridor CBSE.","wat":4,"watN":"Tanker-dependent; Stage V rollout delayed.","fld":5,"fldN":"Tops BBMP 'severely vulnerable' stormwater-drain list.","saf":4,"safN":"Gated/CCTV tech belt; safe perception.","conf":"High"},"Benson Town":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Seshadripuram":{"sch":3,"schN":"Adequate schooling; developing options.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Marathahalli":{"sch":4,"schN":"Strong CBSE/ICSE (NPS Marathahalli, Vibgyor).","wat":4,"watN":"ORR tech-belt tanker reliance.","fld":4,"fldN":"ORR low point; flooded 2022.","saf":3,"safN":"Dense PG/tech-transient, congested; more petty theft.","conf":"High"},"Ulsoor":{"sch":3,"schN":"Leans on nearby heritage school belts.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Established residential-commercial mix, generally calm.","conf":"High"},"Kundalahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Gunjur":{"sch":3,"schN":"Developing residential, improving.","wat":5,"watN":"Varthur/Sarjapur periphery; heavy tanker reliance.","fld":4,"fldN":"Lake-overflow flooding.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Rajajinagar":{"sch":4,"schN":"Established CBSE/ICSE (NPS, KLE).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Premium established; among safest.","conf":"High"},"Immadihalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Domlur":{"sch":3,"schN":"Few in-locality schools; relies on Indiranagar.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Kasavanahalli":{"sch":3,"schN":"Emerging, near Sarjapur cluster.","wat":5,"watN":"Sarjapur belt; borewell/tanker-dependent.","fld":4,"fldN":"Flood-prone low-lying layouts.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Varthur Lake":{"sch":4,"schN":"Near Varthur international-school belt.","wat":5,"watN":"Lakeside borewell/tanker dependence.","fld":5,"fldN":"Directly on Varthur Lake \u2014 froth, overflow & monsoon flooding risk.","saf":4,"safN":"New gated stock; generally safe.","conf":"High"},"HSR Layout":{"sch":4,"schN":"Dense modern CBSE/ICSE (NPS, DPS, EuroSchool).","wat":3,"watN":"Partial Cauvery + borewells.","fld":4,"fldN":"Koramangala-Challaghatta valley; low sectors flood.","saf":4,"safN":"Well-planned, frequent patrols; secure.","conf":"High"},"Basaveshwaranagar":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Brookefield":{"sch":4,"schN":"Established Whitefield-belt schools (Sri Sri, Chinmaya).","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Whitefield":{"sch":5,"schN":"International-school hub (Inventure, Vibgyor, Greenwood High).","wat":4,"watN":"First to dry taps in 2024; tanker-heavy, Cauvery Stage V now easing supply.","fld":4,"fldN":"ORR-adjacent low points flood in heavy rain.","saf":4,"safN":"Highest raw crime count in IT belt (density) but heavily gated/CCTV; perceived safe.","conf":"High"},"JP Nagar Phase 8":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Kudlu Gate":{"sch":3,"schN":"Adequate schooling; developing options.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"JP Nagar Phase 7":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Carmelaram":{"sch":3,"schN":"Developing, near premium Sarjapur belt.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Yeshwanthpur":{"sch":3,"schN":"Adequate, transit-heavy.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":3,"safN":"Major market/transit/industrial node; busier, more transient.","conf":"High"},"Uttarahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Sarjapur Road":{"sch":5,"schN":"Premier international corridor (TISB, Indus, Greenwood High).","wat":5,"watN":"Borewell/tanker-dependent outskirts; severe 2024 stress.","fld":5,"fldN":"Rainbow Drive & ORR-Sarjapur inundated Sept 2022 (rafts deployed).","saf":4,"safN":"Planned, gated-community-heavy; considered safe.","conf":"High"},"Panathur":{"sch":3,"schN":"Developing IT-corridor pockets (Orchids, Vibgyor nearby).","wat":5,"watN":"Bellandur-adjacent; severe tanker dependence.","fld":4,"fldN":"Encroached drains; monsoon flooding.","saf":4,"safN":"Gated; safe perception.","conf":"High"},"Jakkur":{"sch":4,"schN":"Premium/international pocket (Mallya Aditi, CIS nearby).","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"HAL":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Amruthahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Basavanagudi":{"sch":4,"schN":"Legacy CBSE/ICSE heritage (National/MES, BMS).","wat":1,"watN":"Reliable Cauvery old core.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Historic family locality, community-driven, safe.","conf":"High"},"Rachenahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Munnekollala":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Frazer Town":{"sch":4,"schN":"Heritage ICSE/convent (St. Germain, St. Francis Xavier).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Nagavara":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Thanisandra":{"sch":3,"schN":"Developing, improving fast.","wat":3,"watN":"New townships outpacing supply; borewell-leaning.","fld":4,"fldN":"Hebbal-valley flooding.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Padmanabhanagar":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Doddanekkundi":{"sch":3,"schN":"Adequate schooling; developing options.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Cooke Town":{"sch":4,"schN":"Heritage anglo-Indian school belt (Clarence, Cathedral).","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Old Airport Road":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Tumkur Road":{"sch":3,"schN":"Adequate schooling; developing options.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Hosa Road":{"sch":3,"schN":"Emerging corridor CBSE.","wat":4,"watN":"Peripheral borewell stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"BTM Layout":{"sch":4,"schN":"Good ICSE/CBSE spread (Vibgyor, St. Mira's).","wat":2,"watN":"Cauvery-served.","fld":3,"fldN":"Madiwala/Challaghatta-valley waterlogging spots.","saf":3,"safN":"Dense PG/young-renter hub; more petty theft & churn.","conf":"High"},"Jeevan Bhima Nagar":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"JP Nagar":{"sch":4,"schN":"Strong, established (Brigade, Sri Kumaran, DPS).","wat":2,"watN":"Mostly Cauvery; some deep borewells in outer phases.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established, resident-rated highly safe.","conf":"High"},"Hennur":{"sch":4,"schN":"International + CBSE cluster (Bangalore Intl, Oasis).","wat":3,"watN":"Mixed Cauvery/borewell.","fld":4,"fldN":"Flood-prone (enquiries dropped ~20% post-2024).","saf":4,"safN":"Reputed among safer residential zones; CCTV, patrols.","conf":"High"},"Begur":{"sch":3,"schN":"Developing south pocket.","wat":4,"watN":"Peripheral borewell stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Kogilu":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Kannur":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Varthur":{"sch":4,"schN":"International-belt overflow (Greenwood High, GEAR).","wat":5,"watN":"Peripheral borewell/tanker reliance.","fld":5,"fldN":"Varthur Lake froth/overflow; flooded Sept 2022.","saf":4,"safN":"Gated communities; generally safe.","conf":"High"},"CV Raman Nagar":{"sch":3,"schN":"Adequate CBSE/ICSE; near Indiranagar.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Mahalakshmi Layout":{"sch":3,"schN":"Adequate schooling; developing options.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Vijayanagar":{"sch":3,"schN":"Adequate, mid-range (Chitrakoota).","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Bagalur":{"sch":2,"schN":"Developing airport belt.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Bannerghatta Road":{"sch":4,"schN":"Strong, growing premium cluster (PSBB LLA, Sherwood).","wat":3,"watN":"Mixed; outer stretches borewell-dependent.","fld":3,"fldN":"Valley-edge waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Kadugodi":{"sch":3,"schN":"Developing; decent CBSE (Vibgyor, Cambridge).","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Akshayanagar":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Hope Farm":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Banashankari":{"sch":4,"schN":"Established, broad options (Kumarans, BGS).","wat":2,"watN":"Cauvery core; outer BSK 6th stage more borewell-reliant.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Girinagar":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Devanahalli":{"sch":2,"schN":"Airport-belt schools emerging (Akash Intl).","wat":4,"watN":"Far-periphery, borewell-dependent (no piped Cauvery).","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Sampigehalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Sahakara Nagar":{"sch":4,"schN":"Trio World Academy (IB) + good CBSE.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Quiet established residential.","conf":"High"},"Electronic City Phase 1":{"sch":4,"schN":"Strong township CBSE/intl (Treamis, DPS, Vibgyor).","wat":4,"watN":"Borewell/tanker-dependent periphery (tanker +60% in 2024).","fld":2,"fldN":"Moderate flooding.","saf":4,"safN":"Tech-transient but resident-rated safe; frequent patrols.","conf":"High"},"Kodigehalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Cox Town":{"sch":3,"schN":"Adequate schooling; developing options.","wat":2,"watN":"Mostly Cauvery; low water stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Gottigere":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Bilekahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Yelahanka New Town":{"sch":5,"schN":"IB/international belt.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Banaswadi":{"sch":3,"schN":"Adequate schooling; developing options.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Repeated waterlogging; Sai Layout-area drain overflow.","saf":4,"safN":"Transforming residential, secure perception.","conf":"High"},"Arekere":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Rajarajeshwari Nagar":{"sch":4,"schN":"Strong CBSE/ICSE cluster (Gnana Srishti, Sri Kumaran).","wat":4,"watN":"Among worst-hit 2024 (24-hr cuts); tops BBMP drain-vulnerability list.","fld":4,"fldN":"West-zone flood vulnerability (39 SWD points).","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Jalahalli":{"sch":3,"schN":"Defence-belt CBSE (KV Jalahalli).","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"RT Nagar":{"sch":3,"schN":"Older established schools (Cluny, Presidency).","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Established, safe, affordable peace-of-mind.","conf":"High"},"Kanakapura Road":{"sch":3,"schN":"Adequate-to-good; corridor growing.","wat":4,"watN":"Outer apartments borewell/tanker-dependent in 2024.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Singasandra":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"Modeled"},"Thubarahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Konanakunte":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Electronic City Phase 2":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent periphery.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Kalyan Nagar":{"sch":4,"schN":"Established CBSE/ICSE (New Horizon, Jain Heritage).","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"KR Puram":{"sch":3,"schN":"Mostly CBSE chains.","wat":4,"watN":"Borewells sunk to 1,500 ft in 2024; Stage V pipeline delayed (hard rock).","fld":4,"fldN":"Repeated underpass/road flooding.","saf":3,"safN":"Busy transit junction, transient & congested; more property-crime exposure.","conf":"High"},"Nagarbhavi":{"sch":3,"schN":"University area; adequate residential.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Kamakshipalya":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Nandini Layout":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Channasandra":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Doddaballapur Road":{"sch":2,"schN":"Limited reputed schools nearby.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Yelahanka":{"sch":5,"schN":"Premier IB/international hub (Canadian Intl, Vidyashilp).","wat":4,"watN":"Borewell-stressed in 2024.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Resident-rated safe; frequent patrols.","conf":"High"},"Hulimavu":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Seegehalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Bommanahalli":{"sch":3,"schN":"Adequate schooling; developing options.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Shettigere":{"sch":2,"schN":"Limited reputed schools nearby.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Magadi Road":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Nayandahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Ramamurthy Nagar":{"sch":2,"schN":"Limited reputed options.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Affordable, mixed; moderate.","conf":"High"},"Chikkajala":{"sch":2,"schN":"Limited reputed schools nearby.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Peenya":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Attibele":{"sch":2,"schN":"Outskirt, developing.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Vidyaranyapura":{"sch":3,"schN":"Adequate schooling; developing options.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":3,"fldN":"Moderate monsoon waterlogging.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Sunkadakatte":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Battarahalli":{"sch":4,"schN":"Good range of reputed CBSE/ICSE schools.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"Modeled"},"Hongasandra":{"sch":3,"schN":"Adequate schooling; developing options.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"},"Kengeri":{"sch":3,"schN":"Adequate; corridor growing.","wat":4,"watN":"Worst-hit 2024 (dry taps in high-rises).","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Nelamangala":{"sch":2,"schN":"Outskirt town; sparse reputed schools.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Chandapura":{"sch":2,"schN":"Outskirt CBSE; limited.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Anekal":{"sch":2,"schN":"Far-south town, sparse reputed schools.","wat":4,"watN":"Outskirt borewell-dependent.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Bidadi":{"sch":2,"schN":"Outskirt; developing.","wat":3,"watN":"Mixed Cauvery/borewell supply.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":4,"safN":"Residential; safe perception.","conf":"High"},"Jigani":{"sch":2,"schN":"Limited reputed schools nearby.","wat":4,"watN":"Borewell/tanker-dependent; historical stress.","fld":2,"fldN":"Low flood risk; occasional waterlogging.","saf":5,"safN":"Established residential; perceived very safe.","conf":"High"},"Hoskote":{"sch":2,"schN":"Outskirt, developing.","wat":4,"watN":"Far-east frontier; borewell-dependent.","fld":4,"fldN":"Flood-prone in heavy rain.","saf":3,"safN":"Busier/commercial; more street/petty crime.","conf":"High"}};
-const PROJECTS = {"projects":[{"builder":"Prestige","name":"Prestige Southern Star","loc":"Akshayanagar / Begur Rd","lat":12.873,"lng":77.623,"type":"Apartments (35ac township)","status":"Launched","price":"\u20b981L\u2013\u20b93.2Cr","note":"Gated township near Bannerghatta Rd; possession Dec 2029.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Evergreen","loc":"Varthur","lat":12.94,"lng":77.748,"type":"Apartments (28ac)","status":"Pre-launch","price":"from \u20b91.1Cr","note":"Phase 2 of 127-ac Raintree Park township.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Park Street","loc":"Devanahalli","lat":13.249,"lng":77.712,"type":"Apartments","status":"Pre-launch","price":"from \u20b985L","note":"Airport corridor; launch ~Oct 2026.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Falcon City Luxe","loc":"Konanakunte / Kanakapura Rd","lat":12.878,"lng":77.556,"type":"Apartments (41ac)","status":"Pre-launch","price":"\u20b91.2\u20133.5Cr","note":"Extension of Falcon City; Kanakapura Rd metro.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Forest Edge","loc":"Kanakapura Rd","lat":12.85,"lng":77.54,"type":"Apartments (8ac)","status":"Pre-launch","price":"from \u20b971L","note":"Green low-density positioning.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Grove Hills","loc":"Whitefield","lat":12.97,"lng":77.75,"type":"Apartments (7ac)","status":"Pre-launch","price":"from \u20b976L","note":"Compact-format township in core Whitefield.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Camden Gardens","loc":"Thanisandra","lat":13.064,"lng":77.63,"type":"Apartments (boutique)","status":"Launched","price":"from \u20b91.89Cr","note":"Boutique high-rise; possession Dec 2027.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Raintree Park","loc":"Varthur Rd, Whitefield","lat":12.942,"lng":77.746,"type":"Apartments (127ac township)","status":"Launched","price":"from \u20b92.59Cr","note":"Large luxury lakeside-themed township.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Somerville","loc":"Varthur Rd, Whitefield","lat":12.941,"lng":77.742,"type":"Apartments (6.58ac)","status":"Launched","price":"\u20b92.47\u20133.62Cr","note":"Premium enclave; possession Dec 2028.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Eaton Park","loc":"Sarjapur Rd (Prestige City)","lat":12.887,"lng":77.706,"type":"Apartments","status":"Under construction","price":"from \u20b975L","note":"Within 180-ac Prestige City Sarjapur.","color":"#e11d48"},{"builder":"Brigade","name":"Brigade Sanctuary","loc":"Whitefield\u2013Sarjapur Rd","lat":12.9,"lng":77.73,"type":"Apartments","status":"Launched","price":"from \u20b979L","note":"Between two IT corridors; possession Dec 2028.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Insignia","loc":"Whitefield\u2013Sarjapur Rd","lat":12.902,"lng":77.732,"type":"Apartments (6ac)","status":"Launched","price":"~\u20b92.66Cr","note":"Low-density luxury.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Eternia","loc":"Yelahanka","lat":13.1,"lng":77.596,"type":"Apartments","status":"Launched","price":"from \u20b92.21Cr","note":"Near airport belt.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Citrine","loc":"Budigere Cross","lat":13.035,"lng":77.76,"type":"Apartments (net-zero)","status":"Launched","price":"\u2013","note":"India's first net-zero apartments.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Lakecrest","loc":"Battarahalli, Old Madras Rd","lat":13.022,"lng":77.708,"type":"Apartments","status":"Launched","price":"from \u20b959L","note":"Lakefront; possession Mar 2030.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Oasis Ph3","loc":"Devanahalli","lat":13.25,"lng":77.7,"type":"Plots","status":"Launched","price":"from \u20b91.09Cr","note":"Airport-belt plotted township.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Hebbal","loc":"Rachenahalli, Hebbal","lat":13.048,"lng":77.62,"type":"Apartments","status":"Under construction","price":"from \u20b92.7Cr","note":"Lakeside; possession from Dec 2025.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Valencia","loc":"Hosur Rd / E-City","lat":12.84,"lng":77.67,"type":"Apartments (24ac)","status":"Under construction","price":"\u2013","note":"Spanish-themed; E-City connectivity.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Komarla Heights","loc":"Padmanabhanagar","lat":12.918,"lng":77.556,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Phase 1 possession ~2026.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Devanahalli","loc":"Devanahalli","lat":13.247,"lng":77.708,"type":"Apartments (boutique)","status":"Launched","price":"\u2013","note":"Boutique airport-belt project.","color":"#f59e0b"},{"builder":"Sobha","name":"Sobha World City","loc":"Hoskote","lat":13.07,"lng":77.798,"type":"Township (300ac plan)","status":"Pre-launch","price":"from \u20b91.09Cr","note":"One of East BLR's largest townships.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Ayana","loc":"Balagere / Panathur Rd","lat":12.948,"lng":77.718,"type":"Apartments (6.28ac)","status":"Launched","price":"from \u20b92.01Cr","note":"Forestscape theme; possession 2031.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Crystal Meadows","loc":"Mullur, Sarjapur Rd","lat":12.9,"lng":77.71,"type":"Row houses/villas","status":"Launched","price":"from \u20b910.5Cr","note":"London-themed ultra-luxury.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Altair","loc":"Hadosiddapura, Sarjapur Rd","lat":12.895,"lng":77.7,"type":"Apartments (3.3ac)","status":"Pre-launch","price":"\u2013","note":"Compact ultra-luxury.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Neopolis","loc":"Panathur Rd","lat":12.942,"lng":77.7,"type":"Apartments (township)","status":"Under construction","price":"\u20b91.43\u20131.53Cr","note":"Greek-themed; possession 2026.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Windsor Ph2","loc":"Whitefield","lat":12.97,"lng":77.74,"type":"Apartments (5.27ac)","status":"Under construction","price":"from \u20b92.20Cr","note":"Possession ~2025-26.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Royal Crest","loc":"Banashankari","lat":12.925,"lng":77.546,"type":"Apartments","status":"Launched","price":"from \u20b91.99Cr","note":"Possession Dec 2028.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Manhattan Towers","loc":"Attibele, Hosur Rd","lat":12.78,"lng":77.77,"type":"Apartments (8.62ac)","status":"Under construction","price":"from \u20b91.15Cr","note":"E-City affordability; possession Dec 2026.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Sentosa","loc":"Panathur Rd","lat":12.943,"lng":77.701,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Possession Dec 2027.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Galera","loc":"near Whitefield/Hoskote","lat":13.01,"lng":77.76,"type":"Villas","status":"Pre-launch","price":"\u2013","note":"Spanish-themed villas.","color":"#8b5cf6"},{"builder":"Century","name":"Century Regalia","loc":"Kodihalli (Domlur/Indiranagar)","lat":12.962,"lng":77.648,"type":"Apartments (ultra-prime)","status":"Launched","price":"\u20b95.1\u20138Cr","note":"Ultra-prime central-east luxury.","color":"#06b6d4"},{"builder":"Century","name":"Century Mirai","loc":"Marathahalli","lat":12.956,"lng":77.701,"type":"Apartments","status":"Launched","price":"~\u20b915,000/sqft","note":"Possession Nov 2030.","color":"#06b6d4"},{"builder":"Century","name":"Century Liva","loc":"Yelahanka","lat":13.1,"lng":77.5963,"type":"Apartments","status":"Launched","price":"~\u20b99,950/sqft","note":"70%+ open space; possession 2028.","color":"#06b6d4"},{"builder":"Century","name":"Century Bliss","loc":"Doddaballapura","lat":13.294,"lng":77.538,"type":"Apartments","status":"Launched","price":"from \u20b980L","note":"Far-north emerging belt.","color":"#06b6d4"},{"builder":"Century","name":"Century Trails","loc":"Devanahalli, IVC Rd","lat":13.23,"lng":77.67,"type":"Plots (60ac)","status":"Launched","price":"from \u20b940L","note":"BIAAPA-approved airport plots.","color":"#06b6d4"},{"builder":"Century","name":"Century Sports Village","loc":"Devanahalli Rd","lat":13.22,"lng":77.65,"type":"Plots","status":"Launched","price":"\u20b952.5L\u20131.05Cr","note":"Sports-themed plotted community.","color":"#06b6d4"},{"builder":"Godrej","name":"Godrej MSR City","loc":"Devanahalli (Shettigere)","lat":13.237,"lng":77.708,"type":"Township (62ac)","status":"Launched","price":"\u2013","note":"Large airport-corridor township, ~4000 units.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Woodscapes","loc":"Budigere Cross","lat":13.047,"lng":77.753,"type":"Apartments","status":"Launched","price":"\u2013","note":"Forest-themed; possession Mar 2029.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Bannerghatta Road","loc":"Bannerghatta Rd","lat":12.89,"lng":77.597,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"EOI opens Feb 2026.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Yelahanka","loc":"Yelahanka (NH-44)","lat":13.1007,"lng":77.5963,"type":"Apartments (10ac)","status":"Pre-launch","price":"from \u20b92.88Cr","note":"Launch ~Feb 2026; possession Jan 2030.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Tiara","loc":"Goraguntepalya / Yeshwanthpur","lat":13.028,"lng":77.538,"type":"Apartments","status":"Launched","price":"\u2013","note":"Near Yeshwanthpur metro/junction.","color":"#22c55e"},{"builder":"Puravankara","name":"Purva Northern Lights","loc":"KIADB Aerospace Park, Devanahalli","lat":13.23,"lng":77.69,"type":"Apartments (25ac)","status":"Launched","price":"from \u20b91.3Cr","note":"Large airport-corridor community.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Esplanade","loc":"Gummanahalli (Hardware Park)","lat":13.105,"lng":77.73,"type":"Apartments (24ac)","status":"Pre-launch","price":"\u2013","note":"Big North BLR launch; completion 2030.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Codename Futura","loc":"Balagere","lat":12.956,"lng":77.739,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Family-focused East BLR.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Codename Bliss","loc":"Hebbagodi (E-City)","lat":12.84,"lng":77.665,"type":"Apartments (7ac)","status":"Launched","price":"\u2013","note":"Near E-City employment belt.","color":"#ec4899"},{"builder":"Sattva","name":"Sattva City","loc":"Doddajala/Shettigere, Devanahalli","lat":13.215,"lng":77.705,"type":"Township (50ac)","status":"Pre-launch","price":"\u2013","note":"Flagship airport township; launch Mar 2026.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Vasanta Skye","loc":"Bellary Rd","lat":13.13,"lng":77.59,"type":"Apartments","status":"Pre-launch","price":"from \u20b978L","note":"Wide config range on Bellary Rd.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Bhumi","loc":"Vijayapura (North)","lat":13.49,"lng":77.79,"type":"Plots","status":"Launched","price":"from \u20b937.6L","note":"Northern growth edge.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Bliss","loc":"Budigere Cross","lat":13.047,"lng":77.753,"type":"Apartments","status":"Upcoming","price":"from \u20b939.58L","note":"Compact affordable East BLR.","color":"#3b82f6"},{"builder":"Embassy","name":"Embassy Greenshore","loc":"Embassy Springs, Devanahalli","lat":13.22,"lng":77.67,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Inside 288-ac Embassy Springs township.","color":"#14b8a6"},{"builder":"Embassy","name":"Embassy Verde Ph2","loc":"Embassy Springs, Devanahalli","lat":13.221,"lng":77.671,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Next phase of Verde.","color":"#14b8a6"},{"builder":"Embassy","name":"Embassy Hebbal","loc":"Hebbal","lat":13.049,"lng":77.591,"type":"Apartments (10ac)","status":"Announced","price":"\u2013","note":"Prime Hebbal lakeside-adjacent.","color":"#14b8a6"},{"builder":"Birla","name":"Birla Evara","loc":"Sarjapur Rd","lat":12.895,"lng":77.69,"type":"Apartments (25ac)","status":"Launched","price":"from \u20b977L","note":"Large Sarjapur Rd community.","color":"#f43f5e"},{"builder":"Birla","name":"Birla Tisya","loc":"Magadi Rd","lat":12.978,"lng":77.535,"type":"Apartments (ultra-luxury)","status":"Under construction","price":"\u2013","note":"Possession from Dec 2026.","color":"#f43f5e"},{"builder":"Birla","name":"Birla Ojasvi","loc":"Rajarajeshwari Nagar","lat":12.923,"lng":77.518,"type":"Township (10.2ac)","status":"Launched","price":"\u2013","note":"Vastu-compliant mixed-use.","color":"#f43f5e"},{"builder":"Total Environment","name":"Pursuit of a Radical Rhapsody","loc":"Hoodi","lat":12.992,"lng":77.715,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Signature lush design; possession Jan 2026.","color":"#84cc16"},{"builder":"Total Environment","name":"Tangled Up In Green","loc":"Devanahalli","lat":13.248,"lng":77.712,"type":"Plots (110ac)","status":"Upcoming","price":"from \u20b91.39Cr","note":"Green-themed plotted township.","color":"#84cc16"},{"builder":"Total Environment","name":"The Magic Faraway Tree","loc":"South/East BLR (approx)","lat":12.91,"lng":77.64,"type":"Apartments","status":"Upcoming","price":"from \u20b92.49Cr","note":"Nature-integrated homes; exact loc TBC.","color":"#84cc16"},{"builder":"Assetz","name":"Assetz KR Puram","loc":"KR Puram","lat":13.008,"lng":77.696,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Launch Jan 2026.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Hennur Extension","loc":"Hennur","lat":13.07,"lng":77.645,"type":"Apartments + villas","status":"Pre-launch","price":"\u2013","note":"Mixed-format green community.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Codename The Hideaway","loc":"IVC Rd, Devanahalli","lat":13.205,"lng":77.63,"type":"Plots + apts","status":"Pre-launch","price":"\u2013","note":"Airport-corridor mix; possession Dec 2026.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Mizumi Reserve","loc":"Kudlu (E-City/HSR)","lat":12.887,"lng":77.648,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Japanese-inspired; possession Mar 2029.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Promise of Spring","loc":"Devanahalli","lat":13.245,"lng":77.71,"type":"Plots","status":"Launched","price":"\u2013","note":"Premium airport plots; possession Oct 2026.","color":"#a855f7"},{"builder":"Mahindra","name":"Mahindra Blossom","loc":"Whitefield","lat":12.9698,"lng":77.75,"type":"Apartments (net-zero)","status":"Launched","price":"\u2013","note":"3rd Net-Zero project; possession Dec 2026.","color":"#fb923c"},{"builder":"Mahindra","name":"Mahindra North Bangalore","loc":"Sadahalli / Doddajala","lat":13.205,"lng":77.7,"type":"Apartments (8.2ac)","status":"Announced","price":"\u2013","note":"New airport-corridor entry near KIA.","color":"#fb923c"},{"builder":"Shriram","name":"Shriram Codename The One","loc":"Kambalipura Rd (approx)","lat":12.88,"lng":77.67,"type":"Apartments","status":"Launched","price":"\u2013","note":"Premium mid-size; possession 2030.","color":"#eab308"},{"builder":"Shriram","name":"Shriram Sarjapur","loc":"Sarjapur Main Rd","lat":12.86,"lng":77.785,"type":"Apartments","status":"Announced","price":"\u2013","note":"4-acre high-rise; launch late 2026.","color":"#eab308"},{"builder":"L&T Realty","name":"L&T Raintree Boulevard","loc":"Sahakar Nagar / Hebbal","lat":13.057,"lng":77.587,"type":"Apartments (65ac)","status":"Under construction","price":"\u2013","note":"Large community; possession from Mar 2026.","color":"#0ea5e9"},{"builder":"L&T Realty","name":"L&T Elara Celestia","loc":"Sarjapur Rd","lat":12.9,"lng":77.695,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"L&T's Sarjapur corridor entry.","color":"#0ea5e9"},{"builder":"Tata","name":"Tata Carnatica / Varnam","loc":"Shettigere, Devanahalli","lat":13.23,"lng":77.7,"type":"Township (135ac)","status":"Launched","price":"\u2013","note":"Carnatic-themed; \u20b91000Cr sold in 60 days; 6.8km from KIA.","color":"#10b981"},{"builder":"Adarsh","name":"Adarsh Tropica Ph2","loc":"Off Sarjapur Rd","lat":12.9,"lng":77.7,"type":"Apartments","status":"Launched","price":"\u2013","note":"Connectivity-focused Sarjapur community.","color":"#d946ef"},{"builder":"Adarsh","name":"Adarsh Rosewood","loc":"Bellandur","lat":12.926,"lng":77.676,"type":"Apartments","status":"Launched","price":"\u2013","note":"Close to ORR/Bellandur tech hubs.","color":"#d946ef"},{"builder":"Adarsh","name":"Adarsh Crest Ph2","loc":"Hebbal","lat":13.044,"lng":77.592,"type":"Apartments","status":"Upcoming","price":"\u2013","note":"Possession Dec 2030.","color":"#d946ef"},{"builder":"Mana","name":"Mana Dale Ph2","loc":"Sarjapur Rd (RGA Tech Park)","lat":12.905,"lng":77.72,"type":"Apartments","status":"Launched","price":"\u2013","note":"Nature-themed; 75% open space.","color":"#94a3b8"},{"builder":"Casagrand","name":"Casagrand Promenade","loc":"Yelahanka","lat":13.1,"lng":77.596,"type":"Apartments (3.89ac)","status":"Pre-launch","price":"\u2013","note":"Compact premium Yelahanka.","color":"#f472b6"},{"builder":"Casagrand","name":"Casagrand Casablanca","loc":"Kanakapura Rd","lat":12.885,"lng":77.545,"type":"Apartments","status":"Launched","price":"\u20b988L\u20133.63Cr","note":"Wide-config launch.","color":"#f472b6"},{"builder":"Casagrand","name":"Casagrand Hazen","loc":"BTM Layout","lat":12.916,"lng":77.61,"type":"Apartments (9ac)","status":"Launched","price":"from \u20b948L","note":"Rare central-south launch.","color":"#f472b6"}],"builders":{"Prestige":"#e11d48","Brigade":"#f59e0b","Sobha":"#8b5cf6","Century":"#06b6d4","Godrej":"#22c55e","Puravankara":"#ec4899","Sattva":"#3b82f6","Embassy":"#14b8a6","Birla":"#f43f5e","Total Environment":"#84cc16","Assetz":"#a855f7","Mahindra":"#fb923c","Shriram":"#eab308","L&T Realty":"#0ea5e9","Tata":"#10b981","Adarsh":"#d946ef","Mana":"#94a3b8","Casagrand":"#f472b6"},"meta":{"count":77,"note":"A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Compiled May 2026."}};
+const PROJECTS = {"projects":[{"builder":"Prestige","name":"Prestige Southern Star","loc":"Akshayanagar / Begur Rd","lat":12.873,"lng":77.623,"type":"Apartments (35ac township)","status":"Launched","price":"\u20b981L\u2013\u20b93.2Cr","note":"Gated township near Bannerghatta Rd; possession Dec 2029.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Evergreen","loc":"Varthur","lat":12.94,"lng":77.748,"type":"Apartments (28ac)","status":"Pre-launch","price":"from \u20b91.1Cr","note":"Phase 2 of 127-ac Raintree Park township.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Park Street","loc":"Devanahalli","lat":13.249,"lng":77.712,"type":"Apartments","status":"Pre-launch","price":"from \u20b985L","note":"Airport corridor; launch ~Oct 2026.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Falcon City Luxe","loc":"Konanakunte / Kanakapura Rd","lat":12.878,"lng":77.556,"type":"Apartments (41ac)","status":"Pre-launch","price":"\u20b91.2\u20133.5Cr","note":"Extension of Falcon City; Kanakapura Rd metro.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Forest Edge","loc":"Kanakapura Rd","lat":12.85,"lng":77.54,"type":"Apartments (8ac)","status":"Pre-launch","price":"from \u20b971L","note":"Green low-density positioning.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Grove Hills","loc":"Whitefield","lat":12.97,"lng":77.75,"type":"Apartments (7ac)","status":"Pre-launch","price":"from \u20b976L","note":"Compact-format township in core Whitefield.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Camden Gardens","loc":"Thanisandra","lat":13.064,"lng":77.63,"type":"Apartments (boutique)","status":"Launched","price":"from \u20b91.89Cr","note":"Boutique high-rise; possession Dec 2027.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Raintree Park","loc":"Varthur Rd, Whitefield","lat":12.942,"lng":77.746,"type":"Apartments (127ac township)","status":"Launched","price":"from \u20b92.59Cr","note":"Large luxury lakeside-themed township.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Somerville","loc":"Varthur Rd, Whitefield","lat":12.941,"lng":77.742,"type":"Apartments (6.58ac)","status":"Launched","price":"\u20b92.47\u20133.62Cr","note":"Premium enclave; possession Dec 2028.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Eaton Park","loc":"Sarjapur Rd (Prestige City)","lat":12.887,"lng":77.706,"type":"Apartments","status":"Under construction","price":"from \u20b975L","note":"Within 180-ac Prestige City Sarjapur.","color":"#e11d48"},{"builder":"Brigade","name":"Brigade Sanctuary","loc":"Whitefield\u2013Sarjapur Rd","lat":12.9,"lng":77.73,"type":"Apartments","status":"Launched","price":"from \u20b979L","note":"Between two IT corridors; possession Dec 2028.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Insignia","loc":"Whitefield\u2013Sarjapur Rd","lat":12.902,"lng":77.732,"type":"Apartments (6ac)","status":"Launched","price":"~\u20b92.66Cr","note":"Low-density luxury.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Eternia","loc":"Yelahanka","lat":13.1,"lng":77.596,"type":"Apartments","status":"Launched","price":"from \u20b92.21Cr","note":"Near airport belt.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Citrine","loc":"Budigere Cross","lat":13.035,"lng":77.76,"type":"Apartments (net-zero)","status":"Launched","price":"\u2013","note":"India's first net-zero apartments.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Lakecrest","loc":"Battarahalli, Old Madras Rd","lat":13.022,"lng":77.708,"type":"Apartments","status":"Launched","price":"from \u20b959L","note":"Lakefront; possession Mar 2030.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Oasis Ph3","loc":"Devanahalli","lat":13.25,"lng":77.7,"type":"Plots","status":"Launched","price":"from \u20b91.09Cr","note":"Airport-belt plotted township.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Hebbal","loc":"Rachenahalli, Hebbal","lat":13.048,"lng":77.62,"type":"Apartments","status":"Under construction","price":"from \u20b92.7Cr","note":"Lakeside; possession from Dec 2025.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Valencia","loc":"Hosur Rd / E-City","lat":12.84,"lng":77.67,"type":"Apartments (24ac)","status":"Under construction","price":"\u2013","note":"Spanish-themed; E-City connectivity.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Komarla Heights","loc":"Padmanabhanagar","lat":12.918,"lng":77.556,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Phase 1 possession ~2026.","color":"#f59e0b"},{"builder":"Brigade","name":"Brigade Devanahalli","loc":"Devanahalli","lat":13.247,"lng":77.708,"type":"Apartments (boutique)","status":"Launched","price":"\u2013","note":"Boutique airport-belt project.","color":"#f59e0b"},{"builder":"Sobha","name":"Sobha World City","loc":"Hoskote","lat":13.07,"lng":77.798,"type":"Township (300ac plan)","status":"Pre-launch","price":"from \u20b91.09Cr","note":"One of East BLR's largest townships.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Ayana","loc":"Balagere / Panathur Rd","lat":12.948,"lng":77.718,"type":"Apartments (6.28ac)","status":"Launched","price":"from \u20b92.01Cr","note":"Forestscape theme; possession 2031.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Crystal Meadows","loc":"Mullur, Sarjapur Rd","lat":12.9,"lng":77.71,"type":"Row houses/villas","status":"Launched","price":"from \u20b910.5Cr","note":"London-themed ultra-luxury.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Altair","loc":"Hadosiddapura, Sarjapur Rd","lat":12.895,"lng":77.7,"type":"Apartments (3.3ac)","status":"Pre-launch","price":"\u2013","note":"Compact ultra-luxury.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Neopolis","loc":"Panathur Rd","lat":12.942,"lng":77.7,"type":"Apartments (township)","status":"Under construction","price":"\u20b91.43\u20131.53Cr","note":"Greek-themed; possession 2026.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Windsor Ph2","loc":"Whitefield","lat":12.97,"lng":77.74,"type":"Apartments (5.27ac)","status":"Under construction","price":"from \u20b92.20Cr","note":"Possession ~2025-26.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Royal Crest","loc":"Banashankari","lat":12.925,"lng":77.546,"type":"Apartments","status":"Launched","price":"from \u20b91.99Cr","note":"Possession Dec 2028.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Manhattan Towers","loc":"Attibele, Hosur Rd","lat":12.78,"lng":77.77,"type":"Apartments (8.62ac)","status":"Under construction","price":"from \u20b91.15Cr","note":"E-City affordability; possession Dec 2026.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Sentosa","loc":"Panathur Rd","lat":12.943,"lng":77.701,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Possession Dec 2027.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Galera","loc":"near Whitefield/Hoskote","lat":13.01,"lng":77.76,"type":"Villas","status":"Pre-launch","price":"\u2013","note":"Spanish-themed villas.","color":"#8b5cf6"},{"builder":"Century","name":"Century Regalia","loc":"Kodihalli (Domlur/Indiranagar)","lat":12.962,"lng":77.648,"type":"Apartments (ultra-prime)","status":"Launched","price":"\u20b95.1\u20138Cr","note":"Ultra-prime central-east luxury.","color":"#06b6d4"},{"builder":"Century","name":"Century Mirai","loc":"Marathahalli","lat":12.956,"lng":77.701,"type":"Apartments","status":"Launched","price":"~\u20b915,000/sqft","note":"Possession Nov 2030.","color":"#06b6d4"},{"builder":"Century","name":"Century Liva","loc":"Yelahanka","lat":13.1,"lng":77.5963,"type":"Apartments","status":"Launched","price":"~\u20b99,950/sqft","note":"70%+ open space; possession 2028.","color":"#06b6d4"},{"builder":"Century","name":"Century Bliss","loc":"Doddaballapura","lat":13.294,"lng":77.538,"type":"Apartments","status":"Launched","price":"from \u20b980L","note":"Far-north emerging belt.","color":"#06b6d4"},{"builder":"Century","name":"Century Trails","loc":"Devanahalli, IVC Rd","lat":13.23,"lng":77.67,"type":"Plots (60ac)","status":"Launched","price":"from \u20b940L","note":"BIAAPA-approved airport plots.","color":"#06b6d4"},{"builder":"Century","name":"Century Sports Village","loc":"Devanahalli Rd","lat":13.22,"lng":77.65,"type":"Plots","status":"Launched","price":"\u20b952.5L\u20131.05Cr","note":"Sports-themed plotted community.","color":"#06b6d4"},{"builder":"Godrej","name":"Godrej MSR City","loc":"Devanahalli (Shettigere)","lat":13.237,"lng":77.708,"type":"Township (62ac)","status":"Launched","price":"\u2013","note":"Large airport-corridor township, ~4000 units.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Woodscapes","loc":"Budigere Cross","lat":13.047,"lng":77.753,"type":"Apartments","status":"Launched","price":"\u2013","note":"Forest-themed; possession Mar 2029.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Bannerghatta Road","loc":"Bannerghatta Rd","lat":12.89,"lng":77.597,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"EOI opens Feb 2026.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Yelahanka","loc":"Yelahanka (NH-44)","lat":13.1007,"lng":77.5963,"type":"Apartments (10ac)","status":"Pre-launch","price":"from \u20b92.88Cr","note":"Launch ~Feb 2026; possession Jan 2030.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Tiara","loc":"Goraguntepalya / Yeshwanthpur","lat":13.028,"lng":77.538,"type":"Apartments","status":"Launched","price":"\u2013","note":"Near Yeshwanthpur metro/junction.","color":"#22c55e"},{"builder":"Puravankara","name":"Purva Northern Lights","loc":"KIADB Aerospace Park, Devanahalli","lat":13.23,"lng":77.69,"type":"Apartments (25ac)","status":"Launched","price":"from \u20b91.3Cr","note":"Large airport-corridor community.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Esplanade","loc":"Gummanahalli (Hardware Park)","lat":13.105,"lng":77.73,"type":"Apartments (24ac)","status":"Pre-launch","price":"\u2013","note":"Big North BLR launch; completion 2030.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Codename Futura","loc":"Balagere","lat":12.956,"lng":77.739,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Family-focused East BLR.","color":"#ec4899"},{"builder":"Puravankara","name":"Purva Codename Bliss","loc":"Hebbagodi (E-City)","lat":12.84,"lng":77.665,"type":"Apartments (7ac)","status":"Launched","price":"\u2013","note":"Near E-City employment belt.","color":"#ec4899"},{"builder":"Sattva","name":"Sattva City","loc":"Doddajala/Shettigere, Devanahalli","lat":13.215,"lng":77.705,"type":"Township (50ac)","status":"Pre-launch","price":"\u2013","note":"Flagship airport township; launch Mar 2026.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Vasanta Skye","loc":"Bellary Rd","lat":13.13,"lng":77.59,"type":"Apartments","status":"Pre-launch","price":"from \u20b978L","note":"Wide config range on Bellary Rd.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Bhumi","loc":"Vijayapura (North)","lat":13.49,"lng":77.79,"type":"Plots","status":"Launched","price":"from \u20b937.6L","note":"Northern growth edge.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Bliss","loc":"Budigere Cross","lat":13.047,"lng":77.753,"type":"Apartments","status":"Upcoming","price":"from \u20b939.58L","note":"Compact affordable East BLR.","color":"#3b82f6"},{"builder":"Embassy","name":"Embassy Greenshore","loc":"Embassy Springs, Devanahalli","lat":13.22,"lng":77.67,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Inside 288-ac Embassy Springs township.","color":"#14b8a6"},{"builder":"Embassy","name":"Embassy Verde Ph2","loc":"Embassy Springs, Devanahalli","lat":13.221,"lng":77.671,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Next phase of Verde.","color":"#14b8a6"},{"builder":"Embassy","name":"Embassy Hebbal","loc":"Hebbal","lat":13.049,"lng":77.591,"type":"Apartments (10ac)","status":"Announced","price":"\u2013","note":"Prime Hebbal lakeside-adjacent.","color":"#14b8a6"},{"builder":"Birla","name":"Birla Evara","loc":"Sarjapur Rd","lat":12.895,"lng":77.69,"type":"Apartments (25ac)","status":"Launched","price":"from \u20b977L","note":"Large Sarjapur Rd community.","color":"#f43f5e"},{"builder":"Birla","name":"Birla Tisya","loc":"Magadi Rd","lat":12.978,"lng":77.535,"type":"Apartments (ultra-luxury)","status":"Under construction","price":"\u2013","note":"Possession from Dec 2026.","color":"#f43f5e"},{"builder":"Birla","name":"Birla Ojasvi","loc":"Rajarajeshwari Nagar","lat":12.923,"lng":77.518,"type":"Township (10.2ac)","status":"Launched","price":"\u2013","note":"Vastu-compliant mixed-use.","color":"#f43f5e"},{"builder":"Total Environment","name":"Pursuit of a Radical Rhapsody","loc":"Hoodi","lat":12.992,"lng":77.715,"type":"Apartments","status":"Under construction","price":"\u2013","note":"Signature lush design; possession Jan 2026.","color":"#84cc16"},{"builder":"Total Environment","name":"Tangled Up In Green","loc":"Devanahalli","lat":13.248,"lng":77.712,"type":"Plots (110ac)","status":"Upcoming","price":"from \u20b91.39Cr","note":"Green-themed plotted township.","color":"#84cc16"},{"builder":"Total Environment","name":"The Magic Faraway Tree","loc":"South/East BLR (approx)","lat":12.91,"lng":77.64,"type":"Apartments","status":"Upcoming","price":"from \u20b92.49Cr","note":"Nature-integrated homes; exact loc TBC.","color":"#84cc16"},{"builder":"Assetz","name":"Assetz KR Puram","loc":"KR Puram","lat":13.008,"lng":77.696,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Launch Jan 2026.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Hennur Extension","loc":"Hennur","lat":13.07,"lng":77.645,"type":"Apartments + villas","status":"Pre-launch","price":"\u2013","note":"Mixed-format green community.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Codename The Hideaway","loc":"IVC Rd, Devanahalli","lat":13.205,"lng":77.63,"type":"Plots + apts","status":"Pre-launch","price":"\u2013","note":"Airport-corridor mix; possession Dec 2026.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Mizumi Reserve","loc":"Kudlu (E-City/HSR)","lat":12.887,"lng":77.648,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"Japanese-inspired; possession Mar 2029.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Promise of Spring","loc":"Devanahalli","lat":13.245,"lng":77.71,"type":"Plots","status":"Launched","price":"\u2013","note":"Premium airport plots; possession Oct 2026.","color":"#a855f7"},{"builder":"Mahindra","name":"Mahindra Blossom","loc":"Whitefield","lat":12.9698,"lng":77.75,"type":"Apartments (net-zero)","status":"Launched","price":"\u2013","note":"3rd Net-Zero project; possession Dec 2026.","color":"#fb923c"},{"builder":"Mahindra","name":"Mahindra North Bangalore","loc":"Sadahalli / Doddajala","lat":13.205,"lng":77.7,"type":"Apartments (8.2ac)","status":"Announced","price":"\u2013","note":"New airport-corridor entry near KIA.","color":"#fb923c"},{"builder":"Shriram","name":"Shriram Codename The One","loc":"Kambalipura Rd (approx)","lat":12.88,"lng":77.67,"type":"Apartments","status":"Launched","price":"\u2013","note":"Premium mid-size; possession 2030.","color":"#eab308"},{"builder":"Shriram","name":"Shriram Sarjapur","loc":"Sarjapur Main Rd","lat":12.86,"lng":77.785,"type":"Apartments","status":"Announced","price":"\u2013","note":"4-acre high-rise; launch late 2026.","color":"#eab308"},{"builder":"L&T Realty","name":"L&T Raintree Boulevard","loc":"Sahakar Nagar / Hebbal","lat":13.057,"lng":77.587,"type":"Apartments (65ac)","status":"Under construction","price":"\u2013","note":"Large community; possession from Mar 2026.","color":"#0ea5e9"},{"builder":"L&T Realty","name":"L&T Elara Celestia","loc":"Sarjapur Rd","lat":12.9,"lng":77.695,"type":"Apartments","status":"Pre-launch","price":"\u2013","note":"L&T's Sarjapur corridor entry.","color":"#0ea5e9"},{"builder":"Tata","name":"Tata Carnatica / Varnam","loc":"Shettigere, Devanahalli","lat":13.23,"lng":77.7,"type":"Township (135ac)","status":"Launched","price":"\u2013","note":"Carnatic-themed; \u20b91000Cr sold in 60 days; 6.8km from KIA.","color":"#10b981"},{"builder":"Adarsh","name":"Adarsh Tropica Ph2","loc":"Off Sarjapur Rd","lat":12.9,"lng":77.7,"type":"Apartments","status":"Launched","price":"\u2013","note":"Connectivity-focused Sarjapur community.","color":"#d946ef"},{"builder":"Adarsh","name":"Adarsh Rosewood","loc":"Bellandur","lat":12.926,"lng":77.676,"type":"Apartments","status":"Launched","price":"\u2013","note":"Close to ORR/Bellandur tech hubs.","color":"#d946ef"},{"builder":"Adarsh","name":"Adarsh Crest Ph2","loc":"Hebbal","lat":13.044,"lng":77.592,"type":"Apartments","status":"Upcoming","price":"\u2013","note":"Possession Dec 2030.","color":"#d946ef"},{"builder":"Mana","name":"Mana Dale Ph2","loc":"Sarjapur Rd (RGA Tech Park)","lat":12.905,"lng":77.72,"type":"Apartments","status":"Launched","price":"\u2013","note":"Nature-themed; 75% open space.","color":"#94a3b8"},{"builder":"Casagrand","name":"Casagrand Promenade","loc":"Yelahanka","lat":13.1,"lng":77.596,"type":"Apartments (3.89ac)","status":"Pre-launch","price":"\u2013","note":"Compact premium Yelahanka.","color":"#f472b6"},{"builder":"Casagrand","name":"Casagrand Casablanca","loc":"Kanakapura Rd","lat":12.885,"lng":77.545,"type":"Apartments","status":"Launched","price":"\u20b988L\u20133.63Cr","note":"Wide-config launch.","color":"#f472b6"},{"builder":"Casagrand","name":"Casagrand Hazen","loc":"BTM Layout","lat":12.916,"lng":77.61,"type":"Apartments (9ac)","status":"Launched","price":"from \u20b948L","note":"Rare central-south launch.","color":"#f472b6"},{"builder":"Prestige","name":"Prestige Windgates","loc":"Thanisandra","lat":13.0648,"lng":77.6248,"type":"Apartments","status":"Pre-launch","price":"₹92L-1.51Cr","note":"7-acre, 4-tower project on Thanisandra Main Rd; possession ~2030.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige City Sarjapur","loc":"Sarjapur","lat":12.859,"lng":77.786,"type":"Apartments (township)","status":"Upcoming","price":"–","note":"Integrated township (apts/villas/plots) on Sarjapur corridor; possession ~Mar 2030.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Suncrest","loc":"Electronic City Ph2","lat":12.841,"lng":77.677,"type":"Apartments","status":"Launched","price":"from ₹70L","note":"5.8-acre gated community, 437 units of 1/2/3 BHK; RERA approved.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Pine Forest","loc":"Whitefield","lat":12.9698,"lng":77.7499,"type":"Apartments","status":"Upcoming","price":"from ₹60L","note":"Compact 1/2/3 BHK in core Whitefield tech corridor.","color":"#e11d48"},{"builder":"Prestige","name":"Prestige Spring Heights","loc":"ORR (Budvel)","lat":12.91,"lng":77.64,"type":"Apartments","status":"Launched","price":"–","note":"RERA-approved premium apartments near ORR; possession after Mar 2030.","color":"#e11d48"},{"builder":"Brigade","name":"Brigade Lumina","loc":"Tumkur Road","lat":13.056,"lng":77.505,"type":"Apartments","status":"Launched","price":"from ₹1.45Cr","note":"4-acre, 416-unit 2/3 BHK on Tumkur Rd; possession Jan 2031.","color":"#f59e0b"},{"builder":"Sobha","name":"Sobha Townpark (Madison Heights)","loc":"Hosur Rd, E-City","lat":12.80,"lng":77.69,"type":"Apartments (township)","status":"Launched","price":"–","note":"NY-themed 50+ ac township near E-City; 42-storey Madison Heights, 1-4 BHK.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Hamptons","loc":"Hosur Rd, E-City","lat":12.801,"lng":77.691,"type":"Apartments","status":"Pre-launch","price":"–","note":"45-storey, 984-unit tower within Sobha Townpark; awaiting RERA.","color":"#8b5cf6"},{"builder":"Sobha","name":"Sobha Oakshire","loc":"IVC Rd, Devanahalli","lat":13.22,"lng":77.64,"type":"Villas","status":"Under construction","price":"from ₹5.1Cr","note":"8.5-acre gated project, 80 four-BHK villas; possession 2026-27.","color":"#8b5cf6"},{"builder":"Godrej","name":"Godrej Vanantara","loc":"Bannerghatta Road","lat":12.848,"lng":77.597,"type":"Apartments (township)","status":"Launched","price":"from ₹1.57Cr","note":"36-acre estate, 16 towers, 2,008 units with two lakes; possession Dec 2031.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Athena","loc":"Indiranagar (HAL)","lat":12.9719,"lng":77.6412,"type":"Apartments","status":"Launched","price":"₹68.65L-2.6Cr","note":"Low-rise G+4 Greco-Roman boutique project, 330 units; possession ~2028.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej Lakeside Orchard","loc":"Sarjapur Road","lat":12.905,"lng":77.735,"type":"Apartments","status":"Launched","price":"from ₹1.85Cr","note":"15.9-acre lakeside project, 698 homes in 6 towers; possession Sep 2030.","color":"#22c55e"},{"builder":"Godrej","name":"Godrej IHP Yelahanka","loc":"Yelahanka","lat":13.10,"lng":77.596,"type":"Apartments (township)","status":"Launched","price":"–","note":"Township on former Indian Hume Pipe land near Yelahanka metro; possession 2030.","color":"#22c55e"},{"builder":"Sattva","name":"Sattva Whitefield","loc":"Whitefield","lat":12.9698,"lng":77.7499,"type":"Apartments","status":"Launched","price":"from ₹1.1Cr","note":"25-acre development with 2 & 3 BHK in core Whitefield.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Lumina","loc":"Yelahanka","lat":13.1257,"lng":77.6093,"type":"Apartments","status":"Launched","price":"from ₹38L","note":"13-acre township, 8 towers, studios to 3 BHK near Doddaballapura Rd.","color":"#3b82f6"},{"builder":"Sattva","name":"Sattva Plots Doddaballapur","loc":"Doddaballapur","lat":13.292,"lng":77.537,"type":"Plots","status":"Upcoming","price":"–","note":"Plotted development in fast-growing North Bangalore.","color":"#3b82f6"},{"builder":"Birla","name":"Birla Trimaya Ph4 (The Bay)","loc":"Devanahalli","lat":13.2257,"lng":77.7081,"type":"Apartments","status":"Pre-launch","price":"from ₹95L","note":"Phase 4 of 52-acre Shettigere Rd township; EOI from Jan 2026.","color":"#f43f5e"},{"builder":"Assetz","name":"Assetz Soho & Sky Ph2","loc":"Jakkur","lat":13.076,"lng":77.608,"type":"Apartments","status":"Launched","price":"from ₹2.77Cr","note":"Boutique North Bangalore project; possession by Sep 2026.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz Melodies of Life","loc":"Hosa Road","lat":12.865,"lng":77.67,"type":"Plots","status":"Under construction","price":"–","note":"39-acre plotted development, 505 plots off Hosa Road.","color":"#a855f7"},{"builder":"Assetz","name":"Assetz 63 East","loc":"Kodathi, Sarjapur Rd","lat":12.8975,"lng":77.725,"type":"Apartments","status":"Under construction","price":"–","note":"26-acre sustainable township, studio to 3 BHK off Sarjapur Rd.","color":"#a855f7"},{"builder":"Total Environment","name":"Total Environment Rajanukunte","loc":"Rajanukunte","lat":13.164,"lng":77.556,"type":"Apartments","status":"Pre-launch","price":"from ₹1.53Cr","note":"60-70 ac mixed-use (plots/villas/apts) in North Bangalore.","color":"#84cc16"},{"builder":"Total Environment","name":"In That Quiet Earth","loc":"Hennur Road","lat":13.066,"lng":77.643,"type":"Apartments","status":"Under construction","price":"–","note":"Luxury 3 & 4 BHK on Hennur Rd; possession from late 2025.","color":"#84cc16"},{"builder":"Century","name":"Century Tisora","loc":"Attur, Yelahanka","lat":13.094,"lng":77.566,"type":"Apartments","status":"Pre-launch","price":"from ₹1.21Cr","note":"14-acre lakefront, ~1,200 lake-facing 2-4 BHK; launch 2026.","color":"#06b6d4"},{"builder":"L&T Realty","name":"L&T Olivia at Raintree Blvd","loc":"Hebbal","lat":13.049,"lng":77.595,"type":"Apartments","status":"Under construction","price":"from ₹2.30Cr","note":"566 premium 3 & 4 BHK on 7.38 ac next to GKVK.","color":"#0ea5e9"},{"builder":"Tata","name":"Tata Swaram","loc":"Devanahalli","lat":13.23,"lng":77.71,"type":"Plots","status":"Launched","price":"–","note":"Plotted dev within the 140-ac Tata Carnatica megacity.","color":"#10b981"},{"builder":"Tata","name":"Tata Doddanekundi","loc":"Doddanekundi, Whitefield","lat":12.978,"lng":77.696,"type":"Apartments","status":"Upcoming","price":"–","note":"Low-density 2 & 3 BHK on a 25+ ac Whitefield parcel.","color":"#10b981"},{"builder":"Tata","name":"Tata One Bangalore Luxury","loc":"Devanahalli","lat":13.248,"lng":77.718,"type":"Apartments","status":"Upcoming","price":"–","note":"140-ac development with ultra-luxury apts, villas & plots.","color":"#10b981"},{"builder":"Shriram","name":"Shriram Serenity","loc":"Rajanukunte, Yelahanka","lat":13.173,"lng":77.536,"type":"Apartments","status":"Launched","price":"from ₹87L","note":"2 & 3 BHK across 4 ac in north Bangalore.","color":"#eab308"},{"builder":"Adarsh","name":"Adarsh Bellandur","loc":"Bellandur","lat":12.926,"lng":77.676,"type":"Apartments & Villas","status":"Upcoming","price":"–","note":"~40-ac 2 & 3 BHK plus villas on Bellandur land.","color":"#d946ef"},{"builder":"Adarsh","name":"Adarsh Thanisandra","loc":"Thanisandra","lat":13.064,"lng":77.623,"type":"Apartments","status":"Upcoming","price":"–","note":"Premium 2 & 3 BHK on a 9-ac Thanisandra parcel.","color":"#d946ef"},{"builder":"Mana","name":"Mana Vista","loc":"Gattahalli, Sarjapur Rd","lat":12.887,"lng":77.73,"type":"Apartments","status":"Launched","price":"from ₹1.23Cr","note":"Low-density 2.5 & 3 BHK, two homes per floor.","color":"#94a3b8"},{"builder":"Mana","name":"Mana Right Life Ph2","loc":"Bommasandra-Whitefield","lat":12.85,"lng":77.68,"type":"Township","status":"Upcoming","price":"–","note":"~2.3M sqft child-centric township.","color":"#94a3b8"},{"builder":"Lodha","name":"Lodha Haven","loc":"HSR Ext / Hosa Rd","lat":12.892,"lng":77.648,"type":"Apartments","status":"Launched","price":"from ₹2.30Cr","note":"3-4 BHK luxury towers; Lodha's south-east Bangalore launch.","color":"#dc2626"},{"builder":"Lodha","name":"Lodha Sadahalli","loc":"Sadahalli, Devanahalli","lat":13.221,"lng":77.711,"type":"Apartments","status":"Pre-launch","price":"from ₹1.5Cr","note":"Integrated township near the airport corridor.","color":"#dc2626"},{"builder":"Kolte-Patil","name":"Kolte-Patil Lakeside 24","loc":"Hennur Road","lat":13.072,"lng":77.642,"type":"Apartments","status":"Launched","price":"–","note":"New launch overlooking Kannur Lake on Hennur Rd.","color":"#a16207"},{"builder":"Sumadhura","name":"Folium by Sumadhura Ph4","loc":"Whitefield","lat":12.969,"lng":77.75,"type":"Apartments","status":"Launched","price":"–","note":"500 lakeside units; latest phase of Folium.","color":"#0d9488"},{"builder":"Sumadhura","name":"Sumadhura Elysium","loc":"Panathur","lat":12.936,"lng":77.696,"type":"Apartments","status":"Launched","price":"–","note":"East Bangalore luxury launch near Panathur.","color":"#0d9488"},{"builder":"Sumadhura","name":"Solea by Sumadhura","loc":"Rachenahalli","lat":13.057,"lng":77.62,"type":"Apartments","status":"Upcoming","price":"–","note":"North Bangalore luxury launch near Manyata.","color":"#0d9488"},{"builder":"Nambiar","name":"Nambiar District 25 Ph3","loc":"Muthanallur Cross, Sarjapur","lat":12.865,"lng":77.748,"type":"Township","status":"Launched","price":"from ₹2.15Cr","note":"Next phase of 100-ac township; Phase 3 launch 2026.","color":"#4338ca"},{"builder":"Concorde","name":"Concorde Eleve","loc":"Whitefield","lat":12.97,"lng":77.74,"type":"Apartments","status":"Upcoming","price":"–","note":"2 & 3 BHK Whitefield launch; possession ~2030.","color":"#4d7c0f"},{"builder":"Arvind","name":"Arvind Skycrest","loc":"Gottigere, Bannerghatta Rd","lat":12.858,"lng":77.584,"type":"Apartments","status":"Upcoming","price":"from ₹70L","note":"12-ac, 3-tower, 630-unit launch on Bannerghatta Rd.","color":"#c026d3"},{"builder":"Goyal & Co","name":"Goyal Orchid Salisbury","loc":"Bellahalli","lat":13.084,"lng":77.636,"type":"Apartments","status":"Launched","price":"from ₹89L","note":"2 & 3 BHK in north Bangalore; possession Dec 2028.","color":"#0369a1"},{"builder":"Vaishnavi","name":"Vaishnavi Krishna Brindavan","loc":"Banashankari","lat":12.925,"lng":77.547,"type":"Apartments","status":"Launched","price":"from ₹2.72Cr","note":"Twin 32-floor towers, 3 & 4 BHK; launched Oct 2025.","color":"#9f1239"},{"builder":"SNN","name":"SNN Estates Felicity","loc":"Thanisandra","lat":13.064,"lng":77.628,"type":"Apartments","status":"Launched","price":"–","note":"9 towers, 580 units behind Manyata Tech Park; 1-4 BHK.","color":"#b45309"},{"builder":"SNN","name":"SNN Raj Vivienté","loc":"Bannerghatta Road","lat":12.864,"lng":77.597,"type":"Apartments","status":"Upcoming","price":"from ₹4.49Cr","note":"Boutique 64-flat luxury project; possession from Jul 2026.","color":"#b45309"},{"builder":"Mahaveer","name":"Mahaveer Camelia","loc":"Hoodi","lat":12.992,"lng":77.716,"type":"Apartments","status":"Upcoming","price":"–","note":"2 BHK project in Hoodi; possession Oct 2026.","color":"#15803d"},{"builder":"Modern Spaaces","name":"Modern Spaaces Neon","loc":"Chikka Tirupati Rd, Sarjapur","lat":12.848,"lng":77.79,"type":"Apartments","status":"Launched","price":"–","note":"292 units of 2 & 3 BHK across 4.19 ac on Sarjapur belt.","color":"#6d28d9"},{"builder":"Bhartiya","name":"Nikoo Homes 8","loc":"Bellahalli, Thanisandra","lat":13.085,"lng":77.638,"type":"Apartments","status":"Launched","price":"from ₹1.4Cr","note":"Garden Enclave 1-4 BHK in Bhartiya City pipeline.","color":"#be185d"},{"builder":"DivyaSree","name":"DivyaSree Shettigere","loc":"Shettigere","lat":13.205,"lng":77.642,"type":"Township","status":"Launched","price":"from ₹1.05Cr","note":"72-ac township, 1,900+ units across 31 towers near airport.","color":"#1d4ed8"},{"builder":"DivyaSree","name":"DivyaSree 77 Life","loc":"Yemalur, Old Airport Rd","lat":12.945,"lng":77.672,"type":"Apartments","status":"Launched","price":"–","note":"Premium 3 & 4 BHK plus penthouses; 55,000 sqft clubhouse.","color":"#1d4ed8"},{"builder":"Ramky","name":"Ramky Lumina","loc":"Hosa Road","lat":12.887,"lng":77.653,"type":"Apartments","status":"Launched","price":"–","note":"7-ac, 729-unit 1/2/3 BHK launch on Hosa Rd.","color":"#047857"},{"builder":"MJR","name":"MJR North Park","loc":"Bagalur Aerospace Park","lat":13.132,"lng":77.668,"type":"Apartments","status":"Launched","price":"–","note":"Studio to 3 BHK enclave in airport-side Aerospace Park.","color":"#a21caf"},{"builder":"Shapoorji","name":"Shapoorji Codename Evolve","loc":"Binnipete","lat":12.974,"lng":77.556,"type":"Apartments","status":"Pre-launch","price":"–","note":"New luxury launch in central Binnipete (ParkWest precinct).","color":"#7c2d12"},{"builder":"Radiance","name":"Radiance Floresta","loc":"Hennur","lat":13.068,"lng":77.644,"type":"Apartments","status":"Under construction","price":"–","note":"Premium 3-5 BHK on Hennur; possession 2026-28.","color":"#ea580c"},{"builder":"Assetz","name":"Assetz Zen & Sato","loc":"Sathanur, Bagalur Main Rd","lat":13.1228,"lng":77.6326,"type":"Apartments","status":"Under construction","price":"–","note":"Japanese-inspired 3 & 4 BHK; 7-acre, 412 units in 4 towers (G+14), 74% open space. 104 Srinivasa Nagar, Sathanur (near airport corridor).","color":"#a855f7"}],"builders":{"Prestige":"#e11d48","Brigade":"#f59e0b","Sobha":"#8b5cf6","Century":"#06b6d4","Godrej":"#22c55e","Puravankara":"#ec4899","Sattva":"#3b82f6","Embassy":"#14b8a6","Birla":"#f43f5e","Total Environment":"#84cc16","Assetz":"#a855f7","Mahindra":"#fb923c","Shriram":"#eab308","L&T Realty":"#0ea5e9","Tata":"#10b981","Adarsh":"#d946ef","Mana":"#94a3b8","Casagrand":"#f472b6","Lodha":"#dc2626","Kolte-Patil":"#a16207","Sumadhura":"#0d9488","Nambiar":"#4338ca","Concorde":"#4d7c0f","Arvind":"#c026d3","Goyal & Co":"#0369a1","Vaishnavi":"#9f1239","SNN":"#b45309","Mahaveer":"#15803d","Modern Spaaces":"#6d28d9","Bhartiya":"#be185d","DivyaSree":"#1d4ed8","Ramky":"#047857","MJR":"#a21caf","Shapoorji":"#7c2d12","Radiance":"#ea580c"},"meta":{"count":132,"note":"A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated June 2026."}};
 const CONCEPT = {"lines":[
 {"name":"Orbital Ring Line (PRR Loop)","short":"Orbital","color":"#2dd4bf","horizon":"Phase 5 concept · ~2035–2042","priority":"Flagship",
  "rationale":"The single biggest gap: Bengaluru has no orbital metro. Every line is radial, forcing peripheral-to-peripheral trips through the congested core. A ~95km loop along the Peripheral/Outer Ring Roads linking Hebbal–KR Puram–Whitefield–Sarjapur–Electronic City–Kanakapura–RR Nagar–Tumkur Rd would interchange with every radial line, slash cross-town times, and unlock the peripheral land bank. Highest network-wide payoff.",
@@ -399,14 +520,17 @@ function refreshList(){
   rows.sort((a,b)=>(keyOf(a)-keyOf(b))*sortDir);
   document.getElementById('listCount').textContent=rows.length+" localities";
   const ML={price:'price',cagr:'hist. growth',pcagr:'proj. growth',yield:'yield',sch:'schools',saf:'safety',wat:'water risk',cauv:'Cauvery'};document.getElementById('sortLbl').textContent='sorted by '+(ML[metric]||metric)+(sortDir===-1?' ▾':' ▴');
+  if(rows.length===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
   list.innerHTML=rows.map(loc=>{
     const p=priceAt(loc,timeIdx);
     const chg=((p/loc.price2019-1)*100);
     const chgTxt=timeIdx===0?'':(chg>=0?'+':'')+chg.toFixed(0)+'% since ’19';
-    return `<div class="item ${selected===loc.name?'sel':''}" onclick="openDetail('${loc.name.replace(/'/g,"\\'")}')">
+    const esc=loc.name.replace(/'/g,"\\'");
+    return `<div class="item ${selected===loc.name?'sel':''}" onclick="openDetail('${esc}')">
       <div class="dot" style="background:${metricColor(loc)}"></div>
-      <div><div class="nm">${loc.name}</div><div class="zn">${loc.zone} · ${loc.confidence} confidence</div></div>
+      <div style="min-width:0"><div class="nm">${loc.name}</div><div class="zn">${loc.zone} · ${loc.confidence} confidence</div></div>
       <div class="pr"><div class="p">${fmtMetric(loc)}</div>${metric==='price'?`<div class="c ${chg>=0?'up':'down'}">${chgTxt}</div>`:''}</div>
+      <button class="pinbtn ${isPinned(loc.name)?'on':''}" title="Add to compare" onclick="event.stopPropagation();togglePin('${esc}')">⇄</button>
     </div>`;
   }).join('');
 }
@@ -459,12 +583,15 @@ function openDetail(name){
       <div class="stat"><div class="l">Since 2019</div><div class="v up">+${(((cur/p19)-1)*100).toFixed(0)}%</div></div>
     </div>
     <div class="chartbox"><canvas id="chart" height="180"></canvas></div>
+    ${alertCtaHtml(loc)}
     <div class="drivers">
       <span class="conf ${loc.confidence}">${loc.confidence} confidence</span> &nbsp;
       <span class="muted">infra boost +${loc.infraBoost}%/yr</span>
       <div style="margin-top:8px">${loc.drivers}</div>
     </div>
     ${livabilityHtml(loc)}
+    ${nearbySchoolsHtml(loc.lat,loc.lng)}
+    ${sunWindHtml(loc.lat,loc.lng)}
     ${metroSummaryHtml(loc)}
     <div class="muted">Solid line = interpolated actuals (2019–2026). Dashed = projection (2026–2029) from fading trend growth + locality infrastructure boost. A modeled index, not transaction-grade valuation.</div>
   `;
@@ -489,16 +616,17 @@ function openDetail(name){
   });
   refreshMap();refreshList();
   map.flyTo([loc.lat,loc.lng],13,{duration:.6});
+  dismissCoach();syncDetailActions();updateHash();
 }
-function closeDetail(){document.getElementById('detail').classList.remove('open');selected=null;refreshMap();refreshList();}
+function closeDetail(){document.getElementById('detail').classList.remove('open');selected=null;refreshMap();refreshList();updateHash();}
 
 // ---------- controls wiring ----------
 const zc=document.getElementById('zoneChips');
 ZONES.forEach(z=>{const el=document.createElement('div');el.className='chip'+(z==='All'?' active':'');el.textContent=z;el.onclick=()=>{zoneFilter=z;[...zc.children].forEach(c=>c.classList.toggle('active',c.textContent===z));renderAll();};zc.appendChild(el);});
-document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();});
+document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();updateHash();});
 document.getElementById('search').oninput=e=>{searchTxt=e.target.value.toLowerCase().trim();renderAll();};
 document.getElementById('sortLbl').onclick=()=>{sortDir=-sortDir;refreshList();};
-document.getElementById('time').oninput=e=>{timeIdx=+e.target.value;renderAll();};
+document.getElementById('time').oninput=e=>{timeIdx=+e.target.value;renderAll();updateHash();};
 
 // ---------- play/animate ----------
 let playing=null;
@@ -546,7 +674,7 @@ function showStation(s,line){
    '</div>'+
    '<div class="drivers">'+line.note+'</div>'+
    '<div class="muted">'+(line.status==='approved'?'Planned alignment — station coordinates approximate.':'Station coordinates from official metro data.')+'</div>';
-  refreshMap();refreshList();
+  refreshMap();refreshList();syncDetailActions();
 }
 function refreshMetro(){
   const y=selYearF();
@@ -602,7 +730,7 @@ function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
 }
 // ---------- builder projects overlay ----------
 map.createPane('projectPane');map.getPane('projectPane').style.zIndex=520;
-let projectsOn=true;
+let projectsOn=false;
 const projectLayers=[];
 PROJECTS.projects.forEach(pr=>{
   const icon=L.divIcon({className:'projpin',iconSize:[12,12],html:'<div style="width:11px;height:11px;background:'+pr.color+';border:1.5px solid #fff;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(0,0,0,.55)"></div>'});
@@ -624,8 +752,10 @@ function showProject(pr){
    '<div class="stat"><div class="l">Price</div><div class="v" style="font-size:14px">'+(pr.price&&pr.price!=='–'?pr.price:'NA')+'</div></div>'+
    '</div>'+
    '<div class="drivers"><div style="font-weight:700;margin-bottom:4px">📍 '+pr.loc+'</div>'+pr.note+'</div>'+
+   nearbySchoolsHtml(pr.lat,pr.lng)+
+   sunWindHtml(pr.lat,pr.lng)+
    '<div class="muted">A-tier builder project · location approximate (locality/landmark). Compiled May 2026.</div>';
-  refreshMap();refreshList();
+  refreshMap();refreshList();syncDetailActions();
 }
 function refreshProjects(){projectLayers.forEach(mk=>{if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}else if(map.hasLayer(mk))mk.remove();});}
 function buildProjectsLegend(){
@@ -637,6 +767,228 @@ function buildProjectsLegend(){
 }
 document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);document.getElementById('projLegend').style.display=projectsOn?'block':'none';refreshProjects();};
 buildProjectsLegend();refreshProjects();
+
+// ---------- schools overlay ----------
+const SCHOOLS = {schools:[
+{"n":"Vibgyor High Marathahalli","loc":"Marathahalli","lat":12.9560,"lng":77.7010,"b":"ICSE","z":"East"},
+{"n":"NPS Whitefield","loc":"Whitefield","lat":12.9719,"lng":77.7499,"b":"CBSE","z":"East"},
+{"n":"The Deens Academy","loc":"Whitefield","lat":12.9810,"lng":77.7280,"b":"CBSE","z":"East"},
+{"n":"Greenwood High International","loc":"Sarjapur Road","lat":12.8890,"lng":77.6700,"b":"IB","z":"East"},
+{"n":"Inventure Academy","loc":"Whitefield (Sarjapur Rd)","lat":12.9145,"lng":77.7090,"b":"ICSE","z":"East"},
+{"n":"Glentree Academy Whitefield","loc":"Whitefield","lat":12.9760,"lng":77.7350,"b":"CBSE","z":"East"},
+{"n":"EuroSchool Whitefield","loc":"Whitefield","lat":12.9690,"lng":77.7400,"b":"CBSE","z":"East"},
+{"n":"GIIS Whitefield","loc":"Whitefield","lat":12.9880,"lng":77.7510,"b":"Multiple","z":"East"},
+{"n":"Vydehi School of Excellence","loc":"Whitefield","lat":12.9610,"lng":77.7270,"b":"CBSE","z":"East"},
+{"n":"Chrysalis High Marq","loc":"Varthur","lat":12.9430,"lng":77.7440,"b":"ICSE","z":"East"},
+{"n":"Ryan International Whitefield","loc":"Whitefield","lat":12.9700,"lng":77.7460,"b":"ICSE","z":"East"},
+{"n":"Cambridge International Whitefield","loc":"Whitefield","lat":12.9760,"lng":77.7560,"b":"CBSE","z":"East"},
+{"n":"Indus International School","loc":"Sarjapur (Billapura)","lat":12.8350,"lng":77.7290,"b":"IB","z":"East"},
+{"n":"GEAR Innovative International","loc":"Doddakannelli","lat":12.9120,"lng":77.6850,"b":"CBSE","z":"East"},
+{"n":"Royale Concorde Bellandur","loc":"Bellandur","lat":12.9290,"lng":77.6760,"b":"CBSE","z":"East"},
+{"n":"MVJ International School","loc":"Marathahalli","lat":12.9580,"lng":77.6990,"b":"CBSE","z":"East"},
+{"n":"Genius Global School","loc":"Marathahalli","lat":12.9530,"lng":77.7050,"b":"CBSE","z":"East"},
+{"n":"Orchids Kadugodi","loc":"Kadugodi","lat":12.9930,"lng":77.7600,"b":"CBSE","z":"East"},
+{"n":"EuroSchool Hoodi","loc":"Hoodi","lat":12.9930,"lng":77.7150,"b":"CBSE","z":"East"},
+{"n":"The Brigade School Mahadevapura","loc":"Mahadevapura","lat":12.9910,"lng":77.6870,"b":"ICSE","z":"East"},
+{"n":"SSRVM KR Puram","loc":"KR Puram","lat":12.9990,"lng":77.6960,"b":"CBSE","z":"East"},
+{"n":"SJES International School","loc":"Medahalli, Old Madras Rd","lat":13.0180,"lng":77.7050,"b":"ICSE","z":"East"},
+{"n":"New Baldwin International","loc":"Budigere Cross","lat":13.0490,"lng":77.7280,"b":"Multiple","z":"East"},
+{"n":"Vishwa Vidyapeeth","loc":"Varthur","lat":12.9400,"lng":77.7480,"b":"CBSE","z":"East"},
+{"n":"Vagdevi Vilas School","loc":"Varthur","lat":12.9380,"lng":77.7420,"b":"CBSE","z":"East"},
+{"n":"NPS Outer Ring Road","loc":"Bellandur","lat":12.9270,"lng":77.6890,"b":"CBSE","z":"East"},
+{"n":"Harvest International School","loc":"Kodathi, Sarjapur Rd","lat":12.8920,"lng":77.7110,"b":"Multiple","z":"East"},
+{"n":"Vibgyor Rise Bellandur","loc":"Bellandur","lat":12.9230,"lng":77.6700,"b":"CBSE","z":"East"},
+{"n":"Gopalan International School","loc":"Hoodi, Whitefield","lat":12.9890,"lng":77.7080,"b":"Multiple","z":"East"},
+{"n":"Cambridge Public School Brookefield","loc":"Brookefield","lat":12.9670,"lng":77.7180,"b":"CBSE","z":"East"},
+{"n":"NPS Koramangala","loc":"Koramangala","lat":12.9362,"lng":77.6245,"b":"CBSE","z":"South"},
+{"n":"Bethany High School","loc":"Koramangala","lat":12.9341,"lng":77.6201,"b":"ICSE","z":"South"},
+{"n":"DPS South Bangalore","loc":"Konanakunte","lat":12.8782,"lng":77.5648,"b":"CBSE","z":"South"},
+{"n":"Ekya School JP Nagar","loc":"JP Nagar","lat":12.9063,"lng":77.5857,"b":"Multiple","z":"South"},
+{"n":"Orchids JP Nagar","loc":"JP Nagar","lat":12.9072,"lng":77.5854,"b":"CBSE","z":"South"},
+{"n":"St. Paul's English School","loc":"JP Nagar","lat":12.9081,"lng":77.5852,"b":"ICSE","z":"South"},
+{"n":"The Oxford English School","loc":"JP Nagar","lat":12.9090,"lng":77.5901,"b":"ICSE","z":"South"},
+{"n":"Innisfree House School","loc":"JP Nagar","lat":12.9018,"lng":77.5912,"b":"ICSE","z":"South"},
+{"n":"BNM Public School","loc":"Banashankari","lat":12.9255,"lng":77.5468,"b":"ICSE","z":"South"},
+{"n":"Little Flower Public School","loc":"Banashankari","lat":12.9216,"lng":77.5503,"b":"ICSE","z":"South"},
+{"n":"Sri Aurobindo Memorial School","loc":"Banashankari","lat":12.9281,"lng":77.5471,"b":"CBSE","z":"South"},
+{"n":"JSS Public School HSR","loc":"HSR Layout","lat":12.9121,"lng":77.6446,"b":"CBSE","z":"South"},
+{"n":"EuroSchool HSR","loc":"HSR Layout","lat":12.9089,"lng":77.6512,"b":"ICSE","z":"South"},
+{"n":"Cambridge Public School HSR","loc":"HSR Layout","lat":12.9056,"lng":77.6553,"b":"ICSE","z":"South"},
+{"n":"Vibgyor High BTM","loc":"BTM Layout","lat":12.9165,"lng":77.6101,"b":"Multiple","z":"South"},
+{"n":"Nightingales English High","loc":"BTM Layout","lat":12.9148,"lng":77.6082,"b":"ICSE","z":"South"},
+{"n":"Greenwood High Bannerghatta","loc":"Bannerghatta Road","lat":12.8462,"lng":77.6042,"b":"Multiple","z":"South"},
+{"n":"Sherwood High","loc":"Bannerghatta Road","lat":12.8521,"lng":77.5982,"b":"ICSE","z":"South"},
+{"n":"Chrysalis High Bannerghatta","loc":"Bannerghatta Road","lat":12.8389,"lng":77.5971,"b":"CBSE","z":"South"},
+{"n":"The Samhita Academy","loc":"Bannerghatta Road","lat":12.8901,"lng":77.5961,"b":"Multiple","z":"South"},
+{"n":"GIIS Bannerghatta","loc":"Bannerghatta Road","lat":12.8612,"lng":77.5994,"b":"Multiple","z":"South"},
+{"n":"School of India","loc":"Bannerghatta Road","lat":12.8275,"lng":77.6128,"b":"CBSE","z":"South"},
+{"n":"DPS Electronic City","loc":"Electronic City","lat":12.8452,"lng":77.6601,"b":"CBSE","z":"South"},
+{"n":"BS International School","loc":"Electronic City","lat":12.8392,"lng":77.6772,"b":"CBSE","z":"South"},
+{"n":"Bangalore International Public","loc":"Uttarahalli","lat":12.9056,"lng":77.5421,"b":"ICSE","z":"South"},
+{"n":"Silicon City Academy","loc":"Konanakunte","lat":12.8801,"lng":77.5712,"b":"CBSE","z":"South"},
+{"n":"Primus Public School","loc":"Sarjapur Road","lat":12.9012,"lng":77.6921,"b":"CBSE","z":"South"},
+{"n":"Kunskapsskolan Bengaluru","loc":"Sarjapur Road","lat":12.8961,"lng":77.7012,"b":"CBSE","z":"South"},
+{"n":"Ryan International Sarjapur","loc":"Sarjapur Road","lat":12.9023,"lng":77.7156,"b":"Multiple","z":"South"},
+{"n":"Carmel English School","loc":"Bannerghatta Road","lat":12.8852,"lng":77.5961,"b":"ICSE","z":"South"},
+{"n":"Vidyashilp Academy","loc":"Jakkur","lat":13.0822,"lng":77.6092,"b":"ICSE","z":"North"},
+{"n":"Canadian International School","loc":"Yelahanka","lat":13.0789,"lng":77.5687,"b":"IB","z":"North"},
+{"n":"Stonehill International School","loc":"Tarahunise, Yelahanka","lat":13.1565,"lng":77.6242,"b":"IB","z":"North"},
+{"n":"Mallya Aditi International","loc":"Yelahanka New Town","lat":13.1010,"lng":77.5960,"b":"IGCSE","z":"North"},
+{"n":"DPS Bangalore North","loc":"Kogilu, Yelahanka","lat":13.1142,"lng":77.6217,"b":"CBSE","z":"North"},
+{"n":"Vidyaniketan School","loc":"Hebbal Kempapura","lat":13.0489,"lng":77.5912,"b":"CBSE","z":"North"},
+{"n":"Jain Heritage School","loc":"Hebbal","lat":13.0455,"lng":77.5908,"b":"CBSE","z":"North"},
+{"n":"Kendriya Vidyalaya Hebbal","loc":"Hebbal","lat":13.0420,"lng":77.5880,"b":"CBSE","z":"North"},
+{"n":"NPS Yelahanka","loc":"Yelahanka","lat":13.1009,"lng":77.5963,"b":"CBSE","z":"North"},
+{"n":"NPS Vidyaranyapura","loc":"Vidyaranyapura","lat":13.0815,"lng":77.5557,"b":"CBSE","z":"North"},
+{"n":"Ryan International Yelahanka","loc":"Yelahanka","lat":13.0978,"lng":77.5895,"b":"CBSE","z":"North"},
+{"n":"Vibgyor High Yelahanka","loc":"Yelahanka","lat":13.1018,"lng":77.5742,"b":"CBSE","z":"North"},
+{"n":"EuroSchool North","loc":"Yelahanka","lat":13.1056,"lng":77.5798,"b":"CBSE","z":"North"},
+{"n":"Orchids Yelahanka","loc":"Yelahanka","lat":13.0995,"lng":77.5810,"b":"ICSE","z":"North"},
+{"n":"Federal Public School","loc":"Yelahanka","lat":13.0967,"lng":77.5963,"b":"State","z":"North"},
+{"n":"Trio World Academy","loc":"Sahakar Nagar","lat":13.0631,"lng":77.5862,"b":"IB","z":"North"},
+{"n":"Bangalore International School","loc":"Geddalahalli, Hennur","lat":13.0395,"lng":77.6385,"b":"IB","z":"North"},
+{"n":"Harrow International Bengaluru","loc":"Devanahalli","lat":13.2480,"lng":77.7090,"b":"IB","z":"North"},
+{"n":"Embassy Academy","loc":"Devanahalli","lat":13.2210,"lng":77.7060,"b":"IB","z":"North"},
+{"n":"Vyasa International School","loc":"Vidyaranyapura","lat":13.0840,"lng":77.5510,"b":"ICSE","z":"North"},
+{"n":"Presidency School RT Nagar","loc":"RT Nagar","lat":13.0247,"lng":77.5950,"b":"CBSE","z":"North"},
+{"n":"Cluny Convent RT Nagar","loc":"RT Nagar","lat":13.0285,"lng":77.5940,"b":"ICSE","z":"North"},
+{"n":"Sindhi High School Hebbal","loc":"Kempapura, Hebbal","lat":13.0500,"lng":77.5940,"b":"State","z":"North"},
+{"n":"Gnan Srishti Thanisandra","loc":"Thanisandra","lat":13.0640,"lng":77.6360,"b":"CBSE","z":"North"},
+{"n":"Legacy School","loc":"Thanisandra","lat":13.0700,"lng":77.6300,"b":"ICSE","z":"North"},
+{"n":"Akshara International School","loc":"Doddaballapur Road","lat":13.1370,"lng":77.5760,"b":"ICSE","z":"North"},
+{"n":"Sri Kumaran Children's Home","loc":"Nagavara","lat":13.0420,"lng":77.6230,"b":"Multiple","z":"North"},
+{"n":"Royale Concorde Kalyan Nagar","loc":"Kalyan Nagar, Hennur","lat":13.0280,"lng":77.6400,"b":"CBSE","z":"North"},
+{"n":"Cambridge Public Doddaballapur Rd","loc":"Doddaballapur Road","lat":13.1280,"lng":77.5840,"b":"CBSE","z":"North"},
+{"n":"Bishop Cotton Boys' School","loc":"Residency Road","lat":12.9650,"lng":77.6020,"b":"ICSE","z":"Central"},
+{"n":"Bishop Cotton Girls' School","loc":"St. Mark's Road","lat":12.9695,"lng":77.5985,"b":"ICSE","z":"Central"},
+{"n":"St. Joseph's Boys' High School","loc":"Museum Road","lat":12.9690,"lng":77.6055,"b":"ICSE","z":"Central"},
+{"n":"Baldwin Boys' High School","loc":"Richmond Town","lat":12.9555,"lng":77.6075,"b":"ICSE","z":"Central"},
+{"n":"Baldwin Girls' High School","loc":"Richmond Town","lat":12.9560,"lng":77.6090,"b":"ICSE","z":"Central"},
+{"n":"Clarence High School","loc":"Richards Town","lat":13.0010,"lng":77.6175,"b":"ICSE","z":"Central"},
+{"n":"The Cathedral High School","loc":"Richmond Town","lat":12.9590,"lng":77.6080,"b":"ICSE","z":"Central"},
+{"n":"St. Germain High School","loc":"Frazer Town","lat":12.9985,"lng":77.6195,"b":"ICSE","z":"Central"},
+{"n":"Sophia High School","loc":"Vasanth Nagar","lat":12.9855,"lng":77.5895,"b":"ICSE","z":"Central"},
+{"n":"Mount Carmel Central School","loc":"Vasanth Nagar","lat":12.9905,"lng":77.5905,"b":"CBSE","z":"Central"},
+{"n":"NPS Indiranagar","loc":"Indiranagar","lat":12.9665,"lng":77.6455,"b":"CBSE","z":"Central"},
+{"n":"Frank Anthony Public School","loc":"Ulsoor","lat":12.9805,"lng":77.6245,"b":"ICSE","z":"Central"},
+{"n":"Sacred Heart Boys' School","loc":"Richmond Road","lat":12.9645,"lng":77.6085,"b":"ICSE","z":"Central"},
+{"n":"Cluny Convent Malleshwaram","loc":"Malleshwaram","lat":13.0050,"lng":77.5710,"b":"ICSE","z":"Central"},
+{"n":"MES Kishora Kendra","loc":"Malleshwaram","lat":13.0035,"lng":77.5645,"b":"State","z":"Central"},
+{"n":"Nirmala Rani High School","loc":"Malleshwaram","lat":13.0080,"lng":77.5680,"b":"ICSE","z":"Central"},
+{"n":"Seshadripuram High School","loc":"Seshadripuram","lat":12.9930,"lng":77.5765,"b":"State","z":"Central"},
+{"n":"St. Anthony's Boys' School","loc":"Ulsoor","lat":12.9820,"lng":77.6190,"b":"ICSE","z":"Central"},
+{"n":"The Brigade School Malleshwaram","loc":"Malleshwaram","lat":13.0040,"lng":77.5700,"b":"ICSE","z":"Central"},
+{"n":"Stella Maris School","loc":"Malleshwaram","lat":13.0065,"lng":77.5660,"b":"State","z":"Central"},
+{"n":"Christ The King Public School","loc":"Malleshwaram","lat":13.0095,"lng":77.5635,"b":"CBSE","z":"Central"},
+{"n":"St. Francis Xavier Girls' High","loc":"Frazer Town","lat":12.9990,"lng":77.6180,"b":"ICSE","z":"Central"},
+{"n":"Goodwill's Girls School","loc":"Cox Town","lat":12.9960,"lng":77.6235,"b":"ICSE","z":"Central"},
+{"n":"Vasavi Vidya Niketan","loc":"Seshadripuram","lat":12.9905,"lng":77.5790,"b":"State","z":"Central"},
+{"n":"St. Charles High School","loc":"Cox Town","lat":12.9955,"lng":77.6260,"b":"ICSE","z":"Central"},
+{"n":"Sri Kumaran Children's Home Domlur","loc":"Domlur","lat":12.9605,"lng":77.6385,"b":"ICSE","z":"Central"},
+{"n":"NPS Rajajinagar","loc":"Rajajinagar","lat":12.9942,"lng":77.5526,"b":"CBSE","z":"West"},
+{"n":"Orchids Rajajinagar","loc":"Rajajinagar","lat":12.9889,"lng":77.5550,"b":"CBSE","z":"West"},
+{"n":"RPES Jnana Saraswati","loc":"Rajajinagar","lat":12.9970,"lng":77.5510,"b":"CBSE","z":"West"},
+{"n":"Venus International School","loc":"Rajajinagar","lat":12.9905,"lng":77.5495,"b":"ICSE","z":"West"},
+{"n":"St. Mira's High School","loc":"Rajajinagar","lat":12.9920,"lng":77.5560,"b":"ICSE","z":"West"},
+{"n":"Orchids Vijayanagar","loc":"Vijayanagar","lat":12.9700,"lng":77.5360,"b":"CBSE","z":"West"},
+{"n":"National Academy School","loc":"Basaveshwaranagar","lat":13.0005,"lng":77.5390,"b":"Multiple","z":"West"},
+{"n":"SSRVM Basaveshwaranagar","loc":"Basaveshwaranagar","lat":12.9990,"lng":77.5420,"b":"State","z":"West"},
+{"n":"Orchids Nagarbhavi","loc":"Nagarbhavi","lat":12.9650,"lng":77.5090,"b":"CBSE","z":"West"},
+{"n":"JES Public School","loc":"Nagarbhavi","lat":12.9620,"lng":77.5120,"b":"CBSE","z":"West"},
+{"n":"Sri Vani Education Centre","loc":"Nagarbhavi","lat":12.9590,"lng":77.5150,"b":"CBSE","z":"West"},
+{"n":"National Hill View Public","loc":"RR Nagar","lat":12.9180,"lng":77.5180,"b":"CBSE","z":"West"},
+{"n":"Gospel International School","loc":"RR Nagar","lat":12.9240,"lng":77.5210,"b":"Multiple","z":"West"},
+{"n":"Global Academy For Learning","loc":"RR Nagar","lat":12.9200,"lng":77.5240,"b":"CBSE","z":"West"},
+{"n":"Sri Jnanakshi Vidyaniketan","loc":"RR Nagar","lat":12.9150,"lng":77.5220,"b":"CBSE","z":"West"},
+{"n":"BGS Public School","loc":"Kengeri","lat":12.8980,"lng":77.4830,"b":"CBSE","z":"West"},
+{"n":"NPS Kengeri","loc":"Kengeri","lat":12.9070,"lng":77.4850,"b":"CBSE","z":"West"},
+{"n":"Orchids Kengeri","loc":"Kengeri","lat":12.9090,"lng":77.4870,"b":"CBSE","z":"West"},
+{"n":"Vidya Sanskaar International","loc":"Magadi Road","lat":12.9780,"lng":77.5180,"b":"CBSE","z":"West"},
+{"n":"VLS International Public","loc":"Magadi Road","lat":12.9810,"lng":77.5230,"b":"ICSE","z":"West"},
+{"n":"NPS Yeshwanthpur","loc":"Yeshwanthpur","lat":13.0310,"lng":77.5370,"b":"CBSE","z":"West"},
+{"n":"Schoenstatt St. Mary's","loc":"Peenya","lat":13.0290,"lng":77.5200,"b":"ICSE","z":"West"},
+{"n":"Presidency School Nandini Layout","loc":"Nandini Layout","lat":13.0090,"lng":77.5500,"b":"Multiple","z":"West"},
+{"n":"Sri Kumaran Mallasandra","loc":"Mallasandra","lat":12.9870,"lng":77.5090,"b":"Multiple","z":"West"},
+{"n":"Baldwin Co-Ed Extension","loc":"RR Nagar","lat":12.9210,"lng":77.5190,"b":"ICSE","z":"West"},
+{"n":"SSRVM Vijayanagar","loc":"Vijayanagar","lat":12.9665,"lng":77.5390,"b":"State","z":"West"},
+{"n":"Gnan Srishti RR Nagar","loc":"RR Nagar","lat":12.9120,"lng":77.5150,"b":"IGCSE","z":"West"},
+{"n":"The International School Bangalore (TISB)","loc":"Sarjapur","lat":12.8290,"lng":77.7340,"b":"IB","z":"East"},
+{"n":"Oakridge International School","loc":"Varthur / Sarjapur","lat":12.8460,"lng":77.7460,"b":"IB","z":"East"},
+{"n":"Candor International School","loc":"Off Bannerghatta Rd","lat":12.8230,"lng":77.6240,"b":"IB","z":"South"},
+{"n":"Ebenezer International School","loc":"Electronic City","lat":12.8470,"lng":77.6720,"b":"IB","z":"South"},
+{"n":"New Horizon Public School","loc":"Indiranagar","lat":12.9720,"lng":77.6410,"b":"ICSE","z":"East"},
+{"n":"The Valley School (KFI)","loc":"Kanakapura Road","lat":12.8580,"lng":77.5360,"b":"State","z":"South"},
+{"n":"Sishu Griha Montessori & High","loc":"New Thippasandra","lat":12.9760,"lng":77.6610,"b":"ICSE","z":"East"},
+{"n":"Treamis World School","loc":"Electronic City","lat":12.8240,"lng":77.6740,"b":"Multiple","z":"South"},
+{"n":"Silver Oaks International School","loc":"Dommasandra, Sarjapur","lat":12.8830,"lng":77.7570,"b":"IGCSE","z":"East"},
+{"n":"Edify School","loc":"Electronic City","lat":12.8400,"lng":77.6770,"b":"CBSE","z":"South"},
+{"n":"Podar International School","loc":"Yeshwanthpur","lat":13.0280,"lng":77.5400,"b":"CBSE","z":"West"},
+{"n":"Prakriya Green Wisdom School","loc":"Doddakannelli, Sarjapur Rd","lat":12.9120,"lng":77.6900,"b":"ICSE","z":"East"},
+{"n":"Head Start Educational Academy","loc":"Sarjapur Road","lat":12.9080,"lng":77.6940,"b":"ICSE","z":"East"},
+{"n":"Geethanjali Vidyalaya","loc":"CV Raman Nagar","lat":12.9870,"lng":77.6700,"b":"CBSE","z":"East"},
+{"n":"Sri Chaitanya Techno School","loc":"Whitefield / Hoodi","lat":12.9920,"lng":77.7160,"b":"CBSE","z":"East"},
+{"n":"Whitefield Global School","loc":"Whitefield","lat":12.9990,"lng":77.7480,"b":"CBSE","z":"East"},
+{"n":"NPS ITPL","loc":"Kadugodi","lat":12.9990,"lng":77.7570,"b":"CBSE","z":"East"},
+{"n":"Army Public School","loc":"Kamaraj Road","lat":12.9810,"lng":77.6090,"b":"CBSE","z":"Central"},
+{"n":"Air Force School","loc":"HAL, Marathahalli","lat":12.9590,"lng":77.6660,"b":"CBSE","z":"East"},
+{"n":"DPS Bangalore East","loc":"Sarjapur / Dommasandra","lat":12.8820,"lng":77.7530,"b":"CBSE","z":"East"},
+{"n":"DPS Whitefield","loc":"Whitefield","lat":12.9760,"lng":77.7340,"b":"CBSE","z":"East"},
+{"n":"National Centre for Excellence","loc":"Malleshpalya, Indiranagar","lat":12.9740,"lng":77.6650,"b":"CBSE","z":"East"},
+{"n":"Poornaprajna Education Centre","loc":"Yelahanka","lat":13.1020,"lng":77.5980,"b":"State","z":"North"},
+{"n":"St. John's High School","loc":"Cleveland Town","lat":12.9970,"lng":77.6160,"b":"ICSE","z":"Central"},
+{"n":"Florence Public School","loc":"HSR Layout","lat":12.9120,"lng":77.6470,"b":"CBSE","z":"South"},
+{"n":"Narayana e-Techno School","loc":"Marathahalli","lat":12.9555,"lng":77.7015,"b":"CBSE","z":"East"},
+{"n":"Maharishi Vidya Mandir","loc":"JP Nagar","lat":12.9060,"lng":77.5860,"b":"CBSE","z":"South"},
+{"n":"BEL Public School","loc":"Jalahalli","lat":13.0370,"lng":77.5160,"b":"CBSE","z":"West"},
+{"n":"Kendriya Vidyalaya ASC","loc":"Cantonment","lat":12.9710,"lng":77.6110,"b":"CBSE","z":"Central"},
+{"n":"St. Thomas Public School","loc":"Banaswadi","lat":13.0140,"lng":77.6500,"b":"ICSE","z":"East"},
+{"n":"Insight Academy","loc":"Banashankari","lat":12.9180,"lng":77.5460,"b":"CBSE","z":"South"},
+{"n":"Auden Public School","loc":"Vidyaranyapura","lat":13.0810,"lng":77.5550,"b":"CBSE","z":"North"},
+{"n":"Excel Public School","loc":"Mysore Road / Kengeri","lat":12.9080,"lng":77.4830,"b":"CBSE","z":"West"},
+{"n":"Aurinko Academy","loc":"Hennur / Bagalur","lat":13.0890,"lng":77.6560,"b":"Multiple","z":"North"}
+],boardColors:{"CBSE":"#2563eb","ICSE":"#16a34a","IB":"#db2777","IGCSE":"#9333ea","State":"#d97706","Multiple":"#0891b2"}};
+
+// great-circle distance in km
+function kmBetween(lat1,lng1,lat2,lng2){
+  const R=6371,toRad=d=>d*Math.PI/180;
+  const dLat=toRad(lat2-lat1),dLng=toRad(lng2-lng1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function nearestSchools(lat,lng,n){
+  return SCHOOLS.schools.map(s=>({s,d:kmBetween(lat,lng,s.lat,s.lng)})).sort((a,b)=>a.d-b.d).slice(0,n||5);
+}
+function nearbySchoolsHtml(lat,lng){
+  const bc=SCHOOLS.boardColors;
+  const rows=nearestSchools(lat,lng,5).map(({s,d})=>
+    '<div style="display:flex;align-items:center;gap:7px;padding:3px 0">'+
+    '<span style="width:8px;height:8px;border-radius:50%;background:'+(bc[s.b]||'#888')+';flex:none"></span>'+
+    '<span style="flex:1;font-size:12px">'+s.n+' <span class="muted" style="font-size:10px">· '+s.b+'</span></span>'+
+    '<span style="font-size:12px;font-weight:700">'+d.toFixed(1)+' km</span></div>').join('');
+  return '<div class="drivers"><div style="font-weight:700;margin-bottom:4px">🏫 Nearest schools</div>'+rows+
+    '<div class="muted" style="font-size:10px;margin-top:4px">Straight-line distance to curated reputed schools. Approximate coordinates.</div></div>';
+}
+
+map.createPane('schoolPane');map.getPane('schoolPane').style.zIndex=515;
+let schoolsOn=false;
+const schoolLayers=[];
+SCHOOLS.schools.forEach(s=>{
+  const col=SCHOOLS.boardColors[s.b]||'#888';
+  const icon=L.divIcon({className:'schoolpin',iconSize:[10,10],html:'<div style="width:9px;height:9px;border-radius:50%;background:'+col+';border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.5)"></div>'});
+  const mk=L.marker([s.lat,s.lng],{pane:'schoolPane',icon});
+  mk.bindTooltip('<b>'+s.n+'</b><br>'+s.b+' · '+s.loc,{className:'pin',direction:'top',offset:[0,-5]});
+  schoolLayers.push(mk);
+});
+function refreshSchools(){schoolLayers.forEach(mk=>{if(schoolsOn){if(!map.hasLayer(mk))mk.addTo(map);}else if(map.hasLayer(mk))mk.remove();});}
+function buildSchoolsLegend(){
+  const bc=SCHOOLS.boardColors;
+  document.getElementById('schoolLegend').innerHTML='<div class="lt">🏫 Schools — '+SCHOOLS.schools.length+'</div>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
+   Object.keys(bc).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;border-radius:50%;background:'+bc[k]+';display:inline-block;flex:none"></span>'+k+'</span>').join('')+
+   '</div><div class="muted" style="margin-top:4px">hover a dot for name · distances in detail panel</div>';
+}
+document.getElementById('schoolsToggle').onclick=function(){schoolsOn=!schoolsOn;this.classList.toggle('active',schoolsOn);document.getElementById('schoolLegend').style.display=schoolsOn?'block':'none';refreshSchools();};
+buildSchoolsLegend();refreshSchools();
 
 // ---------- planner concept lines ----------
 map.createPane('conceptPane');map.getPane('conceptPane').style.zIndex=405;
@@ -668,7 +1020,7 @@ function showConcept(line){
    '<div class="drivers"><div style="font-weight:700;margin-bottom:4px">Why this line</div>'+line.rationale+'</div>'+
    '<div class="drivers"><div style="font-weight:700;margin-bottom:4px">Alignment ('+line.stations.length+' nodes)</div><div style="font-size:12px;line-height:1.6">'+stops+'</div></div>'+
    '<div class="muted">Conceptual planner proposal — not an official BMRCL plan. Indicative alignment & coordinates.</div>';
-  refreshMap();refreshList();
+  refreshMap();refreshList();syncDetailActions();
 }
 function refreshConcept(){conceptLayers.forEach(o=>{if(conceptOn){if(!map.hasLayer(o))o.addTo(map);}else if(map.hasLayer(o))o.remove();});}
 document.getElementById('conceptToggle').onclick=function(){conceptOn=!conceptOn;this.classList.toggle('active',conceptOn);refreshConcept();};
@@ -707,11 +1059,339 @@ function refreshHeatmap(){
 }
 document.getElementById('heatToggle').onclick=function(){heatmapOn=!heatmapOn;this.classList.toggle('active',heatmapOn);refreshHeatmap();refreshMap();};
 
-function renderAll(){refreshMap();refreshLegend();refreshList();refreshKPI();refreshTime();refreshMetro();refreshHeatmap();}
-document.getElementById('kpiCount2')&&0;
-renderAll();
-// open a flagship locality by default (desktop only — keep the map clear on phones)
-if(!isMobile())setTimeout(()=>openDetail('Whitefield'),300);
+// ---------- sun & wind simulation ----------
+// Sun = exact solar geometry (NOAA-style) for Bengaluru's latitude; Wind = IMD/NASA-POWER
+// monthly climatology (prevailing "from" direction °N & mean speed m/s). The bottom timeline
+// slider is dual-purpose: its quarter sets the season (Q1→winter, Q2→pre-monsoon, Q3→SW monsoon, Q4→NE monsoon).
+const D2R=Math.PI/180, R2D=180/Math.PI, IST_LSTM=82.5, CITY=[12.9716,77.5946];
+function solDecl(N){return 23.45*Math.sin(D2R*(360/365*(284+N)));}                         // declination °
+function eqTime(N){const B=D2R*(360/364*(N-81));return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B);} // min
+function sunPos(lat,lng,N,hour){
+  const dec=solDecl(N)*D2R, phi=lat*D2R;
+  const tc=4*(lng-IST_LSTM)+eqTime(N), lst=hour+tc/60, H=15*(lst-12)*D2R;
+  const el=Math.asin(Math.sin(dec)*Math.sin(phi)+Math.cos(dec)*Math.cos(phi)*Math.cos(H));
+  let ca=(Math.sin(dec)-Math.sin(el)*Math.sin(phi))/(Math.cos(el)*Math.cos(phi));
+  ca=Math.max(-1,Math.min(1,ca));let az=Math.acos(ca)*R2D;if(H>0)az=360-az;
+  return {az,el:el*R2D};
+}
+function sunTimes(lat,lng,N){
+  const dec=solDecl(N)*D2R, phi=lat*D2R, tc=4*(lng-IST_LSTM)+eqTime(N);
+  let ch=-Math.tan(phi)*Math.tan(dec);ch=Math.max(-1,Math.min(1,ch));
+  const H0=Math.acos(ch)*R2D, noon=12-tc/60;
+  return {rise:noon-H0/15, set:noon+H0/15, noon, noonEl:sunPos(lat,lng,N,noon).el};
+}
+const DIRS=['N','NE','E','SE','S','SW','W','NW'];
+function dir8(az){return DIRS[Math.round((((az%360)+360)%360)/45)%8];}
+function hhmm(h){h=((h%24)+24)%24;let H=Math.floor(h),mm=Math.round((h-H)*60);if(mm===60){mm=0;H=(H+1)%24;}const ap=H<12?'am':'pm';let h12=H%12;if(h12===0)h12=12;return h12+':'+(mm<10?'0':'')+mm+ap;}
+const WIND={monthly:[
+ {d:65,s:2.1},{d:90,s:2.3},{d:110,s:2.6},{d:140,s:2.9},{d:250,s:3.2},{d:270,s:4.6},
+ {d:270,s:5.0},{d:265,s:4.5},{d:250,s:3.6},{d:60,s:2.6},{d:45,s:2.3},{d:60,s:2.0}]};
+const SEASONS=[
+ {m:1, name:'Winter (Dec–Feb)', N:46},
+ {m:4, name:'Pre-monsoon (Mar–May)', N:135},
+ {m:7, name:'SW Monsoon (Jun–Sep)', N:227},
+ {m:10,name:'NE Monsoon (Oct–Nov)', N:319}];
+const SEASON_COLORS=['#60a5fa','#fbbf24','#34d399','#f472b6'];
+function curSeason(){return SEASONS[timeIdx%4];}
+
+let sunwindOn=false, todHour=12, swCanvas=null, swCtx=null, swRAF=null, swParticles=[], swDPR=1, skyCtx=null, todPlaying=null;
+let sunAz=120, sunEl=45, windToRad=0, windSpd=3;
+
+function swResize(){
+  if(!swCanvas)return;
+  const w=document.getElementById('mapwrap');
+  swDPR=Math.min(1.5,window.devicePixelRatio||1);
+  swCanvas.width=w.clientWidth*swDPR;swCanvas.height=w.clientHeight*swDPR;
+  swCanvas.style.width=w.clientWidth+'px';swCanvas.style.height=w.clientHeight+'px';
+  swCtx.setTransform(swDPR,0,0,swDPR,0,0);
+  swSeedParticles();
+}
+function swSeedParticles(){
+  const w=parseFloat(swCanvas.style.width)||swCanvas.width, h=parseFloat(swCanvas.style.height)||swCanvas.height;
+  const n=Math.round(Math.max(80,Math.min(360,90+windSpd*40)));
+  swParticles=[];for(let i=0;i<n;i++)swParticles.push({x:Math.random()*w,y:Math.random()*h,a:Math.random()*120|0,life:60+(Math.random()*90|0)});
+}
+function drawSunTint(w,h){
+  const tx=Math.sin(sunAz*D2R), ty=-Math.cos(sunAz*D2R), cx=w/2, cy=h/2, R=Math.hypot(w,h)/2;
+  if(sunEl>0){
+    const inten=Math.max(.05,Math.min(.9,Math.sin(sunEl*D2R)));
+    const x0=cx-tx*R,y0=cy-ty*R,x1=cx+tx*R,y1=cy+ty*R;
+    const g=swCtx.createLinearGradient(x1,y1,x0,y0), warm=sunEl<12?'255,150,70':'255,225,160';
+    g.addColorStop(0,'rgba('+warm+','+(0.16*inten+0.04).toFixed(3)+')');
+    g.addColorStop(0.5,'rgba('+warm+',0.03)');
+    g.addColorStop(1,'rgba(10,20,40,0.10)');
+    swCtx.fillStyle=g;swCtx.fillRect(0,0,w,h);
+  }else{swCtx.fillStyle='rgba(20,40,80,0.14)';swCtx.fillRect(0,0,w,h);}
+}
+function swFrame(){
+  if(!sunwindOn){swRAF=null;return;}
+  const w=parseFloat(swCanvas.style.width), h=parseFloat(swCanvas.style.height);
+  swCtx.clearRect(0,0,w,h);
+  drawSunTint(w,h);
+  const sp=0.5+windSpd*0.55, vx=Math.sin(windToRad)*sp, vy=-Math.cos(windToRad)*sp;
+  swCtx.lineWidth=1.1;swCtx.strokeStyle='rgba(150,210,255,.5)';swCtx.lineCap='round';swCtx.beginPath();
+  for(const p of swParticles){
+    const ox=p.x,oy=p.y;p.x+=vx;p.y+=vy;p.a++;
+    if(p.a>p.life||p.x<-5||p.x>w+5||p.y<-5||p.y>h+5){p.x=Math.random()*w;p.y=Math.random()*h;p.a=0;continue;}
+    swCtx.moveTo(ox,oy);swCtx.lineTo(p.x,p.y);
+  }
+  swCtx.stroke();
+  swRAF=requestAnimationFrame(swFrame);
+}
+function drawSkyDome(){
+  if(!skyCtx)return;
+  const W=170,H=150,cx=85,cy=92,R=66, s=curSeason(), t=sunTimes(CITY[0],CITY[1],s.N);
+  skyCtx.clearRect(0,0,W,H);
+  skyCtx.strokeStyle='#2b3543';skyCtx.lineWidth=1;
+  [1,0.66,0.33].forEach(f=>{skyCtx.beginPath();skyCtx.arc(cx,cy,R*f,0,Math.PI*2);skyCtx.stroke();});
+  skyCtx.beginPath();skyCtx.moveTo(cx-R,cy);skyCtx.lineTo(cx+R,cy);skyCtx.moveTo(cx,cy-R);skyCtx.lineTo(cx,cy+R);skyCtx.stroke();
+  skyCtx.fillStyle='#6b7787';skyCtx.font='9px sans-serif';skyCtx.textAlign='center';
+  skyCtx.fillText('N',cx,cy-R-3);skyCtx.fillText('S',cx,cy+R+9);skyCtx.fillText('E',cx+R+6,cy+3);skyCtx.fillText('W',cx-R-6,cy+3);
+  skyCtx.strokeStyle='#f5c451';skyCtx.lineWidth=1.6;skyCtx.beginPath();let started=false;
+  for(let h=t.rise;h<=t.set+1e-3;h+=(t.set-t.rise)/80){const p=sunPos(CITY[0],CITY[1],s.N,h);if(p.el<0)continue;const r=(90-p.el)/90*R,x=cx+r*Math.sin(p.az*D2R),y=cy-r*Math.cos(p.az*D2R);if(!started){skyCtx.moveTo(x,y);started=true;}else skyCtx.lineTo(x,y);}
+  skyCtx.stroke();
+  const cur=sunPos(CITY[0],CITY[1],s.N,todHour);
+  if(cur.el>0){const r=(90-cur.el)/90*R,x=cx+r*Math.sin(cur.az*D2R),y=cy-r*Math.cos(cur.az*D2R);
+    skyCtx.strokeStyle='rgba(255,213,74,.4)';skyCtx.lineWidth=2;skyCtx.beginPath();skyCtx.arc(x,y,8,0,Math.PI*2);skyCtx.stroke();
+    skyCtx.fillStyle='#ffd54a';skyCtx.beginPath();skyCtx.arc(x,y,5,0,Math.PI*2);skyCtx.fill();
+  }else{const x=cx+R*Math.sin(cur.az*D2R),y=cy-R*Math.cos(cur.az*D2R);skyCtx.fillStyle='#3a4554';skyCtx.beginPath();skyCtx.arc(x,y,4,0,Math.PI*2);skyCtx.fill();}
+}
+function updateSWPanelText(sp,s,wm){
+  const t=sunTimes(CITY[0],CITY[1],s.N), shadow=(sp.az+180)%360;
+  document.getElementById('swSeason').textContent='· '+s.name.replace(/ \(.*/,'');
+  document.getElementById('swSun').innerHTML=(sp.el>0
+    ? '☀️ Sun '+dir8(sp.az)+' · '+Math.round(sp.el)+'°↑ · shadows '+dir8(shadow)
+    : '🌙 Below horizon (night)')+
+    '<br><span class="muted" style="font-size:10px">↑'+hhmm(t.rise)+' · noon '+Math.round(t.noonEl)+'°↑ · ↓'+hhmm(t.set)+'</span>';
+  document.getElementById('swTime').textContent='time of day · '+hhmm(todHour);
+  document.getElementById('swWind').innerHTML='🌬️ Wind from <b>'+dir8(wm.d)+'</b> ('+wm.d+'°) · '+wm.s.toFixed(1)+' m/s';
+}
+function updateSunWind(){
+  const s=curSeason(), wm=WIND.monthly[s.m], sp=sunPos(CITY[0],CITY[1],s.N,todHour);
+  sunAz=sp.az;sunEl=sp.el;windToRad=((wm.d+180)%360)*D2R;windSpd=wm.s;
+  if(swCanvas){const want=Math.round(Math.max(80,Math.min(360,90+windSpd*40)));if(Math.abs(want-swParticles.length)>50)swSeedParticles();}
+  drawSkyDome();updateSWPanelText(sp,s,wm);
+}
+function buildSunWindPanel(){
+  const el=document.getElementById('sunwindPanel');
+  el.innerHTML=
+   '<div class="lt">☀️ Sun &amp; wind <span id="swSeason" class="muted" style="font-weight:400"></span></div>'+
+   '<canvas id="skyDome" width="170" height="150" style="width:170px;height:150px;display:block;margin:2px auto 3px"></canvas>'+
+   '<div id="swSun" style="font-size:11px;line-height:1.5;margin-bottom:3px"></div>'+
+   '<div class="tslide" style="margin:2px 0 3px"><button class="playbtn" id="todPlay" style="width:26px;height:24px;font-size:11px">▶</button><input type="range" id="todSlider" min="4" max="20" step="0.25" value="12"/></div>'+
+   '<div id="swTime" class="muted" style="font-size:10px;text-align:center;margin-bottom:5px"></div>'+
+   '<div id="swWind" style="font-size:11px;line-height:1.5"></div>'+
+   '<div class="muted" style="font-size:9px;margin-top:4px">Sun path = exact astronomy for the season set by the bottom timeline. Wind = typical year-round climatology.</div>';
+  skyCtx=document.getElementById('skyDome').getContext('2d');
+  document.getElementById('todSlider').oninput=e=>{todHour=+e.target.value;updateSunWind();};
+  document.getElementById('todPlay').onclick=function(){
+    if(todPlaying){clearInterval(todPlaying);todPlaying=null;this.textContent='▶';return;}
+    this.textContent='⏸';
+    todPlaying=setInterval(()=>{todHour=todHour>=20?4:todHour+0.25;document.getElementById('todSlider').value=todHour;updateSunWind();},90);
+  };
+}
+function ensureSwCanvas(){
+  if(swCanvas)return;
+  swCanvas=document.createElement('canvas');swCanvas.id='swCanvas';
+  swCanvas.style.cssText='position:absolute;inset:0;z-index:400;pointer-events:none';
+  document.getElementById('mapwrap').appendChild(swCanvas);
+  swCtx=swCanvas.getContext('2d');
+  buildSunWindPanel();swResize();
+}
+function refreshSunWind(){if(sunwindOn)updateSunWind();}
+document.getElementById('sunwindToggle').onclick=function(){
+  sunwindOn=!sunwindOn;this.classList.toggle('active',sunwindOn);
+  document.getElementById('sunwindPanel').style.display=sunwindOn?'block':'none';
+  if(sunwindOn){ensureSwCanvas();swCanvas.style.display='block';updateSunWind();if(!swRAF)swRAF=requestAnimationFrame(swFrame);}
+  else{if(swRAF){cancelAnimationFrame(swRAF);swRAF=null;}if(swCanvas){swCtx.clearRect(0,0,swCanvas.width,swCanvas.height);swCanvas.style.display='none';}if(todPlaying){clearInterval(todPlaying);todPlaying=null;document.getElementById('todPlay').textContent='▶';}}
+};
+window.addEventListener('resize',()=>{if(sunwindOn)swResize();});
+
+// ---- per-property sun & wind (inline SVG, no canvas) ----
+function sunPathSvg(lat,lng,sz){
+  const cx=sz/2,cy=sz*0.6,R=sz*0.4, s=curSeason(), t=sunTimes(lat,lng,s.N);
+  let g='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#2b3543"/>'+
+        '<line x1="'+(cx-R)+'" y1="'+cy+'" x2="'+(cx+R)+'" y2="'+cy+'" stroke="#2b3543"/>'+
+        '<line x1="'+cx+'" y1="'+(cy-R)+'" x2="'+cx+'" y2="'+(cy+R)+'" stroke="#2b3543"/>'+
+        '<text x="'+cx+'" y="'+(cy-R-2)+'" fill="#6b7787" font-size="8" text-anchor="middle">N</text>'+
+        '<text x="'+(cx+R+5)+'" y="'+(cy+3)+'" fill="#6b7787" font-size="8" text-anchor="middle">E</text>'+
+        '<text x="'+(cx-R-5)+'" y="'+(cy+3)+'" fill="#6b7787" font-size="8" text-anchor="middle">W</text>';
+  let pts=[];
+  for(let h=t.rise;h<=t.set+1e-3;h+=(t.set-t.rise)/60){const p=sunPos(lat,lng,s.N,h);if(p.el<0)continue;const r=(90-p.el)/90*R;pts.push((cx+r*Math.sin(p.az*D2R)).toFixed(1)+','+(cy-r*Math.cos(p.az*D2R)).toFixed(1));}
+  if(pts.length)g+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#f5c451" stroke-width="1.6"/>';
+  const cur=sunPos(lat,lng,s.N,todHour);
+  if(cur.el>0){const r=(90-cur.el)/90*R,x=cx+r*Math.sin(cur.az*D2R),y=cy-r*Math.cos(cur.az*D2R);g+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4.5" fill="#ffd54a"/>';}
+  return '<svg width="'+sz+'" height="'+sz+'" style="flex:none">'+g+'</svg>';
+}
+function windRoseSvg(sz){
+  const cx=sz/2,cy=sz/2,R=sz*0.4;
+  let g='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#2b3543"/>'+
+        '<text x="'+cx+'" y="'+(cy-R-1)+'" fill="#6b7787" font-size="8" text-anchor="middle">N</text>';
+  SEASONS.forEach((s,i)=>{const wm=WIND.monthly[s.m],to=(wm.d+180)%360,len=R*(0.42+wm.s/7);
+    const ux=Math.sin(to*D2R),uy=-Math.cos(to*D2R);
+    const tipx=cx+len*ux,tipy=cy+len*uy,bx=tipx-ux*6,by=tipy-uy*6,px=-uy*3.2,py=ux*3.2,cur=(timeIdx%4)===i;
+    g+='<line x1="'+cx+'" y1="'+cy+'" x2="'+tipx.toFixed(1)+'" y2="'+tipy.toFixed(1)+'" stroke="'+SEASON_COLORS[i]+'" stroke-width="'+(cur?3:1.6)+'" opacity="'+(cur?1:.55)+'"/>'+
+       '<polygon points="'+tipx.toFixed(1)+','+tipy.toFixed(1)+' '+(bx+px).toFixed(1)+','+(by+py).toFixed(1)+' '+(bx-px).toFixed(1)+','+(by-py).toFixed(1)+'" fill="'+SEASON_COLORS[i]+'" opacity="'+(cur?1:.55)+'"/>';});
+  return '<svg width="'+sz+'" height="'+sz+'" style="flex:none">'+g+'</svg>';
+}
+function seasonWindRows(){
+  return SEASONS.map((s,i)=>{const wm=WIND.monthly[s.m],cur=(timeIdx%4)===i;
+    return '<div style="'+(cur?'font-weight:700;':'')+'white-space:nowrap"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+SEASON_COLORS[i]+';margin-right:5px"></span>'+s.name.replace(/ \(.*/,'')+': '+dir8(wm.d)+' '+wm.s.toFixed(1)+'m/s</div>';}).join('');
+}
+function sunWindHtml(lat,lng){
+  const s=curSeason(), t=sunTimes(lat,lng,s.N), sp=sunPos(lat,lng,s.N,todHour), shadow=(sp.az+180)%360;
+  return '<div class="drivers">'+
+    '<div style="font-weight:700;margin-bottom:4px">☀️ Sun &amp; wind <span class="muted" style="font-weight:400;font-size:10px">· '+s.name+'</span></div>'+
+    '<div style="display:flex;gap:10px;align-items:center">'+sunPathSvg(lat,lng,116)+
+      '<div style="font-size:11.5px;line-height:1.6">🌅 '+hhmm(t.rise)+' &nbsp; 🌇 '+hhmm(t.set)+'<br>noon sun '+Math.round(t.noonEl)+'° high<br>'+
+      (sp.el>0?('at '+hhmm(todHour)+': sun '+dir8(sp.az)+' '+Math.round(sp.el)+'°↑<br>shadows fall '+dir8(shadow)):('at '+hhmm(todHour)+': night'))+'</div></div>'+
+    '<div style="display:flex;gap:10px;align-items:center;margin-top:8px">'+windRoseSvg(108)+
+      '<div style="font-size:10.5px;line-height:1.55">'+seasonWindRows()+'</div></div>'+
+    '<div class="muted" style="font-size:10px;margin-top:5px">Westerlies dominate the SW monsoon (Jun–Sep); calmer easterly/NE winds otherwise — a W/SW aspect catches the monsoon breeze &amp; rain. Drag the bottom timeline to change season; toggle ☀️ Sun &amp; wind for the live map sim.</div>'+
+  '</div>';
+}
+
+function renderAll(){refreshMap();refreshLegend();refreshList();refreshKPI();refreshTime();refreshMetro();refreshHeatmap();refreshSunWind();}
+// ================= v2: audit features =================
+const LEAD_ENDPOINT=""; // set to a Formspree/serverless URL to receive emails; "" = store to localStorage only
+function $(id){return document.getElementById(id);}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function slugify(s){return s.toLowerCase().replace(/[^\w]+/g,'-').replace(/^-|-$/g,'');}
+
+// ---- C1/H4: lead capture ----
+function saveLeadLocal(rec){try{const a=JSON.parse(localStorage.getItem('bv_leads')||'[]');a.push(rec);localStorage.setItem('bv_leads',JSON.stringify(a));}catch(e){}}
+function submitLead(kind,inputEl,btnEl,msgEl,meta){
+  const email=(inputEl.value||'').trim();
+  if(msgEl)msgEl.innerHTML='';
+  if(!isEmail(email)){if(msgEl)msgEl.innerHTML='<div class="caperr">Please enter a valid email.</div>';inputEl.focus();return;}
+  const rec={kind,email,meta:meta||null,when:new Date().toISOString()};
+  saveLeadLocal(rec);
+  const done=()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ You\'re in — confirmation on the way.</div>';inputEl.value='';btnEl&&btnEl.classList.remove('busy');toast('Subscribed ✓');};
+  if(LEAD_ENDPOINT){btnEl&&btnEl.classList.add('busy');
+    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(done).catch(()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ Saved locally.</div>';btnEl&&btnEl.classList.remove('busy');});
+  }else{done();}
+}
+function alertCtaHtml(loc){
+  const slug=slugify(loc.name), p=loc.price2026, sug=Math.round(p*1.1/100)*100, esc=loc.name.replace(/'/g,"\\'");
+  return '<div class="cta">'+
+    '<h4>🔔 Price alert · '+escapeHtml(loc.name)+'</h4>'+
+    '<p>Email me when '+escapeHtml(loc.name)+' crosses a ₹/sqft threshold — plus the monthly Bangalore market report.</p>'+
+    '<div class="capform"><input type="email" id="ae_'+slug+'" placeholder="you@email.com" autocomplete="email"/>'+
+    '<input type="number" class="thr" id="at_'+slug+'" value="'+sug+'" aria-label="threshold rupees per sqft"/></div>'+
+    '<div class="alertrow"><button class="btn" id="ab_'+slug+'" onclick="submitAlert(\''+esc+'\')">Set alert</button>'+
+    '<span class="muted" style="font-size:10.5px">now '+fmt(p)+'/sqft · <a href="#" onclick="event.preventDefault();openReport()">just the monthly report ↗</a></span></div>'+
+    '<div id="am_'+slug+'"></div></div>';
+}
+function submitAlert(name){const slug=slugify(name);submitLead('price-alert',$('ae_'+slug),$('ab_'+slug),$('am_'+slug),{locality:name,threshold:+$('at_'+slug).value});}
+function openReport(){$('reportModal').style.display='flex';setTimeout(()=>{var e=$('reportEmail');e&&e.focus();},50);}
+function emptyStateHtml(q){
+  const ql=q.toLowerCase();
+  const sugg=DATA.localities.filter(l=>{const n=l.name.toLowerCase();return n.split(/[\s,]+/).some(tok=>tok.startsWith(ql.slice(0,3)))||(ql.length>=4&&n.includes(ql.slice(0,4)));}).slice(0,4);
+  const chips=sugg.map(l=>'<span class="near" onclick="pickLocality(\''+l.name.replace(/'/g,"\\'")+'\')">'+escapeHtml(l.name)+'</span>').join(' · ');
+  return '<div class="empty">'+
+    '<div class="big">No tracked locality matches “'+escapeHtml(q)+'”.</div>'+
+    (chips?('<div style="margin:6px 0 12px">Did you mean: '+chips+'</div>'):'<div style="margin:6px 0 12px">We track 119 Bengaluru localities.</div>')+
+    '<div class="cta" style="text-align:left"><h4>Want “'+escapeHtml(q)+'” added?</h4><p>Drop your email — we\'ll notify you when we add it (and send the monthly report).</p>'+
+    '<div class="capform"><input type="email" id="ne_email" placeholder="you@email.com"/><button class="btn" id="ne_btn" onclick="submitAreaRequest()">Notify me</button></div><div id="ne_msg"></div></div></div>';
+}
+function submitAreaRequest(){submitLead('request-area',$('ne_email'),$('ne_btn'),$('ne_msg'),{query:searchTxt});}
+function pickLocality(n){$('search').value='';searchTxt='';renderAll();openDetail(n);}
+
+// ---- H1: deep links + share ----
+let _hashLock=false;
+function updateHash(){
+  if(_hashLock)return;
+  const parts=[];
+  if(selected)parts.push('a='+encodeURIComponent(selected));
+  if(timeIdx!==29)parts.push('t='+timeIdx);
+  if(metric!=='price')parts.push('m='+metric);
+  const h=parts.join('&');
+  try{history.replaceState(null,'',h?('#'+h):(location.pathname+location.search));}catch(e){if(h)location.hash=h;}
+}
+function parseHash(){const h=location.hash.replace(/^#/,'');const o={};if(h)h.split('&').forEach(kv=>{const i=kv.indexOf('=');if(i>0)o[kv.slice(0,i)]=decodeURIComponent(kv.slice(i+1));});return o;}
+function applyHash(){
+  const o=parseHash();let opened=false;_hashLock=true;
+  if(o.m&&document.querySelector('#metricSeg button[data-m="'+o.m+'"],#livSeg button[data-m="'+o.m+'"]')){metric=o.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x.dataset.m===metric));}
+  if(o.t!==undefined&&o.t!==''){const ti=Math.max(0,Math.min(43,parseInt(o.t,10)||0));timeIdx=ti;$('time').value=ti;}
+  renderAll();
+  if(o.a){const loc=DATA.localities.find(l=>l.name===o.a);if(loc){_hashLock=false;openDetail(o.a);opened=true;}}
+  _hashLock=false;
+  return opened;
+}
+function copyShareLink(){updateHash();const url=location.href;const ok=()=>toast('Link copied ✓');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(()=>prompt('Copy this link:',url));
+  else prompt('Copy this link:',url);
+}
+window.addEventListener('hashchange',()=>{if(!_hashLock)applyHash();});
+
+// ---- H2: compare ----
+let COMPARE=[], cmpChart=null; const CMP_COLORS=['#4f9dff','#21c198','#f59e0b'];
+function loadCompare(){try{COMPARE=JSON.parse(localStorage.getItem('bv_compare')||'[]').filter(n=>DATA.localities.find(l=>l.name===n)).slice(0,3);}catch(e){COMPARE=[];}}
+function saveCompare(){try{localStorage.setItem('bv_compare',JSON.stringify(COMPARE));}catch(e){}}
+function isPinned(n){return COMPARE.indexOf(n)>=0;}
+function togglePin(n){
+  if(isPinned(n))COMPARE=COMPARE.filter(x=>x!==n);
+  else{if(COMPARE.length>=3){toast('Compare holds 3 — remove one first');return;}COMPARE.push(n);toast(n+' added to compare');}
+  saveCompare();renderCompareTray();refreshList();syncDetailActions();
+}
+function toggleCompareCurrent(){if(!selected){toast('Open a locality first');return;}togglePin(selected);}
+function clearCompare(){COMPARE=[];saveCompare();renderCompareTray();refreshList();syncDetailActions();}
+function syncDetailActions(){const b=$('dCompare');if(!b)return;const on=!!selected;b.style.opacity=on?'1':'.4';b.classList.toggle('on',on&&isPinned(selected));b.title=on?(isPinned(selected)?'Remove from compare':'Add to compare'):'Open a locality to compare';}
+function renderCompareTray(){
+  const tray=$('compareTray');
+  if(!COMPARE.length){tray.classList.remove('show');if(cmpChart){cmpChart.destroy();cmpChart=null;}return;}
+  tray.classList.add('show');
+  $('cmpChips').innerHTML=COMPARE.map((n,i)=>'<span class="cmpchip"><span style="width:9px;height:9px;border-radius:50%;background:'+CMP_COLORS[i]+';display:inline-block"></span>'+escapeHtml(n)+'<span class="rm" title="remove" onclick="togglePin(\''+n.replace(/'/g,"\\'")+'\')">×</span></span>').join('');
+  const rows=COMPARE.map(n=>DATA.localities.find(l=>l.name===n));
+  $('cmpTableWrap').innerHTML='<table class="cmptable"><tr><th></th>'+rows.map(l=>'<th>'+escapeHtml(l.name.split(' ')[0])+'</th>').join('')+'</tr>'+
+    '<tr><th>₹/sqft now</th>'+rows.map(l=>'<td>'+fmt(priceAt(l,timeIdx))+'</td>').join('')+'</tr>'+
+    '<tr><th>2029 proj.</th>'+rows.map(l=>'<td>'+fmt(l.projPrice2029)+'</td>').join('')+'</tr>'+
+    '<tr><th>CAGR 19–26</th>'+rows.map(l=>'<td>'+l.cagr+'%</td>').join('')+'</tr>'+
+    '<tr><th>Yield</th>'+rows.map(l=>'<td>'+l.yield+'%</td>').join('')+'</tr></table>';
+  const labels=combined(rows[0]).map((p,i)=>tLabel(i));
+  const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:CMP_COLORS[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
+  if(cmpChart)cmpChart.destroy();
+  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:'#6b7787',maxTicksLimit:8,font:{size:9}},grid:{color:'#222b35'}},y:{ticks:{color:'#6b7787',font:{size:9},callback:v=>fmtK(v)},grid:{color:'#222b35'}}}}});
+}
+
+// ---- H3: coach + pulse ----
+let interacted=false;
+function clearPulse(){document.querySelectorAll('.leaflet-localityPane-pane path.pulse').forEach(p=>p.classList.remove('pulse'));}
+function dismissCoach(){interacted=true;const c=$('coachTip');if(c)c.remove();clearPulse();}
+function applyPulse(){[...DATA.localities].sort((a,b)=>b.projCagr-a.projCagr).slice(0,3).forEach(l=>{const m=markers[l.name];if(m&&m._path)m._path.classList.add('pulse');});}
+function createCoach(){const d=document.createElement('div');d.className='coach';d.id='coachTip';d.innerHTML='👆 Tap any area for its 10-yr price trajectory<span class="cx" onclick="dismissCoach()">×</span>';$('mapwrap').appendChild(d);}
+
+// ---- H5: scrubber axis ----
+function buildScrubAxis(){
+  const ax=$('taxis');if(!ax)return;const max=43, splitPct=ACTUAL_MAX/max*100;
+  $('time').style.setProperty('--split',splitPct.toFixed(1)+'%');
+  let html='<div class="proj" style="left:'+splitPct.toFixed(1)+'%;right:0"></div><div class="nowm" style="left:'+splitPct.toFixed(1)+'%">now ’26</div>';
+  for(let y=2019;y<=2029;y+=2){const pct=((y-2019)*4)/max*100;html+='<div class="tk" style="left:'+pct.toFixed(1)+'%">’'+String(y).slice(2)+'</div>';}
+  ax.innerHTML=html;
+}
+
+// ---- C4: legend collapse ----
+$('legendCollapse').onclick=function(){$('legendStack').classList.toggle('collapsed');};
+
+// ---- N4: mobile layers popover ----
+function placeOverlays(){
+  const block=$('overlaysBlock'),pop=$('layersPop'),controls=document.querySelector('#sidebar .controls');
+  if(isMobile()){if(block.parentElement!==pop)pop.appendChild(block);}
+  else if(block.parentElement!==controls){controls.appendChild(block);pop.classList.remove('show');}
+}
+function toggleLayersPop(){placeOverlays();$('layersPop').classList.toggle('show');}
+window.addEventListener('resize',placeOverlays);
+
+// ---- init ----
+buildScrubAxis();
+loadCompare();
+placeOverlays();
+const _opened=applyHash();
+renderCompareTray();
+applyPulse();
+if(!_opened){ if(!isMobile()) setTimeout(()=>openDetail('Whitefield'),300); else createCoach(); }
 </script>
 <div id="aboutModal" class="modal-bg" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal">
@@ -725,6 +1405,28 @@ if(!isMobile())setTimeout(()=>openDetail('Whitefield'),300);
     <h3>Attribution</h3>
     <p>Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, tiles © <a href="https://carto.com/" target="_blank" rel="noopener">CARTO</a>. Metro data from BMRCL/Wikipedia; water data from BWSSB and press reporting; market data from public property portals and analyst reports.</p>
   </div>
+</div>
+<div id="reportModal" class="modal-bg" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:440px">
+    <button class="x" aria-label="Close" onclick="document.getElementById('reportModal').style.display='none'">×</button>
+    <h2>📈 Monthly Bangalore price report</h2>
+    <p>Get a once-a-month email: which localities moved, new launches, metro &amp; infra updates, and refreshed 3-year projections. No spam, unsubscribe anytime.</p>
+    <div id="reportForm">
+      <div class="capform">
+        <input type="email" id="reportEmail" placeholder="you@email.com" autocomplete="email"/>
+        <button class="btn" id="reportBtn" onclick="submitLead('report',document.getElementById('reportEmail'),document.getElementById('reportBtn'),document.getElementById('reportMsg'))">Get the report</button>
+      </div>
+      <div id="reportMsg"></div>
+    </div>
+    <p class="muted" style="margin-top:10px;font-size:10.5px">We store your email only to send this report. Modeled data — see About &amp; disclaimer.</p>
+  </div>
+</div>
+<div id="toast"></div>
+<div id="cdnfail">
+  <div style="font-size:34px">📡</div>
+  <div style="font-size:16px;font-weight:700">Couldn't load the map libraries</div>
+  <div class="muted" style="max-width:340px">A required resource (Leaflet/Chart.js) was blocked or failed to load — usually a network or ad-blocker issue. Please check your connection and reload.</div>
+  <button class="btn" onclick="location.reload()">Reload</button>
 </div>
 </body>
 </html>
