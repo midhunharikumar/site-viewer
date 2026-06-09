@@ -1,0 +1,1508 @@
+{
+ "lines": [
+  {
+   "name": "Purple Line",
+   "short": "Purple",
+   "color": "#7e2a8e",
+   "status": "op",
+   "announced": "2006 (Phase 1)",
+   "completion": "2011\\u20132023",
+   "projYear": 2011,
+   "note": "East\\u2013West spine (Whitefield/Kadugodi \\u2194 Challaghatta). First line opened Oct 2011; extended to Whitefield & Challaghatta in 2023.",
+   "stations": [
+    {
+     "n": "Whitefield (Kadugodi)",
+     "lat": 12.99507,
+     "lng": 77.75777,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Hopefarm Channasandra",
+     "lat": 12.98793,
+     "lng": 77.75409,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Kadugodi Tree Park",
+     "lat": 12.98565,
+     "lng": 77.7469,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Pattandur Agrahara",
+     "lat": 12.98761,
+     "lng": 77.73821,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Sri Sathya Sai Hospital",
+     "lat": 12.98102,
+     "lng": 77.72762,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Nallurhalli",
+     "lat": 12.97653,
+     "lng": 77.72476,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Kundalahalli",
+     "lat": 12.97746,
+     "lng": 77.71576,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Seetharampalya",
+     "lat": 12.9831,
+     "lng": 77.71352,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Hoodi",
+     "lat": 12.98873,
+     "lng": 77.71127,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Garudacharpalya",
+     "lat": 12.99356,
+     "lng": 77.70376,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Singayyanapalya",
+     "lat": 12.99678,
+     "lng": 77.69217,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Krishnarajapura (KR Pura)",
+     "lat": 12.99999,
+     "lng": 77.67794,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Benniganahalli",
+     "lat": 12.99655,
+     "lng": 77.66828,
+     "st": "op",
+     "yr": 2023
+    },
+    {
+     "n": "Baiyappanahalli",
+     "lat": 12.99076,
+     "lng": 77.65247,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Swami Vivekananda Road",
+     "lat": 12.98596,
+     "lng": 77.64494,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Indiranagar",
+     "lat": 12.9786,
+     "lng": 77.6388,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Halasuru",
+     "lat": 12.97566,
+     "lng": 77.62628,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Trinity",
+     "lat": 12.97295,
+     "lng": 77.61704,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Mahatma Gandhi Road",
+     "lat": 12.97554,
+     "lng": 77.60683,
+     "st": "op",
+     "yr": 2011
+    },
+    {
+     "n": "Cubbon Park",
+     "lat": 12.98074,
+     "lng": 77.59841,
+     "st": "op",
+     "yr": 2016
+    },
+    {
+     "n": "Vidhana Soudha",
+     "lat": 12.97982,
+     "lng": 77.59275,
+     "st": "op",
+     "yr": 2016
+    },
+    {
+     "n": "Central College",
+     "lat": 12.97776,
+     "lng": 77.58279,
+     "st": "op",
+     "yr": 2016
+    },
+    {
+     "n": "Majestic (Kempegowda)",
+     "lat": 12.97569,
+     "lng": 77.57284,
+     "st": "op",
+     "yr": 2016
+    },
+    {
+     "n": "KSR Railway Station",
+     "lat": 12.97581,
+     "lng": 77.56571,
+     "st": "op",
+     "yr": 2016
+    },
+    {
+     "n": "Magadi Road",
+     "lat": 12.97558,
+     "lng": 77.55543,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Hosahalli",
+     "lat": 12.97418,
+     "lng": 77.54554,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Vijayanagara",
+     "lat": 12.9708,
+     "lng": 77.53729,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Attiguppe",
+     "lat": 12.96149,
+     "lng": 77.53711,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Deepanjali Nagar",
+     "lat": 12.95219,
+     "lng": 77.53694,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Mysuru Road",
+     "lat": 12.94651,
+     "lng": 77.52978,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Pantharapalya\\u2013Nayandahalli",
+     "lat": 12.94682,
+     "lng": 77.53132,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Rajarajeshwari Nagar",
+     "lat": 12.93673,
+     "lng": 77.51958,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Jnanabharathi",
+     "lat": 12.93556,
+     "lng": 77.51202,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Pattanagere",
+     "lat": 12.92441,
+     "lng": 77.49826,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Kengeri Bus Terminal",
+     "lat": 12.9149,
+     "lng": 77.48759,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Kengeri",
+     "lat": 12.908,
+     "lng": 77.4765,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Challaghatta",
+     "lat": 12.89742,
+     "lng": 77.46124,
+     "st": "op",
+     "yr": 2023
+    }
+   ]
+  },
+  {
+   "name": "Green Line",
+   "short": "Green",
+   "color": "#16a34a",
+   "status": "op",
+   "announced": "2006 (Phase 1)",
+   "completion": "2014\\u20132024",
+   "projYear": 2014,
+   "note": "North\\u2013South line (Madavara/BIEC \\u2194 Silk Institute). Opened 2014; final Madavara extension Nov 2024.",
+   "stations": [
+    {
+     "n": "Madavara (BIEC)",
+     "lat": 13.05743,
+     "lng": 77.47295,
+     "st": "op",
+     "yr": 2024
+    },
+    {
+     "n": "Chikkabidarakallu",
+     "lat": 13.05241,
+     "lng": 77.48792,
+     "st": "op",
+     "yr": 2024
+    },
+    {
+     "n": "Manjunath Nagar",
+     "lat": 13.05014,
+     "lng": 77.49441,
+     "st": "op",
+     "yr": 2024
+    },
+    {
+     "n": "Nagasandra",
+     "lat": 13.04804,
+     "lng": 77.50009,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Dasarahalli",
+     "lat": 13.04357,
+     "lng": 77.51246,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Jalahalli",
+     "lat": 13.03949,
+     "lng": 77.5197,
+     "st": "op",
+     "yr": 2015
+    },
+    {
+     "n": "Peenya Industry",
+     "lat": 13.03634,
+     "lng": 77.52547,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Peenya",
+     "lat": 13.03292,
+     "lng": 77.5333,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Goraguntepalya",
+     "lat": 13.02837,
+     "lng": 77.54075,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Yeshwanthpur",
+     "lat": 13.02318,
+     "lng": 77.54994,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Sandal Soap Factory",
+     "lat": 13.01471,
+     "lng": 77.55396,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Mahalakshmi",
+     "lat": 13.00822,
+     "lng": 77.54882,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Rajajinagara",
+     "lat": 13.00033,
+     "lng": 77.5497,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Kuvempu Road",
+     "lat": 12.99846,
+     "lng": 77.55695,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Srirampura",
+     "lat": 12.99651,
+     "lng": 77.56328,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Sampige Road",
+     "lat": 12.99051,
+     "lng": 77.57073,
+     "st": "op",
+     "yr": 2014
+    },
+    {
+     "n": "Majestic (Kempegowda)",
+     "lat": 12.97569,
+     "lng": 77.57284,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Chickpete",
+     "lat": 12.96676,
+     "lng": 77.57478,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "KR Market",
+     "lat": 12.96135,
+     "lng": 77.57457,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "National College",
+     "lat": 12.95055,
+     "lng": 77.57371,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Lalbagh",
+     "lat": 12.94636,
+     "lng": 77.58005,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "South End Circle",
+     "lat": 12.9423,
+     "lng": 77.58006,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Jayanagara",
+     "lat": 12.93824,
+     "lng": 77.58008,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "RV Road",
+     "lat": 12.92146,
+     "lng": 77.58038,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Banashankari",
+     "lat": 12.91438,
+     "lng": 77.57675,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Jaya Prakash Nagar",
+     "lat": 12.9073,
+     "lng": 77.57313,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Yelachenahalli",
+     "lat": 12.89598,
+     "lng": 77.57016,
+     "st": "op",
+     "yr": 2017
+    },
+    {
+     "n": "Konanakunte Cross",
+     "lat": 12.88474,
+     "lng": 77.5529,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Doddakallasandra",
+     "lat": 12.88471,
+     "lng": 77.55285,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Vajarahalli",
+     "lat": 12.87745,
+     "lng": 77.54459,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Thalaghattapura",
+     "lat": 12.87168,
+     "lng": 77.53876,
+     "st": "op",
+     "yr": 2021
+    },
+    {
+     "n": "Silk Institute",
+     "lat": 12.86186,
+     "lng": 77.53001,
+     "st": "op",
+     "yr": 2021
+    }
+   ]
+  },
+  {
+   "name": "Yellow Line",
+   "short": "Yellow",
+   "color": "#eab308",
+   "status": "op",
+   "announced": "2014 (Phase 2 approval)",
+   "completion": "Aug 2025",
+   "projYear": 2025,
+   "note": "RV Road \\u2194 Bommasandra (Electronic City corridor). Driverless. Opened Aug 2025 after rolling-stock delays.",
+   "stations": [
+    {
+     "n": "RV Road",
+     "lat": 12.92146,
+     "lng": 77.58038,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Ragigudda",
+     "lat": 12.917,
+     "lng": 77.5884,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Jayadeva Hospital",
+     "lat": 12.91674,
+     "lng": 77.60012,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "BTM Layout",
+     "lat": 12.91656,
+     "lng": 77.60825,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Central Silk Board",
+     "lat": 12.91652,
+     "lng": 77.62056,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Bommanahalli",
+     "lat": 12.91066,
+     "lng": 77.62657,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Hongasandra",
+     "lat": 12.90165,
+     "lng": 77.63208,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Kudlu Gate",
+     "lat": 12.88992,
+     "lng": 77.63929,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Singasandra",
+     "lat": 12.88069,
+     "lng": 77.64498,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Hosa Road",
+     "lat": 12.87078,
+     "lng": 77.65248,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Beratena Agrahara",
+     "lat": 12.86385,
+     "lng": 77.65798,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Infosys Konappana Agrahara",
+     "lat": 12.85648,
+     "lng": 77.66361,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Electronic City",
+     "lat": 12.84649,
+     "lng": 77.67112,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Huskur Road",
+     "lat": 12.83901,
+     "lng": 77.67754,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Biocon Hebbagodi",
+     "lat": 12.82909,
+     "lng": 77.68133,
+     "st": "op",
+     "yr": 2025
+    },
+    {
+     "n": "Bommasandra",
+     "lat": 12.81933,
+     "lng": 77.68834,
+     "st": "op",
+     "yr": 2025
+    }
+   ]
+  },
+  {
+   "name": "Blue Line (ORR + Airport)",
+   "short": "Blue",
+   "color": "#2563eb",
+   "status": "uc",
+   "announced": "2016\\u20132021",
+   "completion": "2026 (ORR) \\u2013 2027 (Airport)",
+   "projYear": 2027,
+   "note": "Central Silk Board \\u2192 KR Pura (ORR tech belt, Phase 2A, ~2026) \\u2192 Hebbal \\u2192 KIA Airport (Phase 2B, ~2027). The airport line.",
+   "stations": [
+    {
+     "n": "Central Silk Board",
+     "lat": 12.91652,
+     "lng": 77.62056,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "HSR Layout",
+     "lat": 12.91649,
+     "lng": 77.63304,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Agara",
+     "lat": 12.92053,
+     "lng": 77.64359,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Ibbaluru",
+     "lat": 12.92125,
+     "lng": 77.6625,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Prestige Bellandur",
+     "lat": 12.92799,
+     "lng": 77.68077,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Embassy TechVillage",
+     "lat": 12.93012,
+     "lng": 77.68419,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Kadubeesanahalli",
+     "lat": 12.93225,
+     "lng": 77.68761,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Marathahalli",
+     "lat": 12.95824,
+     "lng": 77.70127,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "ISRO",
+     "lat": 12.969,
+     "lng": 77.70115,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Doddanekundi",
+     "lat": 12.97563,
+     "lng": 77.69712,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "DRDO Sports Complex",
+     "lat": 12.98589,
+     "lng": 77.69083,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Saraswathi Nagar",
+     "lat": 12.98076,
+     "lng": 77.69397,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Krishnarajapura (KR Pura)",
+     "lat": 12.99999,
+     "lng": 77.67794,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Kasturi Nagar",
+     "lat": 13.0085,
+     "lng": 77.66915,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Horamavu",
+     "lat": 13.01702,
+     "lng": 77.66035,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "HRBR Layout",
+     "lat": 13.02254,
+     "lng": 77.64739,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Kalyan Nagar",
+     "lat": 13.02626,
+     "lng": 77.6378,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "HBR Layout",
+     "lat": 13.0328,
+     "lng": 77.6297,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Nagawara",
+     "lat": 13.04051,
+     "lng": 77.62466,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Veerannapalya",
+     "lat": 13.04116,
+     "lng": 77.61814,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Kempapura",
+     "lat": 13.04272,
+     "lng": 77.6054,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Hebbal",
+     "lat": 13.04429,
+     "lng": 77.59267,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Kodigehalli",
+     "lat": 13.05702,
+     "lng": 77.59386,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Jakkur Cross",
+     "lat": 13.07038,
+     "lng": 77.59347,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Yelahanka",
+     "lat": 13.1021,
+     "lng": 77.60035,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Bagalur Cross",
+     "lat": 13.12061,
+     "lng": 77.61056,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Doddajala",
+     "lat": 13.1886,
+     "lng": 77.64487,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "Airport City (KIADB)",
+     "lat": 13.19833,
+     "lng": 77.68717,
+     "st": "uc",
+     "yr": 2027
+    },
+    {
+     "n": "KIA Terminals",
+     "lat": 13.19809,
+     "lng": 77.71245,
+     "st": "uc",
+     "yr": 2027
+    }
+   ]
+  },
+  {
+   "name": "Pink Line",
+   "short": "Pink",
+   "color": "#db2777",
+   "status": "uc",
+   "announced": "2014 (Phase 2 approval)",
+   "completion": "2026 (phased)",
+   "projYear": 2026,
+   "note": "Kalena Agrahara \\u2194 Nagawara (2nd N\\u2013S corridor, mostly underground through CBD). Elevated south ~mid-2026; underground ~Dec 2026.",
+   "stations": [
+    {
+     "n": "Kalena Agrahara",
+     "lat": 12.87158,
+     "lng": 77.59363,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Hulimavu",
+     "lat": 12.88108,
+     "lng": 77.59579,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "IIMB",
+     "lat": 12.89564,
+     "lng": 77.59967,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "JP Nagar 4th Phase",
+     "lat": 12.90984,
+     "lng": 77.60024,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Jayadeva Hospital",
+     "lat": 12.91674,
+     "lng": 77.60012,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Tavarekere",
+     "lat": 12.92942,
+     "lng": 77.60049,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Dairy Circle",
+     "lat": 12.94045,
+     "lng": 77.60235,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Lakkasandra",
+     "lat": 12.94934,
+     "lng": 77.60308,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Langford Town",
+     "lat": 12.95714,
+     "lng": 77.60615,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "National Military School",
+     "lat": 12.96443,
+     "lng": 77.60704,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "MG Road",
+     "lat": 12.97554,
+     "lng": 77.60683,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Shivajinagar",
+     "lat": 12.98358,
+     "lng": 77.60306,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Cantonment",
+     "lat": 12.99142,
+     "lng": 77.60606,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Pottery Town",
+     "lat": 13.00049,
+     "lng": 77.60934,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Tannery Road",
+     "lat": 13.00899,
+     "lng": 77.61349,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Venkateshpura",
+     "lat": 13.01757,
+     "lng": 77.61789,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Kadugundanahalli",
+     "lat": 13.02984,
+     "lng": 77.62066,
+     "st": "uc",
+     "yr": 2026
+    },
+    {
+     "n": "Nagawara",
+     "lat": 13.04051,
+     "lng": 77.62466,
+     "st": "uc",
+     "yr": 2026
+    }
+   ]
+  },
+  {
+   "name": "Orange Line (Phase 3)",
+   "short": "Orange",
+   "color": "#f97316",
+   "status": "approved",
+   "announced": "Aug 2024 (Cabinet)",
+   "completion": "~2030\\u20132031",
+   "projYear": 2031,
+   "note": "JP Nagar 4th Phase \\u2194 Kempapura along western ORR. Approved Aug 2024; foundation 2025; realistic completion 2030\\u201331. Coordinates approximate.",
+   "stations": [
+    {
+     "n": "JP Nagar 4th Phase",
+     "lat": 12.9082,
+     "lng": 77.5855,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "JP Nagar 5th Phase",
+     "lat": 12.909,
+     "lng": 77.579,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "JP Nagar",
+     "lat": 12.9072,
+     "lng": 77.573,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kadirenahalli",
+     "lat": 12.918,
+     "lng": 77.565,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kamakya Junction",
+     "lat": 12.925,
+     "lng": 77.559,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Hosakerehalli",
+     "lat": 12.933,
+     "lng": 77.552,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Dwaraka Nagar",
+     "lat": 12.94,
+     "lng": 77.545,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Mysuru Road",
+     "lat": 12.9486,
+     "lng": 77.539,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Nagarbhavi Circle",
+     "lat": 12.961,
+     "lng": 77.521,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Vinayaka Layout",
+     "lat": 12.968,
+     "lng": 77.516,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Papireddy Palya",
+     "lat": 12.974,
+     "lng": 77.513,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "BDA Complex Nagarbhavi",
+     "lat": 12.979,
+     "lng": 77.51,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Sumanahalli Cross",
+     "lat": 13.001,
+     "lng": 77.517,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Chowdeshwari Nagar",
+     "lat": 13.012,
+     "lng": 77.523,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Freedom Fighters Colony",
+     "lat": 13.019,
+     "lng": 77.528,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kanteerava Studio",
+     "lat": 13.026,
+     "lng": 77.536,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Peenya",
+     "lat": 13.033,
+     "lng": 77.519,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Muthyalanagar",
+     "lat": 13.04,
+     "lng": 77.553,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "BEL Circle",
+     "lat": 13.033,
+     "lng": 77.565,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Nagashetty Halli",
+     "lat": 13.029,
+     "lng": 77.579,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Hebbal",
+     "lat": 13.0358,
+     "lng": 77.597,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kempapura",
+     "lat": 13.047,
+     "lng": 77.602,
+     "st": "fut",
+     "yr": 2031
+    }
+   ]
+  },
+  {
+   "name": "Silver Line (Phase 3 C2)",
+   "short": "Silver",
+   "color": "#94a3b8",
+   "status": "approved",
+   "announced": "Aug 2024 (Cabinet)",
+   "completion": "~2030\\u20132031",
+   "projYear": 2031,
+   "note": "Hosahalli \\u2194 Kadabagere along Magadi Road (western suburbs). Approved Aug 2024. Color provisional. Coordinates approximate.",
+   "stations": [
+    {
+     "n": "Hosahalli",
+     "lat": 12.976,
+     "lng": 77.538,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "KHB Colony",
+     "lat": 12.982,
+     "lng": 77.53,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kamakshipalya",
+     "lat": 12.987,
+     "lng": 77.523,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Anjana Nagar",
+     "lat": 13.001,
+     "lng": 77.517,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Sunkadakatte",
+     "lat": 12.992,
+     "lng": 77.506,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Herohalli",
+     "lat": 12.996,
+     "lng": 77.496,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Byadarahalli",
+     "lat": 13,
+     "lng": 77.483,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kamath Layout",
+     "lat": 13.004,
+     "lng": 77.472,
+     "st": "fut",
+     "yr": 2031
+    },
+    {
+     "n": "Kadabagere",
+     "lat": 13.008,
+     "lng": 77.46,
+     "st": "fut",
+     "yr": 2031
+    }
+   ]
+  },
+  {
+   "name": "Red Line (Phase 3A)",
+   "short": "Red",
+   "color": "#dc2626",
+   "status": "approved",
+   "announced": "Dec 2024 (State Cabinet)",
+   "completion": "~2032\\u20132033",
+   "projYear": 2033,
+   "note": "Sarjapur \\u2194 Hebbal via Koramangala & CBD (SE tech corridor to North). State-approved Dec 2024; central approval pending. ~28 stations, partly underground. Coordinates approximate.",
+   "stations": [
+    {
+     "n": "Sarjapur",
+     "lat": 12.859,
+     "lng": 77.786,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Kada Agrahara Road",
+     "lat": 12.868,
+     "lng": 77.77,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Sompura",
+     "lat": 12.877,
+     "lng": 77.756,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Dommasandra",
+     "lat": 12.887,
+     "lng": 77.742,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Muthanallur Cross",
+     "lat": 12.896,
+     "lng": 77.729,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Kodathi Gate",
+     "lat": 12.905,
+     "lng": 77.715,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Ambedkar Nagar",
+     "lat": 12.912,
+     "lng": 77.705,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Carmelaram",
+     "lat": 12.917,
+     "lng": 77.695,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Doddakanalli",
+     "lat": 12.923,
+     "lng": 77.685,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Kaikondrahalli",
+     "lat": 12.927,
+     "lng": 77.676,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Bellandur Gate",
+     "lat": 12.93,
+     "lng": 77.668,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Ibbalur",
+     "lat": 12.923,
+     "lng": 77.648,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Agara",
+     "lat": 12.923,
+     "lng": 77.636,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Jakkasandra",
+     "lat": 12.93,
+     "lng": 77.628,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Koramangala 3rd Block",
+     "lat": 12.934,
+     "lng": 77.624,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Koramangala 2nd Block",
+     "lat": 12.938,
+     "lng": 77.618,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Dairy Circle",
+     "lat": 12.941,
+     "lng": 77.602,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "NIMHANS",
+     "lat": 12.942,
+     "lng": 77.596,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Shantinagara",
+     "lat": 12.956,
+     "lng": 77.593,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Town Hall",
+     "lat": 12.965,
+     "lng": 77.587,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "KR Circle",
+     "lat": 12.974,
+     "lng": 77.587,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Basaveshwara Circle",
+     "lat": 12.985,
+     "lng": 77.59,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Bengaluru Golf Course",
+     "lat": 12.993,
+     "lng": 77.592,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Palace Guttahalli",
+     "lat": 13.001,
+     "lng": 77.587,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Mekhri Circle",
+     "lat": 13.009,
+     "lng": 77.587,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Veterinary College",
+     "lat": 13.025,
+     "lng": 77.587,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Ganga Nagar",
+     "lat": 13.03,
+     "lng": 77.592,
+     "st": "fut",
+     "yr": 2033
+    },
+    {
+     "n": "Hebbal",
+     "lat": 13.0358,
+     "lng": 77.597,
+     "st": "fut",
+     "yr": 2033
+    }
+   ]
+  }
+ ],
+ "phase4": [
+  {
+   "name": "KR Pura \\u2192 Hoskote (proposed)",
+   "color": "#2563eb",
+   "from": [
+    12.99999,
+    77.67794
+   ],
+   "to": [
+    13.071,
+    77.798
+   ]
+  },
+  {
+   "name": "Challaghatta \\u2192 Bidadi (proposed)",
+   "color": "#7e2a8e",
+   "from": [
+    12.89742,
+    77.46124
+   ],
+   "to": [
+    12.798,
+    77.386
+   ]
+  },
+  {
+   "name": "Madavara \\u2192 Nelamangala (proposed)",
+   "color": "#16a34a",
+   "from": [
+    13.05743,
+    77.47295
+   ],
+   "to": [
+    13.099,
+    77.394
+   ]
+  },
+  {
+   "name": "Silk Institute \\u2192 Harohalli (proposed)",
+   "color": "#16a34a",
+   "from": [
+    12.86186,
+    77.53001
+   ],
+   "to": [
+    12.78,
+    77.495
+   ]
+  },
+  {
+   "name": "Bommasandra \\u2192 Attibele (proposed)",
+   "color": "#eab308",
+   "from": [
+    12.81933,
+    77.68834
+   ],
+   "to": [
+    12.766,
+    77.77
+   ]
+  }
+ ],
+ "meta": {
+  "source": "Wikipedia per-line articles, BMRCL, themetrorailguy, PIB; compiled May 2026. Future-line coordinates approximate.",
+  "statusLegend": {
+   "op": "Operational",
+   "uc": "Under construction",
+   "approved": "Approved / planned",
+   "fut": "Future station"
+  }
+ }
+}

@@ -1,0 +1,500 @@
+{
+ "Lavelle Road": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Sadashivanagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Cunningham Road": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Vasanth Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Indiranagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "MG Road": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Richmond Town": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Haralur Road": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Hebbal": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Malleshwaram": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Koramangala": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Hoodi": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Jayanagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Bellandur": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Mahadevapura": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Benson Town": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Seshadripuram": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Marathahalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Ulsoor": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Kundalahalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Gunjur": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Rajajinagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Immadihalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Domlur": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Kasavanahalli": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Varthur Lake": {
+  "st": "none",
+  "conf": "High"
+ },
+ "HSR Layout": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Basaveshwaranagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Brookefield": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Whitefield": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "JP Nagar Phase 8": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Kudlu Gate": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "JP Nagar Phase 7": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Carmelaram": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Yeshwanthpur": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Uttarahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Sarjapur Road": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Panathur": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Jakkur": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "HAL": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Amruthahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Basavanagudi": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Rachenahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Munnekollala": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Frazer Town": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Nagavara": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Thanisandra": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Padmanabhanagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Doddanekkundi": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Cooke Town": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Old Airport Road": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Tumkur Road": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Hosa Road": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "BTM Layout": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Jeevan Bhima Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "JP Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Hennur": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Begur": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kogilu": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Kannur": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Varthur": {
+  "st": "none",
+  "conf": "High"
+ },
+ "CV Raman Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Mahalakshmi Layout": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Vijayanagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Bagalur": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Bannerghatta Road": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kadugodi": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Akshayanagar": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Hope Farm": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Banashankari": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Girinagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Devanahalli": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Sampigehalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Sahakara Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Electronic City Phase 1": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kodigehalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Cox Town": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Gottigere": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Bilekahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Yelahanka New Town": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Banaswadi": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Arekere": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Rajarajeshwari Nagar": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Jalahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "RT Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Kanakapura Road": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Singasandra": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Thubarahalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Konanakunte": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Electronic City Phase 2": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kalyan Nagar": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "KR Puram": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Nagarbhavi": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kamakshipalya": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Nandini Layout": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Channasandra": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Doddaballapur Road": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Yelahanka": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Hulimavu": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Seegehalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Bommanahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Shettigere": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Magadi Road": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Nayandahalli": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Ramamurthy Nagar": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Chikkajala": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Peenya": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Attibele": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Vidyaranyapura": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Sunkadakatte": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Battarahalli": {
+  "st": "delayed",
+  "conf": "High"
+ },
+ "Hongasandra": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Kengeri": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Nelamangala": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Chandapura": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Anekal": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Bidadi": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Jigani": {
+  "st": "none",
+  "conf": "High"
+ },
+ "Hoskote": {
+  "st": "none",
+  "conf": "High"
+ },
+ "_meta": {
+  "connected": {
+   "label": "Connected",
+   "eta": "already piped",
+   "note": "Long-standing piped Cauvery supply (BBMP core / Stage I–IV)."
+  },
+  "stageV": {
+   "label": "Stage V – connecting",
+   "eta": "2024–26",
+   "note": "Within Cauvery Stage V command area (commissioned Oct 2024, 775 MLD); connections rolling out 2024–26."
+  },
+  "delayed": {
+   "label": "Stage V – delayed",
+   "eta": "2026+",
+   "note": "Stage V zone but supply delayed (hard-rock pipelines in KR Puram/Mahadevapura belt & pending reservoirs)."
+  },
+  "none": {
+   "label": "No piped Cauvery",
+   "eta": "no ETA",
+   "note": "Outside Stage V command area — borewell/tanker dependent; relies on unbuilt Stage VI (~+500 MLD, DPR stage) or the stalled Mekedatu reservoir."
+  }
+ }
+}

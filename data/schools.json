@@ -1,0 +1,1420 @@
+{
+ "schools": [
+  {
+   "n": "Vibgyor High Marathahalli",
+   "loc": "Marathahalli",
+   "lat": 12.956,
+   "lng": 77.701,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "NPS Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.9719,
+   "lng": 77.7499,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "The Deens Academy",
+   "loc": "Whitefield",
+   "lat": 12.981,
+   "lng": 77.728,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Greenwood High International",
+   "loc": "Sarjapur Road",
+   "lat": 12.889,
+   "lng": 77.67,
+   "b": "IB",
+   "z": "East"
+  },
+  {
+   "n": "Inventure Academy",
+   "loc": "Whitefield (Sarjapur Rd)",
+   "lat": 12.9145,
+   "lng": 77.709,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Glentree Academy Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.976,
+   "lng": 77.735,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "EuroSchool Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.969,
+   "lng": 77.74,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "GIIS Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.988,
+   "lng": 77.751,
+   "b": "Multiple",
+   "z": "East"
+  },
+  {
+   "n": "Vydehi School of Excellence",
+   "loc": "Whitefield",
+   "lat": 12.961,
+   "lng": 77.727,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Chrysalis High Marq",
+   "loc": "Varthur",
+   "lat": 12.943,
+   "lng": 77.744,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Ryan International Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.97,
+   "lng": 77.746,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Cambridge International Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.976,
+   "lng": 77.756,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Indus International School",
+   "loc": "Sarjapur (Billapura)",
+   "lat": 12.835,
+   "lng": 77.729,
+   "b": "IB",
+   "z": "East"
+  },
+  {
+   "n": "GEAR Innovative International",
+   "loc": "Doddakannelli",
+   "lat": 12.912,
+   "lng": 77.685,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Royale Concorde Bellandur",
+   "loc": "Bellandur",
+   "lat": 12.929,
+   "lng": 77.676,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "MVJ International School",
+   "loc": "Marathahalli",
+   "lat": 12.958,
+   "lng": 77.699,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Genius Global School",
+   "loc": "Marathahalli",
+   "lat": 12.953,
+   "lng": 77.705,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Orchids Kadugodi",
+   "loc": "Kadugodi",
+   "lat": 12.993,
+   "lng": 77.76,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "EuroSchool Hoodi",
+   "loc": "Hoodi",
+   "lat": 12.993,
+   "lng": 77.715,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "The Brigade School Mahadevapura",
+   "loc": "Mahadevapura",
+   "lat": 12.991,
+   "lng": 77.687,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "SSRVM KR Puram",
+   "loc": "KR Puram",
+   "lat": 12.999,
+   "lng": 77.696,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "SJES International School",
+   "loc": "Medahalli, Old Madras Rd",
+   "lat": 13.018,
+   "lng": 77.705,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "New Baldwin International",
+   "loc": "Budigere Cross",
+   "lat": 13.049,
+   "lng": 77.728,
+   "b": "Multiple",
+   "z": "East"
+  },
+  {
+   "n": "Vishwa Vidyapeeth",
+   "loc": "Varthur",
+   "lat": 12.94,
+   "lng": 77.748,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Vagdevi Vilas School",
+   "loc": "Varthur",
+   "lat": 12.938,
+   "lng": 77.742,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "NPS Outer Ring Road",
+   "loc": "Bellandur",
+   "lat": 12.927,
+   "lng": 77.689,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Harvest International School",
+   "loc": "Kodathi, Sarjapur Rd",
+   "lat": 12.892,
+   "lng": 77.711,
+   "b": "Multiple",
+   "z": "East"
+  },
+  {
+   "n": "Vibgyor Rise Bellandur",
+   "loc": "Bellandur",
+   "lat": 12.923,
+   "lng": 77.67,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Gopalan International School",
+   "loc": "Hoodi, Whitefield",
+   "lat": 12.989,
+   "lng": 77.708,
+   "b": "Multiple",
+   "z": "East"
+  },
+  {
+   "n": "Cambridge Public School Brookefield",
+   "loc": "Brookefield",
+   "lat": 12.967,
+   "lng": 77.718,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "NPS Koramangala",
+   "loc": "Koramangala",
+   "lat": 12.9362,
+   "lng": 77.6245,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Bethany High School",
+   "loc": "Koramangala",
+   "lat": 12.9341,
+   "lng": 77.6201,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "DPS South Bangalore",
+   "loc": "Konanakunte",
+   "lat": 12.8782,
+   "lng": 77.5648,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Ekya School JP Nagar",
+   "loc": "JP Nagar",
+   "lat": 12.9063,
+   "lng": 77.5857,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "Orchids JP Nagar",
+   "loc": "JP Nagar",
+   "lat": 12.9072,
+   "lng": 77.5854,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "St. Paul's English School",
+   "loc": "JP Nagar",
+   "lat": 12.9081,
+   "lng": 77.5852,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "The Oxford English School",
+   "loc": "JP Nagar",
+   "lat": 12.909,
+   "lng": 77.5901,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Innisfree House School",
+   "loc": "JP Nagar",
+   "lat": 12.9018,
+   "lng": 77.5912,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "BNM Public School",
+   "loc": "Banashankari",
+   "lat": 12.9255,
+   "lng": 77.5468,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Little Flower Public School",
+   "loc": "Banashankari",
+   "lat": 12.9216,
+   "lng": 77.5503,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Sri Aurobindo Memorial School",
+   "loc": "Banashankari",
+   "lat": 12.9281,
+   "lng": 77.5471,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "JSS Public School HSR",
+   "loc": "HSR Layout",
+   "lat": 12.9121,
+   "lng": 77.6446,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "EuroSchool HSR",
+   "loc": "HSR Layout",
+   "lat": 12.9089,
+   "lng": 77.6512,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Cambridge Public School HSR",
+   "loc": "HSR Layout",
+   "lat": 12.9056,
+   "lng": 77.6553,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Vibgyor High BTM",
+   "loc": "BTM Layout",
+   "lat": 12.9165,
+   "lng": 77.6101,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "Nightingales English High",
+   "loc": "BTM Layout",
+   "lat": 12.9148,
+   "lng": 77.6082,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Greenwood High Bannerghatta",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8462,
+   "lng": 77.6042,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "Sherwood High",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8521,
+   "lng": 77.5982,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Chrysalis High Bannerghatta",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8389,
+   "lng": 77.5971,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "The Samhita Academy",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8901,
+   "lng": 77.5961,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "GIIS Bannerghatta",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8612,
+   "lng": 77.5994,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "School of India",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8275,
+   "lng": 77.6128,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "DPS Electronic City",
+   "loc": "Electronic City",
+   "lat": 12.8452,
+   "lng": 77.6601,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "BS International School",
+   "loc": "Electronic City",
+   "lat": 12.8392,
+   "lng": 77.6772,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Bangalore International Public",
+   "loc": "Uttarahalli",
+   "lat": 12.9056,
+   "lng": 77.5421,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Silicon City Academy",
+   "loc": "Konanakunte",
+   "lat": 12.8801,
+   "lng": 77.5712,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Primus Public School",
+   "loc": "Sarjapur Road",
+   "lat": 12.9012,
+   "lng": 77.6921,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Kunskapsskolan Bengaluru",
+   "loc": "Sarjapur Road",
+   "lat": 12.8961,
+   "lng": 77.7012,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Ryan International Sarjapur",
+   "loc": "Sarjapur Road",
+   "lat": 12.9023,
+   "lng": 77.7156,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "Carmel English School",
+   "loc": "Bannerghatta Road",
+   "lat": 12.8852,
+   "lng": 77.5961,
+   "b": "ICSE",
+   "z": "South"
+  },
+  {
+   "n": "Vidyashilp Academy",
+   "loc": "Jakkur",
+   "lat": 13.0822,
+   "lng": 77.6092,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Canadian International School",
+   "loc": "Yelahanka",
+   "lat": 13.0789,
+   "lng": 77.5687,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Stonehill International School",
+   "loc": "Tarahunise, Yelahanka",
+   "lat": 13.1565,
+   "lng": 77.6242,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Mallya Aditi International",
+   "loc": "Yelahanka New Town",
+   "lat": 13.101,
+   "lng": 77.596,
+   "b": "IGCSE",
+   "z": "North"
+  },
+  {
+   "n": "DPS Bangalore North",
+   "loc": "Kogilu, Yelahanka",
+   "lat": 13.1142,
+   "lng": 77.6217,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Vidyaniketan School",
+   "loc": "Hebbal Kempapura",
+   "lat": 13.0489,
+   "lng": 77.5912,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Jain Heritage School",
+   "loc": "Hebbal",
+   "lat": 13.0455,
+   "lng": 77.5908,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Kendriya Vidyalaya Hebbal",
+   "loc": "Hebbal",
+   "lat": 13.042,
+   "lng": 77.588,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "NPS Yelahanka",
+   "loc": "Yelahanka",
+   "lat": 13.1009,
+   "lng": 77.5963,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "NPS Vidyaranyapura",
+   "loc": "Vidyaranyapura",
+   "lat": 13.0815,
+   "lng": 77.5557,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Ryan International Yelahanka",
+   "loc": "Yelahanka",
+   "lat": 13.0978,
+   "lng": 77.5895,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Vibgyor High Yelahanka",
+   "loc": "Yelahanka",
+   "lat": 13.1018,
+   "lng": 77.5742,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "EuroSchool North",
+   "loc": "Yelahanka",
+   "lat": 13.1056,
+   "lng": 77.5798,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Orchids Yelahanka",
+   "loc": "Yelahanka",
+   "lat": 13.0995,
+   "lng": 77.581,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Federal Public School",
+   "loc": "Yelahanka",
+   "lat": 13.0967,
+   "lng": 77.5963,
+   "b": "State",
+   "z": "North"
+  },
+  {
+   "n": "Trio World Academy",
+   "loc": "Sahakar Nagar",
+   "lat": 13.0631,
+   "lng": 77.5862,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Bangalore International School",
+   "loc": "Geddalahalli, Hennur",
+   "lat": 13.0395,
+   "lng": 77.6385,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Harrow International Bengaluru",
+   "loc": "Devanahalli",
+   "lat": 13.248,
+   "lng": 77.709,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Embassy Academy",
+   "loc": "Devanahalli",
+   "lat": 13.221,
+   "lng": 77.706,
+   "b": "IB",
+   "z": "North"
+  },
+  {
+   "n": "Vyasa International School",
+   "loc": "Vidyaranyapura",
+   "lat": 13.084,
+   "lng": 77.551,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Presidency School RT Nagar",
+   "loc": "RT Nagar",
+   "lat": 13.0247,
+   "lng": 77.595,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Cluny Convent RT Nagar",
+   "loc": "RT Nagar",
+   "lat": 13.0285,
+   "lng": 77.594,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Sindhi High School Hebbal",
+   "loc": "Kempapura, Hebbal",
+   "lat": 13.05,
+   "lng": 77.594,
+   "b": "State",
+   "z": "North"
+  },
+  {
+   "n": "Gnan Srishti Thanisandra",
+   "loc": "Thanisandra",
+   "lat": 13.064,
+   "lng": 77.636,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Legacy School",
+   "loc": "Thanisandra",
+   "lat": 13.07,
+   "lng": 77.63,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Akshara International School",
+   "loc": "Doddaballapur Road",
+   "lat": 13.137,
+   "lng": 77.576,
+   "b": "ICSE",
+   "z": "North"
+  },
+  {
+   "n": "Sri Kumaran Children's Home",
+   "loc": "Nagavara",
+   "lat": 13.042,
+   "lng": 77.623,
+   "b": "Multiple",
+   "z": "North"
+  },
+  {
+   "n": "Royale Concorde Kalyan Nagar",
+   "loc": "Kalyan Nagar, Hennur",
+   "lat": 13.028,
+   "lng": 77.64,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Cambridge Public Doddaballapur Rd",
+   "loc": "Doddaballapur Road",
+   "lat": 13.128,
+   "lng": 77.584,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Bishop Cotton Boys' School",
+   "loc": "Residency Road",
+   "lat": 12.965,
+   "lng": 77.602,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Bishop Cotton Girls' School",
+   "loc": "St. Mark's Road",
+   "lat": 12.9695,
+   "lng": 77.5985,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "St. Joseph's Boys' High School",
+   "loc": "Museum Road",
+   "lat": 12.969,
+   "lng": 77.6055,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Baldwin Boys' High School",
+   "loc": "Richmond Town",
+   "lat": 12.9555,
+   "lng": 77.6075,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Baldwin Girls' High School",
+   "loc": "Richmond Town",
+   "lat": 12.956,
+   "lng": 77.609,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Clarence High School",
+   "loc": "Richards Town",
+   "lat": 13.001,
+   "lng": 77.6175,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "The Cathedral High School",
+   "loc": "Richmond Town",
+   "lat": 12.959,
+   "lng": 77.608,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "St. Germain High School",
+   "loc": "Frazer Town",
+   "lat": 12.9985,
+   "lng": 77.6195,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Sophia High School",
+   "loc": "Vasanth Nagar",
+   "lat": 12.9855,
+   "lng": 77.5895,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Mount Carmel Central School",
+   "loc": "Vasanth Nagar",
+   "lat": 12.9905,
+   "lng": 77.5905,
+   "b": "CBSE",
+   "z": "Central"
+  },
+  {
+   "n": "NPS Indiranagar",
+   "loc": "Indiranagar",
+   "lat": 12.9665,
+   "lng": 77.6455,
+   "b": "CBSE",
+   "z": "Central"
+  },
+  {
+   "n": "Frank Anthony Public School",
+   "loc": "Ulsoor",
+   "lat": 12.9805,
+   "lng": 77.6245,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Sacred Heart Boys' School",
+   "loc": "Richmond Road",
+   "lat": 12.9645,
+   "lng": 77.6085,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Cluny Convent Malleshwaram",
+   "loc": "Malleshwaram",
+   "lat": 13.005,
+   "lng": 77.571,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "MES Kishora Kendra",
+   "loc": "Malleshwaram",
+   "lat": 13.0035,
+   "lng": 77.5645,
+   "b": "State",
+   "z": "Central"
+  },
+  {
+   "n": "Nirmala Rani High School",
+   "loc": "Malleshwaram",
+   "lat": 13.008,
+   "lng": 77.568,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Seshadripuram High School",
+   "loc": "Seshadripuram",
+   "lat": 12.993,
+   "lng": 77.5765,
+   "b": "State",
+   "z": "Central"
+  },
+  {
+   "n": "St. Anthony's Boys' School",
+   "loc": "Ulsoor",
+   "lat": 12.982,
+   "lng": 77.619,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "The Brigade School Malleshwaram",
+   "loc": "Malleshwaram",
+   "lat": 13.004,
+   "lng": 77.57,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Stella Maris School",
+   "loc": "Malleshwaram",
+   "lat": 13.0065,
+   "lng": 77.566,
+   "b": "State",
+   "z": "Central"
+  },
+  {
+   "n": "Christ The King Public School",
+   "loc": "Malleshwaram",
+   "lat": 13.0095,
+   "lng": 77.5635,
+   "b": "CBSE",
+   "z": "Central"
+  },
+  {
+   "n": "St. Francis Xavier Girls' High",
+   "loc": "Frazer Town",
+   "lat": 12.999,
+   "lng": 77.618,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Goodwill's Girls School",
+   "loc": "Cox Town",
+   "lat": 12.996,
+   "lng": 77.6235,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Vasavi Vidya Niketan",
+   "loc": "Seshadripuram",
+   "lat": 12.9905,
+   "lng": 77.579,
+   "b": "State",
+   "z": "Central"
+  },
+  {
+   "n": "St. Charles High School",
+   "loc": "Cox Town",
+   "lat": 12.9955,
+   "lng": 77.626,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Sri Kumaran Children's Home Domlur",
+   "loc": "Domlur",
+   "lat": 12.9605,
+   "lng": 77.6385,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "NPS Rajajinagar",
+   "loc": "Rajajinagar",
+   "lat": 12.9942,
+   "lng": 77.5526,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Orchids Rajajinagar",
+   "loc": "Rajajinagar",
+   "lat": 12.9889,
+   "lng": 77.555,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "RPES Jnana Saraswati",
+   "loc": "Rajajinagar",
+   "lat": 12.997,
+   "lng": 77.551,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Venus International School",
+   "loc": "Rajajinagar",
+   "lat": 12.9905,
+   "lng": 77.5495,
+   "b": "ICSE",
+   "z": "West"
+  },
+  {
+   "n": "St. Mira's High School",
+   "loc": "Rajajinagar",
+   "lat": 12.992,
+   "lng": 77.556,
+   "b": "ICSE",
+   "z": "West"
+  },
+  {
+   "n": "Orchids Vijayanagar",
+   "loc": "Vijayanagar",
+   "lat": 12.97,
+   "lng": 77.536,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "National Academy School",
+   "loc": "Basaveshwaranagar",
+   "lat": 13.0005,
+   "lng": 77.539,
+   "b": "Multiple",
+   "z": "West"
+  },
+  {
+   "n": "SSRVM Basaveshwaranagar",
+   "loc": "Basaveshwaranagar",
+   "lat": 12.999,
+   "lng": 77.542,
+   "b": "State",
+   "z": "West"
+  },
+  {
+   "n": "Orchids Nagarbhavi",
+   "loc": "Nagarbhavi",
+   "lat": 12.965,
+   "lng": 77.509,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "JES Public School",
+   "loc": "Nagarbhavi",
+   "lat": 12.962,
+   "lng": 77.512,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Sri Vani Education Centre",
+   "loc": "Nagarbhavi",
+   "lat": 12.959,
+   "lng": 77.515,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "National Hill View Public",
+   "loc": "RR Nagar",
+   "lat": 12.918,
+   "lng": 77.518,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Gospel International School",
+   "loc": "RR Nagar",
+   "lat": 12.924,
+   "lng": 77.521,
+   "b": "Multiple",
+   "z": "West"
+  },
+  {
+   "n": "Global Academy For Learning",
+   "loc": "RR Nagar",
+   "lat": 12.92,
+   "lng": 77.524,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Sri Jnanakshi Vidyaniketan",
+   "loc": "RR Nagar",
+   "lat": 12.915,
+   "lng": 77.522,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "BGS Public School",
+   "loc": "Kengeri",
+   "lat": 12.898,
+   "lng": 77.483,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "NPS Kengeri",
+   "loc": "Kengeri",
+   "lat": 12.907,
+   "lng": 77.485,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Orchids Kengeri",
+   "loc": "Kengeri",
+   "lat": 12.909,
+   "lng": 77.487,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Vidya Sanskaar International",
+   "loc": "Magadi Road",
+   "lat": 12.978,
+   "lng": 77.518,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "VLS International Public",
+   "loc": "Magadi Road",
+   "lat": 12.981,
+   "lng": 77.523,
+   "b": "ICSE",
+   "z": "West"
+  },
+  {
+   "n": "NPS Yeshwanthpur",
+   "loc": "Yeshwanthpur",
+   "lat": 13.031,
+   "lng": 77.537,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Schoenstatt St. Mary's",
+   "loc": "Peenya",
+   "lat": 13.029,
+   "lng": 77.52,
+   "b": "ICSE",
+   "z": "West"
+  },
+  {
+   "n": "Presidency School Nandini Layout",
+   "loc": "Nandini Layout",
+   "lat": 13.009,
+   "lng": 77.55,
+   "b": "Multiple",
+   "z": "West"
+  },
+  {
+   "n": "Sri Kumaran Mallasandra",
+   "loc": "Mallasandra",
+   "lat": 12.987,
+   "lng": 77.509,
+   "b": "Multiple",
+   "z": "West"
+  },
+  {
+   "n": "Baldwin Co-Ed Extension",
+   "loc": "RR Nagar",
+   "lat": 12.921,
+   "lng": 77.519,
+   "b": "ICSE",
+   "z": "West"
+  },
+  {
+   "n": "SSRVM Vijayanagar",
+   "loc": "Vijayanagar",
+   "lat": 12.9665,
+   "lng": 77.539,
+   "b": "State",
+   "z": "West"
+  },
+  {
+   "n": "Gnan Srishti RR Nagar",
+   "loc": "RR Nagar",
+   "lat": 12.912,
+   "lng": 77.515,
+   "b": "IGCSE",
+   "z": "West"
+  },
+  {
+   "n": "The International School Bangalore (TISB)",
+   "loc": "Sarjapur",
+   "lat": 12.829,
+   "lng": 77.734,
+   "b": "IB",
+   "z": "East"
+  },
+  {
+   "n": "Oakridge International School",
+   "loc": "Varthur / Sarjapur",
+   "lat": 12.846,
+   "lng": 77.746,
+   "b": "IB",
+   "z": "East"
+  },
+  {
+   "n": "Candor International School",
+   "loc": "Off Bannerghatta Rd",
+   "lat": 12.823,
+   "lng": 77.624,
+   "b": "IB",
+   "z": "South"
+  },
+  {
+   "n": "Ebenezer International School",
+   "loc": "Electronic City",
+   "lat": 12.847,
+   "lng": 77.672,
+   "b": "IB",
+   "z": "South"
+  },
+  {
+   "n": "New Horizon Public School",
+   "loc": "Indiranagar",
+   "lat": 12.972,
+   "lng": 77.641,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "The Valley School (KFI)",
+   "loc": "Kanakapura Road",
+   "lat": 12.858,
+   "lng": 77.536,
+   "b": "State",
+   "z": "South"
+  },
+  {
+   "n": "Sishu Griha Montessori & High",
+   "loc": "New Thippasandra",
+   "lat": 12.976,
+   "lng": 77.661,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Treamis World School",
+   "loc": "Electronic City",
+   "lat": 12.824,
+   "lng": 77.674,
+   "b": "Multiple",
+   "z": "South"
+  },
+  {
+   "n": "Silver Oaks International School",
+   "loc": "Dommasandra, Sarjapur",
+   "lat": 12.883,
+   "lng": 77.757,
+   "b": "IGCSE",
+   "z": "East"
+  },
+  {
+   "n": "Edify School",
+   "loc": "Electronic City",
+   "lat": 12.84,
+   "lng": 77.677,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Podar International School",
+   "loc": "Yeshwanthpur",
+   "lat": 13.028,
+   "lng": 77.54,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Prakriya Green Wisdom School",
+   "loc": "Doddakannelli, Sarjapur Rd",
+   "lat": 12.912,
+   "lng": 77.69,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Head Start Educational Academy",
+   "loc": "Sarjapur Road",
+   "lat": 12.908,
+   "lng": 77.694,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Geethanjali Vidyalaya",
+   "loc": "CV Raman Nagar",
+   "lat": 12.987,
+   "lng": 77.67,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Sri Chaitanya Techno School",
+   "loc": "Whitefield / Hoodi",
+   "lat": 12.992,
+   "lng": 77.716,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Whitefield Global School",
+   "loc": "Whitefield",
+   "lat": 12.999,
+   "lng": 77.748,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "NPS ITPL",
+   "loc": "Kadugodi",
+   "lat": 12.999,
+   "lng": 77.757,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Army Public School",
+   "loc": "Kamaraj Road",
+   "lat": 12.981,
+   "lng": 77.609,
+   "b": "CBSE",
+   "z": "Central"
+  },
+  {
+   "n": "Air Force School",
+   "loc": "HAL, Marathahalli",
+   "lat": 12.959,
+   "lng": 77.666,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "DPS Bangalore East",
+   "loc": "Sarjapur / Dommasandra",
+   "lat": 12.882,
+   "lng": 77.753,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "DPS Whitefield",
+   "loc": "Whitefield",
+   "lat": 12.976,
+   "lng": 77.734,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "National Centre for Excellence",
+   "loc": "Malleshpalya, Indiranagar",
+   "lat": 12.974,
+   "lng": 77.665,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Poornaprajna Education Centre",
+   "loc": "Yelahanka",
+   "lat": 13.102,
+   "lng": 77.598,
+   "b": "State",
+   "z": "North"
+  },
+  {
+   "n": "St. John's High School",
+   "loc": "Cleveland Town",
+   "lat": 12.997,
+   "lng": 77.616,
+   "b": "ICSE",
+   "z": "Central"
+  },
+  {
+   "n": "Florence Public School",
+   "loc": "HSR Layout",
+   "lat": 12.912,
+   "lng": 77.647,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Narayana e-Techno School",
+   "loc": "Marathahalli",
+   "lat": 12.9555,
+   "lng": 77.7015,
+   "b": "CBSE",
+   "z": "East"
+  },
+  {
+   "n": "Maharishi Vidya Mandir",
+   "loc": "JP Nagar",
+   "lat": 12.906,
+   "lng": 77.586,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "BEL Public School",
+   "loc": "Jalahalli",
+   "lat": 13.037,
+   "lng": 77.516,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Kendriya Vidyalaya ASC",
+   "loc": "Cantonment",
+   "lat": 12.971,
+   "lng": 77.611,
+   "b": "CBSE",
+   "z": "Central"
+  },
+  {
+   "n": "St. Thomas Public School",
+   "loc": "Banaswadi",
+   "lat": 13.014,
+   "lng": 77.65,
+   "b": "ICSE",
+   "z": "East"
+  },
+  {
+   "n": "Insight Academy",
+   "loc": "Banashankari",
+   "lat": 12.918,
+   "lng": 77.546,
+   "b": "CBSE",
+   "z": "South"
+  },
+  {
+   "n": "Auden Public School",
+   "loc": "Vidyaranyapura",
+   "lat": 13.081,
+   "lng": 77.555,
+   "b": "CBSE",
+   "z": "North"
+  },
+  {
+   "n": "Excel Public School",
+   "loc": "Mysore Road / Kengeri",
+   "lat": 12.908,
+   "lng": 77.483,
+   "b": "CBSE",
+   "z": "West"
+  },
+  {
+   "n": "Aurinko Academy",
+   "loc": "Hennur / Bagalur",
+   "lat": 13.089,
+   "lng": 77.656,
+   "b": "Multiple",
+   "z": "North"
+  }
+ ],
+ "boardColors": {
+  "CBSE": "#2563eb",
+  "ICSE": "#16a34a",
+  "IB": "#db2777",
+  "IGCSE": "#9333ea",
+  "State": "#d97706",
+  "Multiple": "#0891b2"
+ }
+}

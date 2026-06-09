@@ -1,0 +1,278 @@
+{
+ "lines": [
+  {
+   "name": "Orbital Ring Line (PRR Loop)",
+   "short": "Orbital",
+   "color": "#2dd4bf",
+   "horizon": "Phase 5 concept · ~2035–2042",
+   "priority": "Flagship",
+   "rationale": "The single biggest gap: Bengaluru has no orbital metro. Every line is radial, forcing peripheral-to-peripheral trips through the congested core. A ~95km loop along the Peripheral/Outer Ring Roads linking Hebbal–KR Puram–Whitefield–Sarjapur–Electronic City–Kanakapura–RR Nagar–Tumkur Rd would interchange with every radial line, slash cross-town times, and unlock the peripheral land bank. Highest network-wide payoff.",
+   "stations": [
+    [
+     "Hebbal",
+     13.0358,
+     77.597
+    ],
+    [
+     "Thanisandra",
+     13.068,
+     77.627
+    ],
+    [
+     "KR Puram",
+     13.003,
+     77.696
+    ],
+    [
+     "Hoodi / Whitefield",
+     12.992,
+     77.716
+    ],
+    [
+     "Varthur",
+     12.941,
+     77.747
+    ],
+    [
+     "Sarjapur Road",
+     12.901,
+     77.687
+    ],
+    [
+     "Carmelaram",
+     12.902,
+     77.697
+    ],
+    [
+     "Electronic City",
+     12.845,
+     77.66
+    ],
+    [
+     "Gottigere",
+     12.858,
+     77.585
+    ],
+    [
+     "Anjanapura",
+     12.882,
+     77.56
+    ],
+    [
+     "RR Nagar",
+     12.926,
+     77.519
+    ],
+    [
+     "Kengeri",
+     12.908,
+     77.485
+    ],
+    [
+     "Nagarbhavi",
+     12.96,
+     77.513
+    ],
+    [
+     "Jalahalli (Tumkur Rd)",
+     13.041,
+     77.547
+    ],
+    [
+     "Hebbal",
+     13.0358,
+     77.597
+    ]
+   ]
+  },
+  {
+   "name": "Tech Diagonal: Whitefield ↔ Electronic City",
+   "short": "Tech Diagonal",
+   "color": "#e879f9",
+   "horizon": "Phase 5 concept · ~2034–2040",
+   "priority": "High",
+   "rationale": "The city's two largest job poles — Whitefield (ITPL/EPIP) and Electronic City — have NO direct transit link; the road commute is 1.5–2 hours. A southeast diagonal via Varthur–Sarjapur–Hosa Road would connect ~1.5M tech workers, relieve the ORR, and ride the fastest-appreciating corridor (Sarjapur, Gunjur, Varthur).",
+   "stations": [
+    [
+     "Whitefield (Kadugodi)",
+     12.995,
+     77.7577
+    ],
+    [
+     "Varthur",
+     12.941,
+     77.747
+    ],
+    [
+     "Gunjur",
+     12.918,
+     77.727
+    ],
+    [
+     "Sarjapur Road",
+     12.901,
+     77.687
+    ],
+    [
+     "Carmelaram",
+     12.902,
+     77.697
+    ],
+    [
+     "Kasavanahalli",
+     12.905,
+     77.672
+    ],
+    [
+     "Haralur Road",
+     12.908,
+     77.679
+    ],
+    [
+     "Hosa Road",
+     12.875,
+     77.655
+    ],
+    [
+     "Electronic City",
+     12.845,
+     77.66
+    ]
+   ]
+  },
+  {
+   "name": "East Line: KR Puram ↔ Hoskote",
+   "short": "East–Hoskote",
+   "color": "#fbbf24",
+   "horizon": "Phase 5 concept · ~2033–2038",
+   "priority": "Medium-High",
+   "rationale": "Extends the Blue Line east along NH-75 into the Hoskote logistics/industrial belt and its fast-growing affordable-housing frontier. Cheap elevated build on a wide highway; seeds TOD on low-cost land.",
+   "stations": [
+    [
+     "KR Puram",
+     13.003,
+     77.696
+    ],
+    [
+     "Battarahalli",
+     13.026,
+     77.725
+    ],
+    [
+     "Avalahalli",
+     13.035,
+     77.748
+    ],
+    [
+     "Kannamangala",
+     13.05,
+     77.77
+    ],
+    [
+     "Hoskote",
+     13.071,
+     77.798
+    ]
+   ]
+  },
+  {
+   "name": "South Line: Silk Institute ↔ Harohalli",
+   "short": "South–Harohalli",
+   "color": "#fb7185",
+   "horizon": "Phase 5 concept · ~2035–2040",
+   "priority": "Medium",
+   "rationale": "Extends the Green Line south down Kanakapura Road to the Harohalli/Bidadi industrial node and the booming Kanakapura residential corridor (NICE Road catchment), channelling sprawl onto rail.",
+   "stations": [
+    [
+     "Silk Institute",
+     12.8619,
+     77.53
+    ],
+    [
+     "Vajarahalli",
+     12.8775,
+     77.5446
+    ],
+    [
+     "Anjanapura",
+     12.858,
+     77.56
+    ],
+    [
+     "Kaggalipura",
+     12.82,
+     77.53
+    ],
+    [
+     "Harohalli",
+     12.78,
+     77.495
+    ]
+   ]
+  },
+  {
+   "name": "West Line: Challaghatta ↔ Bidadi",
+   "short": "West–Bidadi",
+   "color": "#38bdf8",
+   "horizon": "Phase 5 concept · ~2035–2041",
+   "priority": "Medium",
+   "rationale": "Extends the Purple Line west along Mysuru Road to the Bidadi industrial township (Toyota belt) and toward Ramanagara — supports the planned Bidadi satellite city and decongests the Mysuru Rd corridor.",
+   "stations": [
+    [
+     "Challaghatta",
+     12.8974,
+     77.4612
+    ],
+    [
+     "Kumbalgodu",
+     12.87,
+     77.435
+    ],
+    [
+     "Kengeri Satellite Town",
+     12.9,
+     77.47
+    ],
+    [
+     "Bidadi",
+     12.798,
+     77.386
+    ],
+    [
+     "Ramanagara",
+     12.721,
+     77.281
+    ]
+   ]
+  },
+  {
+   "name": "Northwest Line: Madavara ↔ Dabaspet",
+   "short": "NW–Tumkur Rd",
+   "color": "#a78bfa",
+   "horizon": "Phase 5 concept · ~2036–2042",
+   "priority": "Low-Medium",
+   "rationale": "Extends the Green Line northwest along NH-48 (Tumkur Rd) through Nelamangala to the Dabaspet industrial corridor — aligns with the proposed Bengaluru–Tumkur suburban growth and freight-adjacent industrial parks.",
+   "stations": [
+    [
+     "Madavara (BIEC)",
+     13.0574,
+     77.473
+    ],
+    [
+     "Nelamangala",
+     13.099,
+     77.394
+    ],
+    [
+     "Dabaspet",
+     13.16,
+     77.31
+    ]
+   ]
+  }
+ ],
+ "meta": {
+  "author": "Planner concept — not an official BMRCL plan",
+  "note": "Indicative alignments & station nodes designed to fix the radial-only network: add an orbital, link the tech poles, and rail-serve peripheral growth/industrial towns. Coordinates approximate."
+ }
+}
