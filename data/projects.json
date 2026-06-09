@@ -1583,6 +1583,78 @@
    "price": "–",
    "note": "Japanese-inspired 3 & 4 BHK; 7-acre, 412 units in 4 towers (G+14), 74% open space. 104 Srinivasa Nagar, Sathanur (near airport corridor).",
    "color": "#a855f7"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Silversky",
+   "loc": "Hebbagodi, Electronic City",
+   "lat": 12.832,
+   "lng": 77.664,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹2.3Cr",
+   "note": "Launched Feb 2026; 6.99-acre low-density, 356 units in 3 G+32 towers, 3/4/5 BHK (~₹12,100/sqft), 88% open space, ~900m from Huskur Metro; possession 2030.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Forest Ridge",
+   "loc": "JP Nagar 9th Phase, Anjanapura",
+   "lat": 12.858,
+   "lng": 77.558,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹67L",
+   "note": "4-acre, 407 units in 3 G+30 towers, Studio-3 BHK facing Anjanapura Central Park; near Vajrahalli Metro; possession Dec 2029.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Lodha",
+   "name": "Lodha Azur",
+   "loc": "Begur / Akshayanagar, Bannerghatta Rd",
+   "lat": 12.858,
+   "lng": 77.612,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹2.3Cr",
+   "note": "10-acre, 550 units in 4 towers, 3/3.5/4 BHK (1,900-3,200 sqft), 80% open space; possession 2028 onwards.",
+   "color": "#dc2626"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Royale Woods",
+   "loc": "Devanahalli",
+   "lat": 13.18,
+   "lng": 77.62,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹38L",
+   "note": "13-acre, 1,675 units, 1/2/3 BHK off Devanahalli; possession from Jan 2026.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Embassy",
+   "name": "Embassy Hub",
+   "loc": "Venkatala, Yelahanka",
+   "lat": 13.097,
+   "lng": 77.586,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "10.6-acre lake-facing gated community, 428 units in 5 towers, 3/3.5/4 BHK next to Yelahanka Lake; RERA underway; possession ~2030.",
+   "color": "#14b8a6"
+  },
+  {
+   "builder": "Shriram",
+   "name": "Shriram 107 South East",
+   "loc": "Attibele, near E-City",
+   "lat": 12.782,
+   "lng": 77.77,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹57L",
+   "note": "19-acre development, 2 & 3 BHK off Hosur Rd, 40+ amenities; possession Jan 2027.",
+   "color": "#eab308"
   }
  ],
  "builders": {
@@ -1623,7 +1695,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 132,
+  "count": 138,
   "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated June 2026."
  }
 }
