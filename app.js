@@ -351,10 +351,12 @@ function showProject(pr){
    '<div class="stat"><div class="l">Price</div><div class="v" style="font-size:14px">'+(pr.price&&pr.price!=='–'?pr.price:'NA')+'</div></div>'+
    '</div>'+
    '<div class="drivers"><div style="font-weight:700;margin-bottom:4px">📍 '+pr.loc+'</div>'+pr.note+'</div>'+
+   '<div id="prRoutes"></div>'+
    nearbySchoolsHtml(pr.lat,pr.lng)+
    sunWindHtml(pr.lat,pr.lng)+
    '<div class="muted">A-tier builder project · location approximate (locality/landmark). Compiled May 2026.</div>';
   refreshMap();refreshList();syncDetailActions();
+  showProjectRoutes(pr);
 }
 function refreshProjects(){projectLayers.forEach(mk=>{if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}else if(map.hasLayer(mk))mk.remove();});}
 function buildProjectsLegend(){
@@ -669,7 +671,7 @@ function sunWindHtml(lat,lng){
 
 function renderAll(){refreshMap();refreshLegend();refreshList();refreshKPI();refreshTime();refreshMetro();refreshHeatmap();refreshSunWind();}
 // ================= v2: audit features =================
-const LEAD_ENDPOINT=""; // set to a Formspree/serverless URL to receive emails; "" = store to localStorage only
+const LEAD_ENDPOINT="/api/lead"; // Vercel function -> Google Apps Script webhook -> Google Sheet. "" = localStorage only
 function $(id){return document.getElementById(id);}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
 function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
@@ -686,7 +688,7 @@ function submitLead(kind,inputEl,btnEl,msgEl,meta){
   saveLeadLocal(rec);
   const done=()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ You\'re in — confirmation on the way.</div>';inputEl.value='';btnEl&&btnEl.classList.remove('busy');toast('Subscribed ✓');};
   if(LEAD_ENDPOINT){btnEl&&btnEl.classList.add('busy');
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(done).catch(()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ Saved locally.</div>';btnEl&&btnEl.classList.remove('busy');});
+    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(r=>{if(!r.ok)throw new Error('http '+r.status);return done();}).catch(()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ Saved locally.</div>';btnEl&&btnEl.classList.remove('busy');});
   }else{done();}
 }
 function alertCtaHtml(loc){
@@ -708,7 +710,7 @@ function emptyStateHtml(q){
   const chips=sugg.map(l=>'<span class="near" onclick="pickLocality(\''+l.name.replace(/'/g,"\\'")+'\')">'+escapeHtml(l.name)+'</span>').join(' · ');
   return '<div class="empty">'+
     '<div class="big">No tracked locality matches “'+escapeHtml(q)+'”.</div>'+
-    (chips?('<div style="margin:6px 0 12px">Did you mean: '+chips+'</div>'):'<div style="margin:6px 0 12px">We track 119 Bengaluru localities.</div>')+
+    (chips?('<div style="margin:6px 0 12px">Did you mean: '+chips+'</div>'):'<div style="margin:6px 0 12px">We track 127 Bengaluru localities.</div>')+
     '<div class="cta" style="text-align:left"><h4>Want “'+escapeHtml(q)+'” added?</h4><p>Drop your email — we\'ll notify you when we add it (and send the monthly report).</p>'+
     '<div class="capform"><input type="email" id="ne_email" placeholder="you@email.com"/><button class="btn" id="ne_btn" onclick="submitAreaRequest()">Notify me</button></div><div id="ne_msg"></div></div></div>';
 }
@@ -808,3 +810,119 @@ const _opened=applyHash();
 renderCompareTray();
 applyPulse();
 if(!_opened){ if(!isMobile()) setTimeout(()=>openDetail('Whitefield'),300); else createCoach(); }
+
+// ---------- market heat (overheating) panel ----------
+(function(){
+  function med(a){const s=a.slice().sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;}
+  const OH_SCORE={green:15,amber:55,red:90}, OH_DOT={green:'#1a9850',amber:'#f5a623',red:'#d73027'};
+  const el=document.getElementById('ohBody');
+  if(!el||!window.OVERHEAT)return;
+  const L=DATA.localities, rate=OVERHEAT.mortgageRate||8.5;
+  const medY=med(L.map(l=>l.yield));
+  const carry=rate-medY;
+  const mom=med(L.map(l=>{const s=l.series;return (s[s.length-2].price/s[s.length-6].price-1)*100;}));
+  const doubled=L.filter(l=>l.price2026/l.price2019>=2).length;
+  const top=L.slice().sort((a,b)=>b.price2026/b.price2019-a.price2026/a.price2019).slice(0,10);
+  const zc={};top.forEach(l=>zc[l.zone]=(zc[l.zone]||0)+1);
+  const zmax=Object.entries(zc).sort((a,b)=>b[1]-a[1])[0];
+  const internal=[
+    {name:'Rental yield (price-to-rent)',value:medY.toFixed(1)+'% · '+Math.round(100/medY)+'× rent',
+     status:medY>=4?'green':medY>=3?'amber':'red',
+     note:'Median across '+L.length+' localities. Owning costs roughly 3× renting; that gap is the speculative premium in prices.',
+     src:'computed live from this dataset'},
+    {name:'Negative carry vs home loan',value:'−'+carry.toFixed(1)+' pp',
+     status:carry<2?'green':carry<4?'amber':'red',
+     note:'Median yield '+medY.toFixed(1)+'% vs ~'+rate+'% loan rate — appreciation must cover a '+carry.toFixed(1)+'-point annual shortfall for buying to beat renting.',
+     src:'computed live from this dataset'},
+    {name:'Price momentum (last 4 actual quarters)',value:'+'+mom.toFixed(1)+'%/yr',
+     status:mom<6?'green':mom<12?'amber':'red',
+     note:'Decelerating from the 2021–24 surge but still above typical income growth.',
+     src:'computed live from this dataset'},
+    {name:'Boom concentration',value:doubled+' of '+L.length+' doubled since 2019',
+     status:zmax[1]>=7?'red':zmax[1]>=5?'amber':'green',
+     note:zmax[1]+' of the 10 fastest-appreciating localities are in the '+zmax[0]+' zone (tech corridor) — single-industry demand risk.',
+     src:'computed live from this dataset'}
+  ];
+  const all=internal.concat(OVERHEAT.indicators||[]);
+  const score=Math.round(all.reduce((s,i)=>s+(OH_SCORE[i.status]||55),0)/all.length);
+  const band=score<35?['Cool','#1a9850']:score<55?['Warm','#fee08b']:score<75?['Overheating watch','#fc8d59']:['Bubble risk','#d73027'];
+  el.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="muted" style="font-size:12px">Composite of '+all.length+' indicators</span><b style="color:'+band[1]+';font-size:15px">'+score+'/100 · '+band[0]+'</b></div>'+
+    '<div class="oh-gauge"><div class="oh-needle" style="left:'+score+'%"></div></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-bottom:8px"><span>cool</span><span>warm</span><span>hot</span><span>bubble</span></div>'+
+    '<div style="font-size:12px;line-height:1.55;margin-bottom:4px">'+(OVERHEAT.verdict||'')+'</div>'+
+    all.map(i=>'<div class="oh-row"><span class="oh-dot" style="background:'+(OH_DOT[i.status]||OH_DOT.amber)+'"></span><div style="flex:1"><div style="display:flex;gap:8px;align-items:baseline"><b>'+i.name+'</b><span class="oh-val">'+i.value+'</span></div><div class="oh-note">'+i.note+'</div><div class="oh-src">'+(i.url?'<a href="'+i.url+'" target="_blank" rel="noopener">'+i.src+'</a>':i.src)+'</div></div></div>').join('')+
+    '<div class="muted" style="font-size:10px;margin-top:10px">Updated '+(OVERHEAT.updated||'—')+' · thresholds are heuristics, not financial advice. Locality-level loan-default data is not public; the NPA reading is RBI system-level.</div>';
+  if(/[?&]heat=1/.test(location.search))document.getElementById('overheatModal').style.display='flex';
+})();
+
+// ---------- project routes: nearest school & metro, walking + driving (parity with 3D view) ----------
+map.createPane('routePane');map.getPane('routePane').style.zIndex=530;
+const routeGroup=L.layerGroup();
+let routeSeq=0;
+function clearProjectRoutes(){routeGroup.clearLayers();if(map.hasLayer(routeGroup))map.removeLayer(routeGroup);routeSeq++;}
+const _origOpenDetail=openDetail;openDetail=function(n){clearProjectRoutes();return _origOpenDetail(n);};
+const _origCloseDetail=closeDetail;closeDetail=function(){clearProjectRoutes();return _origCloseDetail();};
+async function osrmRoute2D(profile,a,b){ // a,b=[lat,lng]; profile 'foot'|'car'
+  try{
+    const u='https://routing.openstreetmap.de/routed-'+profile+'/route/v1/driving/'+a[1]+','+a[0]+';'+b[1]+','+b[0]+
+      '?geometries=geojson&overview='+(profile==='foot'?'full':'false');
+    const r=await fetch(u,{signal:AbortSignal.timeout(6000)});if(!r.ok)throw 0;
+    const j=await r.json();if(!j.routes||!j.routes[0])throw 0;
+    const rt=j.routes[0];
+    return {coords:rt.geometry?rt.geometry.coordinates.map(c=>[c[1],c[0]]):[a,b],km:rt.distance/1000,min:rt.duration/60,exact:true};
+  }catch(e){
+    const km=haversine(a[0],a[1],b[0],b[1])*1.35;
+    return {coords:[a,b],km,min:profile==='foot'?km/4.8*60:km/22*60,exact:false};
+  }
+}
+async function showProjectRoutes(pr){
+  const seq=++routeSeq;
+  const box=document.getElementById('prRoutes');
+  if(box)box.innerHTML='<div class="drivers"><div style="font-weight:700;margin-bottom:4px">🧭 Nearest school &amp; metro</div><div class="muted" style="font-size:11px">Finding walking &amp; driving routes…</div></div>';
+  const sch=nearestSchools(pr.lat,pr.lng,1)[0];
+  let met=null;METRO.lines.forEach(line=>line.stations.forEach(s=>{const d=haversine(pr.lat,pr.lng,s.lat,s.lng);if(!met||d<met.d)met={s,line,d};}));
+  const pt=[pr.lat,pr.lng],schLL=[sch.s.lat,sch.s.lng],metLL=[met.s.lat,met.s.lng];
+  const [w1,w2,d1,d2]=await Promise.all([
+    osrmRoute2D('foot',pt,schLL),osrmRoute2D('foot',pt,metLL),
+    osrmRoute2D('car',pt,schLL),osrmRoute2D('car',pt,metLL)]);
+  if(seq!==routeSeq)return; // selection changed while fetching
+  routeGroup.clearLayers();
+  L.polyline(w1.coords,{pane:'routePane',color:'#21c198',weight:3.5,dashArray:'7,7',opacity:.9}).addTo(routeGroup);
+  L.polyline(w2.coords,{pane:'routePane',color:met.line.color,weight:3.5,dashArray:'7,7',opacity:.9}).addTo(routeGroup);
+  [[schLL,'#21c198'],[metLL,met.line.color]].forEach(p=>
+    L.circleMarker(p[0],{pane:'routePane',radius:6,color:'#fff',weight:1.5,fillColor:p[1],fillOpacity:1}).addTo(routeGroup));
+  routeGroup.addTo(map);
+  const stSt=met.s.st==='op'?'open':met.s.st==='uc'?'under construction':'planned';
+  const fr=(w,d)=>'🚶 '+w.km.toFixed(1)+' km · ~'+Math.round(w.min)+' min'+(w.exact?'':'*')+' &nbsp;·&nbsp; 🚗 '+d.km.toFixed(1)+' km · ~'+Math.round(d.min)+' min'+(d.exact?'':'*');
+  const box2=document.getElementById('prRoutes');
+  if(box2)box2.innerHTML='<div class="drivers"><div style="font-weight:700;margin-bottom:4px">🧭 Nearest school &amp; metro</div>'+
+    '<div style="padding:3px 0"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#21c198;margin-right:6px"></span><b style="font-size:12px">'+sch.s.n+'</b> <span class="muted" style="font-size:10px">· '+sch.s.b+'</span><div style="font-size:11.5px;margin:2px 0 0 14px">'+fr(w1,d1)+'</div></div>'+
+    '<div style="padding:3px 0"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+met.line.color+';margin-right:6px"></span><b style="font-size:12px">'+met.s.n+'</b> <span class="muted" style="font-size:10px">· '+met.line.name+' ('+stSt+')</span><div style="font-size:11.5px;margin:2px 0 0 14px">'+fr(w2,d2)+'</div></div>'+
+    ((w1.exact&&w2.exact&&d1.exact&&d2.exact)?'':'<div class="muted" style="font-size:10px;margin-top:3px">* router unreachable — straight-line estimate</div>')+
+    '<div class="muted" style="font-size:10px;margin-top:4px">Routes drawn on map · OSRM walking/driving profiles</div></div>';
+  map.fitBounds(L.latLngBounds(w1.coords.concat(w2.coords)),{padding:[70,70],maxZoom:15});
+}
+
+// ---------- 2D <-> 3D view handoff: carry camera position across ----------
+(function(){
+  const l3=document.querySelector('a[href^="3d.html"]');
+  if(l3)l3.addEventListener('click',function(){
+    const c=map.getCenter(),z=map.getZoom();
+    // MapLibre zoom is one level lower than Leaflet for the same scale (512px vs 256px tiles)
+    this.href='3d.html#'+Math.max(8,z-1)+'/'+c.lat.toFixed(5)+'/'+c.lng.toFixed(5)+'/-15/58';
+  });
+  const mll=/[?&]ll=(-?[0-9.]+),(-?[0-9.]+),([0-9.]+)/.exec(location.search);
+  if(mll)map.setView([+mll[1],+mll[2]],Math.round(+mll[3]));
+})();
+
+// deep link: index.html?proj=<name> opens a project with its routes (used by share links & tests)
+(function(){
+  const mp=/[?&]proj=([^&]+)/.exec(location.search);
+  if(!mp)return;
+  const name=decodeURIComponent(mp[1].replace(/\+/g,' ')).toLowerCase();
+  const pr=PROJECTS.projects.find(p=>p.name.toLowerCase()===name);
+  if(!pr)return;
+  if(!projectsOn)document.getElementById('buildsToggle').click();
+  setTimeout(()=>showProject(pr),400);
+})();

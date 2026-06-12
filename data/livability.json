@@ -18,7 +18,7 @@
   "fld": 2,
   "fldN": "Low flood risk; occasional waterlogging.",
   "saf": 5,
-  "safN": "Upscale, embassies, private security, gated — among safest.",
+  "safN": "Upscale, embassies, private security, gated \u2014 among safest.",
   "conf": "High"
  },
  "Cunningham Road": {
@@ -117,7 +117,7 @@
   "fld": 4,
   "fldN": "Sony World/Sony Signal junction is a flagged flood hotspot.",
   "saf": 3,
-  "safN": "Vibrant nightlife — well-policed but rising late-night street/theft reports.",
+  "safN": "Vibrant nightlife \u2014 well-policed but rising late-night street/theft reports.",
   "conf": "High"
  },
  "Hoodi": {
@@ -280,7 +280,7 @@
   "wat": 5,
   "watN": "Lakeside borewell/tanker dependence.",
   "fld": 5,
-  "fldN": "Directly on Varthur Lake — froth, overflow & monsoon flooding risk.",
+  "fldN": "Directly on Varthur Lake \u2014 froth, overflow & monsoon flooding risk.",
   "saf": 4,
   "safN": "New gated stock; generally safe.",
   "conf": "High"
@@ -1307,5 +1307,93 @@
   "saf": 3,
   "safN": "Busier/commercial; more street/petty crime.",
   "conf": "High"
+ },
+ "Chandra Layout": {
+  "sch": 3,
+  "schN": "Adequate, mid-range options.",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 3,
+  "fldN": "Moderate monsoon waterlogging.",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "Medium"
+ },
+ "Bhuvaneshwari Nagar": {
+  "sch": 3,
+  "schN": "University-belt; adequate options.",
+  "wat": 4,
+  "watN": "Borewell/tanker-dependent; historical stress.",
+  "fld": 3,
+  "fldN": "Moderate monsoon waterlogging.",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "Modeled"
+ },
+ "Kammanahalli": {
+  "sch": 4,
+  "schN": "Established CBSE/ICSE nearby (New Horizon belt).",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 4,
+  "fldN": "Flood-prone in heavy rain.",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "High"
+ },
+ "HBR Layout": {
+  "sch": 4,
+  "schN": "Good CBSE/ICSE range toward Hennur.",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 4,
+  "fldN": "Flood-prone in heavy rain (Hebbal valley).",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "Medium"
+ },
+ "Horamavu": {
+  "sch": 3,
+  "schN": "Developing options; Hennur cluster nearby.",
+  "wat": 4,
+  "watN": "Borewell/tanker-dependent; historical stress.",
+  "fld": 4,
+  "fldN": "Flood-prone in heavy rain.",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "Medium"
+ },
+ "Sanjay Nagar": {
+  "sch": 4,
+  "schN": "Strong CBSE/state options (Cluny, NPS belt).",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 2,
+  "fldN": "Low flood risk; occasional waterlogging.",
+  "saf": 5,
+  "safN": "Established residential; perceived very safe.",
+  "conf": "High"
+ },
+ "Mathikere": {
+  "sch": 3,
+  "schN": "Adequate; MSRIT campus belt.",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 3,
+  "fldN": "Moderate monsoon waterlogging.",
+  "saf": 4,
+  "safN": "Residential; safe perception.",
+  "conf": "Medium"
+ },
+ "Kumaraswamy Layout": {
+  "sch": 4,
+  "schN": "Good range of reputed CBSE/ICSE schools.",
+  "wat": 3,
+  "watN": "Mixed Cauvery/borewell supply.",
+  "fld": 2,
+  "fldN": "Low flood risk; occasional waterlogging.",
+  "saf": 5,
+  "safN": "Established residential; perceived very safe.",
+  "conf": "Medium"
  }
 }

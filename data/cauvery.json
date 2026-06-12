@@ -479,22 +479,54 @@
   "connected": {
    "label": "Connected",
    "eta": "already piped",
-   "note": "Long-standing piped Cauvery supply (BBMP core / Stage I–IV)."
+   "note": "Long-standing piped Cauvery supply (BBMP core / Stage I\u2013IV)."
   },
   "stageV": {
-   "label": "Stage V – connecting",
-   "eta": "2024–26",
-   "note": "Within Cauvery Stage V command area (commissioned Oct 2024, 775 MLD); connections rolling out 2024–26."
+   "label": "Stage V \u2013 connecting",
+   "eta": "2024\u201326",
+   "note": "Within Cauvery Stage V command area (commissioned Oct 2024, 775 MLD); connections rolling out 2024\u201326."
   },
   "delayed": {
-   "label": "Stage V – delayed",
+   "label": "Stage V \u2013 delayed",
    "eta": "2026+",
    "note": "Stage V zone but supply delayed (hard-rock pipelines in KR Puram/Mahadevapura belt & pending reservoirs)."
   },
   "none": {
    "label": "No piped Cauvery",
    "eta": "no ETA",
-   "note": "Outside Stage V command area — borewell/tanker dependent; relies on unbuilt Stage VI (~+500 MLD, DPR stage) or the stalled Mekedatu reservoir."
+   "note": "Outside Stage V command area \u2014 borewell/tanker dependent; relies on unbuilt Stage VI (~+500 MLD, DPR stage) or the stalled Mekedatu reservoir."
   }
+ },
+ "Chandra Layout": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Bhuvaneshwari Nagar": {
+  "st": "stageV",
+  "conf": "Medium"
+ },
+ "Kammanahalli": {
+  "st": "connected",
+  "conf": "Medium"
+ },
+ "HBR Layout": {
+  "st": "stageV",
+  "conf": "High"
+ },
+ "Horamavu": {
+  "st": "stageV",
+  "conf": "Medium"
+ },
+ "Sanjay Nagar": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Mathikere": {
+  "st": "connected",
+  "conf": "High"
+ },
+ "Kumaraswamy Layout": {
+  "st": "connected",
+  "conf": "High"
  }
 }
