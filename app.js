@@ -112,8 +112,106 @@ function refreshLegend(){
 }
 
 // ---------- list ----------
+// ---------- unified search across localities + projects + schools + metro ----------
+function searchAll(q){
+  q=String(q||'').toLowerCase().trim();
+  if(!q)return null;
+  const toks=q.split(/\s+/).filter(t=>t.length>=2);
+  const ok=hay=>toks.every(t=>hay.includes(t));
+  const out={localities:[],projects:[],schools:[],stations:[]};
+  // localities: keep zoneFilter respected
+  DATA.localities.forEach(l=>{
+    if(zoneFilter!=='All'&&l.zone!==zoneFilter)return;
+    const hay=(l.name+' '+l.zone+' '+(l.confidence||'')).toLowerCase();
+    if(ok(hay))out.localities.push(l);
+  });
+  // projects: include upcoming/pre-launch/announced too — match name, builder, locality, type, status, note
+  (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
+    const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+(pr.price||'')+' '+(pr.note||'')).toLowerCase();
+    if(ok(hay))out.projects.push(pr);
+  });
+  // schools
+  (typeof SCHOOLS!=='undefined'?SCHOOLS.schools:[]).forEach(s=>{
+    const hay=(s.n+' '+s.loc+' '+(s.b||'')+' '+(s.z||'')).toLowerCase();
+    if(ok(hay))out.schools.push(s);
+  });
+  // metro stations across all lines
+  (typeof METRO!=='undefined'?METRO.lines:[]).forEach(line=>{
+    (line.stations||[]).forEach(st=>{
+      const hay=(st.n+' '+line.name+' '+line.short+' metro station').toLowerCase();
+      if(ok(hay))out.stations.push({...st,line:line.name,lineShort:line.short,color:line.color});
+    });
+  });
+  return out;
+}
+// pan to a point — used by school/metro/project result clicks
+function panToPoint(lat,lng,zoom){
+  if(isMobile())toggleSidebar(false);
+  map.flyTo([lat,lng],zoom||15,{duration:.55});
+}
+// open a project from a search result — ensure the overlay is on, then show detail
+function openProjectByName(name){
+  const pr=(typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).find(p=>p.name===name);
+  if(!pr)return;
+  if(!projectsOn)document.getElementById('buildsToggle').click();
+  panToPoint(pr.lat,pr.lng,14);
+  showProject(pr);
+}
+// open a school result — flash a tooltip on the map
+function openSchoolByCoord(lat,lng,name){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🏫 '+name+'</b>').openOn(map);}
+// open a metro station result
+function openStationByCoord(lat,lng,name,line){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🚇 '+name+'</b><br>'+line).openOn(map);}
+
 function refreshList(){
   const list=document.getElementById('list');
+  // unified search mode: show grouped results
+  if(searchTxt){
+    const res=searchAll(searchTxt);
+    const tot=res.localities.length+res.projects.length+res.schools.length+res.stations.length;
+    document.getElementById('listCount').textContent=tot+' results';
+    document.getElementById('sortLbl').textContent='localities · projects · schools · metro';
+    if(tot===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
+    const sec=(title,n,html)=>n?'<div class="srgroup"><div class="srhd">'+title+' <span class="srct">'+n+'</span></div>'+html+'</div>':'';
+    const locsHtml=res.localities.slice(0,30).map(loc=>{
+      const esc=loc.name.replace(/'/g,"\\'");
+      return `<div class="item ${selected===loc.name?'sel':''}" onclick="openDetail('${esc}')">
+        <div class="dot" style="background:${metricColor(loc)}"></div>
+        <div style="min-width:0"><div class="nm">${loc.name}</div><div class="zn">${loc.zone} · ${loc.confidence} confidence</div></div>
+        <div class="pr"><div class="p">${fmtMetric(loc)}</div></div>
+      </div>`;
+    }).join('');
+    const projHtml=res.projects.slice(0,30).map(pr=>{
+      const esc=pr.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+      return `<div class="item" onclick="openProjectByName('${esc}')">
+        <div class="dot" style="background:${pr.color};transform:rotate(45deg);border-radius:0"></div>
+        <div style="min-width:0"><div class="nm">${pr.name}</div><div class="zn">${pr.builder} · ${pr.loc} · ${pr.status}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">${pr.type.split(' ')[0]}</div></div>
+      </div>`;
+    }).join('');
+    const schHtml=res.schools.slice(0,20).map(s=>{
+      const col=(SCHOOLS.boardColors&&SCHOOLS.boardColors[s.b])||'#888';
+      return `<div class="item" onclick="openSchoolByCoord(${s.lat},${s.lng},'${s.n.replace(/'/g,"\\'")}')">
+        <div class="dot" style="background:${col};border-radius:2px"></div>
+        <div style="min-width:0"><div class="nm">${s.n}</div><div class="zn">${s.loc} · ${s.b||''}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">school</div></div>
+      </div>`;
+    }).join('');
+    const stHtml=res.stations.slice(0,20).map(s=>{
+      const stLbl=s.st==='op'?'operational':(s.st==='uc'?'under constr.':'planned');
+      return `<div class="item" onclick="openStationByCoord(${s.lat},${s.lng},'${s.n.replace(/'/g,"\\'")}','${s.line.replace(/'/g,"\\'")}')">
+        <div class="dot" style="background:${s.color};border-radius:50%"></div>
+        <div style="min-width:0"><div class="nm">${s.n}</div><div class="zn">${s.line} · ${stLbl}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">metro</div></div>
+      </div>`;
+    }).join('');
+    list.innerHTML =
+      sec('🏘️ Localities',res.localities.length,locsHtml)+
+      sec('🏗️ Projects',res.projects.length,projHtml)+
+      sec('🏫 Schools',res.schools.length,schHtml)+
+      sec('🚇 Metro stations',res.stations.length,stHtml);
+    return;
+  }
+  // default mode: existing locality list
   let rows=DATA.localities.filter(visible);
   const keyOf=l=>metric==='yield'?l.yield:metric==='cagr'?l.cagr:metric==='pcagr'?l.projCagr:(metric==='sch'||metric==='saf'||metric==='wat')?LIVE[l.name][metric]:metric==='cauv'?CAUV_RANK[CAUVERY[l.name].st]:priceAt(l,timeIdx);
   rows.sort((a,b)=>(keyOf(a)-keyOf(b))*sortDir);

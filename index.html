@@ -269,6 +269,10 @@ input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:5
 .projSearch .meta .err{color:#ff8f8f}
 .projpin.dim>div{opacity:.18;filter:saturate(.3)}
 .projpin.hit>div{box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,122,.55);transform:rotate(45deg) scale(1.25)}
+/* unified search result groups */
+.srgroup{margin:0 0 6px}
+.srhd{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--muted);padding:8px 14px 4px;text-transform:uppercase;letter-spacing:.5px}
+.srhd .srct{background:var(--panel2);color:var(--txt);padding:1px 7px;border-radius:8px;font-size:10px;font-weight:600;letter-spacing:0}
 </style>
 <meta name="description" content="Interactive Bengaluru (Bangalore) property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, new-launch projects, and schools, water &amp; safety livability across 127 localities. A Zillow-style heatmap for Bangalore."/>
 <meta name="keywords" content="Bangalore property prices, Bengaluru real estate, property price map, Namma Metro map, Bangalore localities, price per sqft, Whitefield, Sarjapur, Electronic City, HSR Layout, property heatmap, Cauvery water, BengaluruValue"/>
@@ -312,7 +316,7 @@ input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:5
   <main>
     <aside id="sidebar">
       <div class="controls">
-        <input class="search" id="search" placeholder="Search a locality… (e.g. Whitefield, HSR)"/>
+        <input class="search" id="search" placeholder="Search localities, projects, schools, metro…"/>
         <div class="ctl-label">Filter zone</div>
         <div class="row" id="zoneChips"></div>
         <div class="ctl-label">Colour map by <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:400">· pick one</span></div>
