@@ -112,8 +112,115 @@ function refreshLegend(){
 }
 
 // ---------- list ----------
+// ---------- unified search across localities + projects + schools + metro ----------
+function searchAll(q){
+  q=String(q||'').toLowerCase().trim();
+  if(!q)return null;
+  const toks=q.split(/\s+/).filter(t=>t.length>=2);
+  const ok=hay=>toks.every(t=>hay.includes(t));
+  const out={localities:[],projects:[],schools:[],stations:[]};
+  // localities: keep zoneFilter respected
+  DATA.localities.forEach(l=>{
+    if(zoneFilter!=='All'&&l.zone!==zoneFilter)return;
+    const hay=(l.name+' '+l.zone+' '+(l.confidence||'')).toLowerCase();
+    if(ok(hay))out.localities.push(l);
+  });
+  // projects: if an AI search is active and gave us a curated set, prefer that
+  // (so the sidebar reflects semantic matches like "near airport under 1.5Cr").
+  // Otherwise fall back to literal keyword match across name/builder/loc/etc.
+  const aiActive = projMatchSet!==null && projSearchMode==='ai';
+  if(aiActive){
+    (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
+      if(projMatchSet.has(pr.name))out.projects.push(pr);
+    });
+  }else{
+    (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
+      const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+(pr.price||'')+' '+(pr.note||'')).toLowerCase();
+      if(ok(hay))out.projects.push(pr);
+    });
+  }
+  // schools
+  (typeof SCHOOLS!=='undefined'?SCHOOLS.schools:[]).forEach(s=>{
+    const hay=(s.n+' '+s.loc+' '+(s.b||'')+' '+(s.z||'')).toLowerCase();
+    if(ok(hay))out.schools.push(s);
+  });
+  // metro stations across all lines
+  (typeof METRO!=='undefined'?METRO.lines:[]).forEach(line=>{
+    (line.stations||[]).forEach(st=>{
+      const hay=(st.n+' '+line.name+' '+line.short+' metro station').toLowerCase();
+      if(ok(hay))out.stations.push({...st,line:line.name,lineShort:line.short,color:line.color});
+    });
+  });
+  return out;
+}
+// pan to a point — used by school/metro/project result clicks
+function panToPoint(lat,lng,zoom){
+  if(isMobile())toggleSidebar(false);
+  map.flyTo([lat,lng],zoom||15,{duration:.55});
+}
+// open a project from a search result — ensure the overlay is on, then show detail
+function openProjectByName(name){
+  const pr=(typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).find(p=>p.name===name);
+  if(!pr)return;
+  if(!projectsOn)document.getElementById('buildsToggle').click();
+  panToPoint(pr.lat,pr.lng,14);
+  showProject(pr);
+}
+// open a school result — flash a tooltip on the map
+function openSchoolByCoord(lat,lng,name){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🏫 '+name+'</b>').openOn(map);}
+// open a metro station result
+function openStationByCoord(lat,lng,name,line){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🚇 '+name+'</b><br>'+line).openOn(map);}
+
 function refreshList(){
   const list=document.getElementById('list');
+  // unified search mode: show grouped results
+  if(searchTxt){
+    const res=searchAll(searchTxt);
+    const tot=res.localities.length+res.projects.length+res.schools.length+res.stations.length;
+    document.getElementById('listCount').textContent=tot+' results';
+    document.getElementById('sortLbl').textContent='localities · projects · schools · metro';
+    if(tot===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
+    const sec=(title,n,html)=>n?'<div class="srgroup"><div class="srhd">'+title+' <span class="srct">'+n+'</span></div>'+html+'</div>':'';
+    const locsHtml=res.localities.slice(0,30).map(loc=>{
+      const esc=loc.name.replace(/'/g,"\\'");
+      return `<div class="item ${selected===loc.name?'sel':''}" onclick="openDetail('${esc}')">
+        <div class="dot" style="background:${metricColor(loc)}"></div>
+        <div style="min-width:0"><div class="nm">${loc.name}</div><div class="zn">${loc.zone} · ${loc.confidence} confidence</div></div>
+        <div class="pr"><div class="p">${fmtMetric(loc)}</div></div>
+      </div>`;
+    }).join('');
+    const projHtml=res.projects.slice(0,30).map(pr=>{
+      const esc=pr.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+      return `<div class="item" onclick="openProjectByName('${esc}')">
+        <div class="dot" style="background:${pr.color};transform:rotate(45deg);border-radius:0"></div>
+        <div style="min-width:0"><div class="nm">${pr.name}</div><div class="zn">${pr.builder} · ${pr.loc} · ${pr.status}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">${pr.type.split(' ')[0]}</div></div>
+      </div>`;
+    }).join('');
+    const schHtml=res.schools.slice(0,20).map(s=>{
+      const col=(SCHOOLS.boardColors&&SCHOOLS.boardColors[s.b])||'#888';
+      return `<div class="item" onclick="openSchoolByCoord(${s.lat},${s.lng},'${s.n.replace(/'/g,"\\'")}')">
+        <div class="dot" style="background:${col};border-radius:2px"></div>
+        <div style="min-width:0"><div class="nm">${s.n}</div><div class="zn">${s.loc} · ${s.b||''}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">school</div></div>
+      </div>`;
+    }).join('');
+    const stHtml=res.stations.slice(0,20).map(s=>{
+      const stLbl=s.st==='op'?'operational':(s.st==='uc'?'under constr.':'planned');
+      return `<div class="item" onclick="openStationByCoord(${s.lat},${s.lng},'${s.n.replace(/'/g,"\\'")}','${s.line.replace(/'/g,"\\'")}')">
+        <div class="dot" style="background:${s.color};border-radius:50%"></div>
+        <div style="min-width:0"><div class="nm">${s.n}</div><div class="zn">${s.line} · ${stLbl}</div></div>
+        <div class="pr"><div class="p" style="font-size:10.5px">metro</div></div>
+      </div>`;
+    }).join('');
+    list.innerHTML =
+      sec('🏘️ Localities',res.localities.length,locsHtml)+
+      sec('🏗️ Projects',res.projects.length,projHtml)+
+      sec('🏫 Schools',res.schools.length,schHtml)+
+      sec('🚇 Metro stations',res.stations.length,stHtml);
+    return;
+  }
+  // default mode: existing locality list
   let rows=DATA.localities.filter(visible);
   const keyOf=l=>metric==='yield'?l.yield:metric==='cagr'?l.cagr:metric==='pcagr'?l.projCagr:(metric==='sch'||metric==='saf'||metric==='wat')?LIVE[l.name][metric]:metric==='cauv'?CAUV_RANK[CAUVERY[l.name].st]:priceAt(l,timeIdx);
   rows.sort((a,b)=>(keyOf(a)-keyOf(b))*sortDir);
@@ -223,7 +330,14 @@ function closeDetail(){document.getElementById('detail').classList.remove('open'
 const zc=document.getElementById('zoneChips');
 ZONES.forEach(z=>{const el=document.createElement('div');el.className='chip'+(z==='All'?' active':'');el.textContent=z;el.onclick=()=>{zoneFilter=z;[...zc.children].forEach(c=>c.classList.toggle('active',c.textContent===z));renderAll();};zc.appendChild(el);});
 document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();updateHash();});
-document.getElementById('search').oninput=e=>{searchTxt=e.target.value.toLowerCase().trim();renderAll();};
+document.getElementById('search').oninput=e=>{
+  searchTxt=e.target.value.toLowerCase().trim();
+  // If an AI search was active, switch back to live local filter as soon as the
+  // user keeps typing — otherwise the stale AI set keeps overriding the list.
+  if(projMatchSet!==null&&projSearchMode==='ai')applyProjectSearch(null,'','');
+  renderAll();
+};
+document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();aiProjectSearch();}});
 document.getElementById('sortLbl').onclick=()=>{sortDir=-sortDir;refreshList();};
 document.getElementById('time').oninput=e=>{timeIdx=+e.target.value;renderAll();updateHash();};
 
@@ -331,12 +445,14 @@ function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
 map.createPane('projectPane');map.getPane('projectPane').style.zIndex=520;
 let projectsOn=false;
 const projectLayers=[];
+const projectIndex=[];   // parallel to projectLayers, holds the source project object
 PROJECTS.projects.forEach(pr=>{
   const icon=L.divIcon({className:'projpin',iconSize:[12,12],html:'<div style="width:11px;height:11px;background:'+pr.color+';border:1.5px solid #fff;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(0,0,0,.55)"></div>'});
   const mk=L.marker([pr.lat,pr.lng],{pane:'projectPane',icon});
   mk.bindTooltip('<b>'+pr.name+'</b><br>'+pr.builder+' · '+pr.status,{className:'pin',direction:'top',offset:[0,-6]});
   mk.on('click',()=>showProject(pr));
   projectLayers.push(mk);
+  projectIndex.push(pr);
 });
 function showProject(pr){
   document.getElementById('detail').classList.add('open');
@@ -358,14 +474,117 @@ function showProject(pr){
   refreshMap();refreshList();syncDetailActions();
   showProjectRoutes(pr);
 }
-function refreshProjects(){projectLayers.forEach(mk=>{if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}else if(map.hasLayer(mk))mk.remove();});}
+// projSearch state: null = no filter; Set<name> = only these projects match
+let projMatchSet=null, projSearchMode='', projSearchReason='';
+function projMatches(pr){return projMatchSet===null||projMatchSet.has(pr.name);}
+function refreshProjects(){
+  projectLayers.forEach((mk,i)=>{
+    const pr=projectIndex[i];
+    const hit=projMatchSet!==null&&projMatchSet.has(pr.name);
+    const dim=projMatchSet!==null&&!hit;
+    const el=mk.getElement&&mk.getElement();
+    if(el){el.classList.toggle('hit',hit);el.classList.toggle('dim',dim);}
+    if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}
+    else if(map.hasLayer(mk))mk.remove();
+  });
+  // pin classes set on next paint for markers added just now
+  if(projectsOn)setTimeout(()=>{
+    projectLayers.forEach((mk,i)=>{const el=mk.getElement&&mk.getElement();if(!el)return;
+      const pr=projectIndex[i];
+      const hit=projMatchSet!==null&&projMatchSet.has(pr.name);
+      const dim=projMatchSet!==null&&!hit;
+      el.classList.toggle('hit',hit);el.classList.toggle('dim',dim);});},0);
+}
+
+// --- local keyword fuzzy match (free, instant, handles typos a bit via token-startsWith) ---
+function localFuzzy(q){
+  const tokens=q.toLowerCase().split(/\s+/).filter(t=>t.length>=2);
+  if(tokens.length===0)return null;
+  const hits=new Set();
+  PROJECTS.projects.forEach(pr=>{
+    const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+pr.price+' '+(pr.note||'')).toLowerCase();
+    if(tokens.every(t=>hay.includes(t)))hits.add(pr.name);
+  });
+  return hits;
+}
+
+function applyProjectSearch(matches,mode,reason){
+  projMatchSet=matches;projSearchMode=mode||'';projSearchReason=reason||'';
+  updateProjectMatchUi();refreshProjects();
+  // Ensure overlay is on if user searched
+  if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
+}
+function updateProjectMatchUi(){
+  const total=PROJECTS.projects.length;
+  const matchN=projMatchSet?projMatchSet.size:total;
+  const ltEl=document.getElementById('projLegendTitle');
+  if(ltEl)ltEl.textContent='🏗️ New builds — '+matchN+(projMatchSet?'/'+total:'')+' projects';
+  const metaEl=document.getElementById('projSearchMeta');
+  if(metaEl){
+    if(projMatchSet!==null){
+      const modeBadge=projSearchMode==='ai'?'<span class="ai" style="color:var(--accent2)">✦ AI</span> · ':(projSearchMode==='keyword'?'kw · ':'');
+      metaEl.style.display='block';
+      metaEl.innerHTML=modeBadge+'<b style="color:var(--txt)">'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>';
+    }else{
+      metaEl.style.display='none';
+      metaEl.innerHTML='';
+    }
+  }
+}
+function clearProjectSearch(){
+  const inp=document.getElementById('search');
+  if(inp){inp.value='';searchTxt='';inp.focus();}
+  applyProjectSearch(null,'','');
+  renderAll();
+}
+
+async function aiProjectSearch(){
+  const inp=document.getElementById('search');
+  if(!inp)return;
+  const q=inp.value.trim();
+  if(q.length<2){applyProjectSearch(null,'','');return;}
+  const btn=document.getElementById('mainAiBtn');
+  if(btn){btn.classList.add('busy');btn.dataset.lbl=btn.innerHTML;btn.innerHTML='✦…';}
+  // Make sure the unified sidebar list uses this query (drives the Projects group).
+  searchTxt=q.toLowerCase();
+  try{
+    const r=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
+    if(!r.ok){
+      const reason=r.status===503?'AI search not configured — using keyword match':('AI error '+r.status+' — using keyword match');
+      const set=localFuzzy(q)||new Set();
+      applyProjectSearch(set,'keyword',reason);
+      renderAll();
+      return;
+    }
+    const data=await r.json();
+    const names=Array.isArray(data.matches)?data.matches:[];
+    applyProjectSearch(new Set(names),'ai',data.reason||'');
+    renderAll();
+  }catch(e){
+    const set=localFuzzy(q)||new Set();
+    applyProjectSearch(set,'keyword','Network error — using keyword match');
+    renderAll();
+  }finally{
+    if(btn){btn.classList.remove('busy');btn.innerHTML=btn.dataset.lbl||'✦ Ask AI';}
+  }
+}
+
+// Build the legend ONCE at boot. After that we only update the count/meta line.
 function buildProjectsLegend(){
   const b=PROJECTS.builders;
-  document.getElementById('projLegend').innerHTML='<div class="lt">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
-   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
-   Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
-   '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>';
+  document.getElementById('projLegend').innerHTML=
+    '<div class="lt" id="projLegendTitle">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
+    '<div class="meta" id="projSearchMeta" style="font-size:9.5px;color:var(--muted);margin:0 0 5px;display:none"></div>'+
+    '<div id="projBuilders">'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
+      Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
+      '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>'+
+    '</div>';
 }
+
+// tiny HTML escape for the reason string
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
 document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);document.getElementById('projLegend').style.display=projectsOn?'block':'none';refreshProjects();};
 buildProjectsLegend();refreshProjects();
 
