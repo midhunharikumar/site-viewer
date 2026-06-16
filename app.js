@@ -125,11 +125,20 @@ function searchAll(q){
     const hay=(l.name+' '+l.zone+' '+(l.confidence||'')).toLowerCase();
     if(ok(hay))out.localities.push(l);
   });
-  // projects: include upcoming/pre-launch/announced too — match name, builder, locality, type, status, note
-  (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
-    const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+(pr.price||'')+' '+(pr.note||'')).toLowerCase();
-    if(ok(hay))out.projects.push(pr);
-  });
+  // projects: if an AI search is active and gave us a curated set, prefer that
+  // (so the sidebar reflects semantic matches like "near airport under 1.5Cr").
+  // Otherwise fall back to literal keyword match across name/builder/loc/etc.
+  const aiActive = projMatchSet!==null && projSearchMode==='ai';
+  if(aiActive){
+    (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
+      if(projMatchSet.has(pr.name))out.projects.push(pr);
+    });
+  }else{
+    (typeof PROJECTS!=='undefined'?PROJECTS.projects:[]).forEach(pr=>{
+      const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+(pr.price||'')+' '+(pr.note||'')).toLowerCase();
+      if(ok(hay))out.projects.push(pr);
+    });
+  }
   // schools
   (typeof SCHOOLS!=='undefined'?SCHOOLS.schools:[]).forEach(s=>{
     const hay=(s.n+' '+s.loc+' '+(s.b||'')+' '+(s.z||'')).toLowerCase();
@@ -321,7 +330,14 @@ function closeDetail(){document.getElementById('detail').classList.remove('open'
 const zc=document.getElementById('zoneChips');
 ZONES.forEach(z=>{const el=document.createElement('div');el.className='chip'+(z==='All'?' active':'');el.textContent=z;el.onclick=()=>{zoneFilter=z;[...zc.children].forEach(c=>c.classList.toggle('active',c.textContent===z));renderAll();};zc.appendChild(el);});
 document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();updateHash();});
-document.getElementById('search').oninput=e=>{searchTxt=e.target.value.toLowerCase().trim();renderAll();};
+document.getElementById('search').oninput=e=>{
+  searchTxt=e.target.value.toLowerCase().trim();
+  // If an AI search was active, switch back to live local filter as soon as the
+  // user keeps typing — otherwise the stale AI set keeps overriding the list.
+  if(projMatchSet!==null&&projSearchMode==='ai')applyProjectSearch(null,'','');
+  renderAll();
+};
+document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();aiProjectSearch();}});
 document.getElementById('sortLbl').onclick=()=>{sortDir=-sortDir;refreshList();};
 document.getElementById('time').oninput=e=>{timeIdx=+e.target.value;renderAll();updateHash();};
 
@@ -498,7 +514,6 @@ function applyProjectSearch(matches,mode,reason){
   // Ensure overlay is on if user searched
   if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
 }
-// Light update — does NOT wipe innerHTML, so the input keeps focus while typing.
 function updateProjectMatchUi(){
   const total=PROJECTS.projects.length;
   const matchN=projMatchSet?projMatchSet.size:total;
@@ -507,79 +522,64 @@ function updateProjectMatchUi(){
   const metaEl=document.getElementById('projSearchMeta');
   if(metaEl){
     if(projMatchSet!==null){
-      const modeBadge=projSearchMode==='ai'?'<span class="ai">✦ AI</span> · ':(projSearchMode==='keyword'?'kw · ':'');
-      metaEl.innerHTML=modeBadge+'<b>'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>';
+      const modeBadge=projSearchMode==='ai'?'<span class="ai" style="color:var(--accent2)">✦ AI</span> · ':(projSearchMode==='keyword'?'kw · ':'');
+      metaEl.style.display='block';
+      metaEl.innerHTML=modeBadge+'<b style="color:var(--txt)">'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>';
     }else{
-      metaEl.innerHTML='Try: <i>near airport, under 1.5 Cr</i> · <i>luxury Whitefield</i> · <i>plots Devanahalli</i>';
+      metaEl.style.display='none';
+      metaEl.innerHTML='';
     }
   }
 }
 function clearProjectSearch(){
-  const inp=document.getElementById('projSearchInp');
-  if(inp){inp.value='';inp.focus();}
+  const inp=document.getElementById('search');
+  if(inp){inp.value='';searchTxt='';inp.focus();}
   applyProjectSearch(null,'','');
+  renderAll();
 }
 
 async function aiProjectSearch(){
-  const inp=document.getElementById('projSearchInp');
+  const inp=document.getElementById('search');
   if(!inp)return;
   const q=inp.value.trim();
   if(q.length<2){applyProjectSearch(null,'','');return;}
-  const btn=document.getElementById('projAiBtn');
-  if(btn){btn.classList.add('busy');btn.textContent='✦ thinking…';}
+  const btn=document.getElementById('mainAiBtn');
+  if(btn){btn.classList.add('busy');btn.dataset.lbl=btn.innerHTML;btn.innerHTML='✦…';}
+  // Make sure the unified sidebar list uses this query (drives the Projects group).
+  searchTxt=q.toLowerCase();
   try{
     const r=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
     if(!r.ok){
-      // graceful fallback to keyword if proxy missing / errored
       const reason=r.status===503?'AI search not configured — using keyword match':('AI error '+r.status+' — using keyword match');
       const set=localFuzzy(q)||new Set();
       applyProjectSearch(set,'keyword',reason);
+      renderAll();
       return;
     }
     const data=await r.json();
     const names=Array.isArray(data.matches)?data.matches:[];
     applyProjectSearch(new Set(names),'ai',data.reason||'');
+    renderAll();
   }catch(e){
     const set=localFuzzy(q)||new Set();
     applyProjectSearch(set,'keyword','Network error — using keyword match');
+    renderAll();
   }finally{
-    if(btn){btn.classList.remove('busy');btn.innerHTML='✦ Ask AI';}
+    if(btn){btn.classList.remove('busy');btn.innerHTML=btn.dataset.lbl||'✦ Ask AI';}
   }
 }
 
-// Build the legend ONCE at boot. After that we only update the count/meta line
-// so the search input never loses focus while typing.
+// Build the legend ONCE at boot. After that we only update the count/meta line.
 function buildProjectsLegend(){
   const b=PROJECTS.builders;
   document.getElementById('projLegend').innerHTML=
     '<div class="lt" id="projLegendTitle">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
-    '<div class="projSearch">'+
-      '<div class="row">'+
-        '<input id="projSearchInp" type="text" placeholder="Search projects… (builder, locality, BHK)" maxlength="240" autocomplete="off"/>'+
-      '</div>'+
-      '<div class="row">'+
-        '<button id="projAiBtn" class="pbtn" title="Natural-language search via LLM">✦ Ask AI</button>'+
-        '<button class="pbtn clear" onclick="clearProjectSearch()" title="Clear search">clear</button>'+
-      '</div>'+
-      '<div class="meta" id="projSearchMeta">Try: <i>near airport, under 1.5 Cr</i> · <i>luxury Whitefield</i> · <i>plots Devanahalli</i></div>'+
-    '</div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
-    Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
-    '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>';
-  const inp=document.getElementById('projSearchInp');
-  if(inp){
-    // local fuzzy as you type (free, instant)
-    inp.addEventListener('input',()=>{
-      const q=inp.value.trim();
-      if(q.length<2){applyProjectSearch(null,'','');return;}
-      const hits=localFuzzy(q);
-      applyProjectSearch(hits||new Set(),'keyword','');
-    });
-    // Enter = LLM
-    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();aiProjectSearch();}});
-  }
-  const aiBtn=document.getElementById('projAiBtn');
-  if(aiBtn)aiBtn.addEventListener('click',aiProjectSearch);
+    '<div class="meta" id="projSearchMeta" style="font-size:9.5px;color:var(--muted);margin:0 0 5px;display:none"></div>'+
+    '<div id="projBuilders">'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
+      Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
+      '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>'+
+    '</div>';
 }
 
 // tiny HTML escape for the reason string
