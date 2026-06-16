@@ -1,55 +1,55 @@
 {
- "updated": "2026-06-10",
- "mortgageRate": 8.5,
- "verdict": "Late-cycle and expensive on rent/income fundamentals, but credit metrics remain healthy. The historical pattern for Indian metros is a multi-year time correction (flat prices), not a foreclosure-driven crash — the main downside trigger is an IT hiring shock, not lending.",
+ "updated": "2026-06-14",
+ "mortgageRate": 8.0,
+ "verdict": "Bengaluru is decisively heating up in mid-2026: ~24% YoY price growth and ~33% YoY sales jump put it out of step with a softer pan-India market. Fundamentals are still sound — inventory overhang has actually tightened to ~12 months, housing GNPAs remain low at ~1.3%, and the repo rate is comfortable at 5.25% — but launch mix is now ~68% premium/luxury, the asking-vs-registry gap forced a 6–15% guidance-value hike, and affordability is being stretched by the price surge. Risk skews to a luxury-segment air pocket if rates rise or IT hiring softens, since mid-income supply has thinned.",
  "indicators": [
   {
    "name": "Unsold inventory overhang",
-   "value": "~15 months",
-   "status": "amber",
-   "note": "Rose from ~9 months (2024) as launches outpace absorption (~70k unsold units vs ~57k/yr sales pace). Cyclical rebalancing; NCR exceeded 60 months in 2017 for comparison.",
-   "src": "Meraqi / JLL, 2026",
-   "url": "https://meraqiadvisors.com/blogs/bengaluru-residential-market-trends-2026"
+   "value": "~12 months, trending lower",
+   "status": "green",
+   "note": "Bengaluru overhang at ~12 months on ~58,900 unsold units — well below the 18–24 month healthy benchmark. Q1 2026 sales +33% YoY (15,603 units) and supply-sales near parity have tightened the market further.",
+   "src": "ANAROCK / PropEquity Q1 2026",
+   "url": "https://therealtytoday.com/news/market-insights/indias-housing-market-shows-strong-structural-stability-in-q1-2026-bengaluru-drives-growth-momentum-mmr-continues-to-anchor-sales/"
   },
   {
    "name": "Launch mix skew to luxury",
-   "value": "Unsold luxury rising",
-   "status": "amber",
-   "note": "New supply increasingly investor-oriented premium stock; end-user mid-market squeezed out — a classic late-cycle developer signal.",
-   "src": "JLL / industry reports, 2026",
-   "url": "https://tridentrealty.co.in/blog/rising-unsold-inventory-in-the-luxury-segment-opportunity-or-concern"
+   "value": "~68% premium/luxury share of Q1 2026 launches",
+   "status": "red",
+   "note": "High-end and luxury accounted for ~68% of Bengaluru launches in Q1 2026; mid-segment fell to ~31%. Affordable supply has nearly disappeared and 'early fatigue' is being flagged in the ultra-premium segment.",
+   "src": "PropTiger Real Insight Q1 2026 / Business Standard",
+   "url": "https://www.business-standard.com/finance/personal-finance/luxury-homes-drive-bengaluru-realty-but-ultra-premium-shows-early-fatigue-125111800804_1.html"
   },
   {
    "name": "EMI-to-income (affordability)",
-   "value": "well under 50%",
-   "status": "green",
-   "note": "Bengaluru remains below the lender stress threshold; affordability improved with ~125 bp of repo rate cuts since Feb 2025.",
-   "src": "Knight Frank Affordability Index H1 2025",
-   "url": "https://content.knightfrank.com/research/3035/documents/en/india-affordable-housing-2025-12385.pdf"
+   "value": "EMI/income ~26-27% (below 50% threshold but stretched)",
+   "status": "amber",
+   "note": "Knight Frank's index shows Bengaluru affordability comfortably under the 50% stress line, but 24% YoY price growth is now outpacing income growth and eroding the cushion. Repo steady at 5.25%; home loan rates 7.65–8.50%.",
+   "src": "Knight Frank India Affordability Index H1 2026",
+   "url": "https://www.business-standard.com/finance/personal-finance/ahmedabad-kolkata-pune-most-affordable-mumbai-falls-below-50-emi-ratio-125122300780_1.html"
   },
   {
    "name": "Housing-loan defaults (NPAs)",
-   "value": "~1.1–1.3% GNPA",
+   "value": "Retail housing GNPA ~1.3%; system GNPA ~2.1%",
    "status": "green",
-   "note": "Bank gross NPAs at a 12-year low (~2.6%); mortgages are the cleanest retail book. Retail stress is concentrated in unsecured credit (≈52% of new retail NPAs, H1FY25), not housing. No public locality-level default data; SARFAESI e-auction counts are the best city-level distress proxy.",
-   "src": "RBI Financial Stability Report",
-   "url": "https://ris.org.in/en/node/4091"
+   "note": "RBI Financial Stability Report (Dec 2025) shows retail housing GNPA stable at ~1.3% with no significant systemic risk. Watch unsecured retail at 1.7% — slippages there could spill over if rates rise. No public locality-level default data.",
+   "src": "RBI Financial Stability Report Dec 2025",
+   "url": "https://www.nextias.com/ca/current-affairs/01-01-2026/rbi-financial-stability-report-2"
   },
   {
    "name": "Asking vs registered price gap",
-   "value": "~20–30%",
-   "status": "red",
-   "note": "Mid-market listings sit well above registry transaction averages (e.g. Chandra Layout ~₹7.8k asking vs ~₹5.6k registered) — listing-based indices, including this site, overstate clearing prices.",
-   "src": "99acres asking vs Kaveri registry data",
-   "url": "https://www.99acres.com/property-rates-and-price-trends-in-chandra-layout-bangalore-west-prffid"
+   "value": "Guidance values revised up 6–15% Feb 2026 to close gap",
+   "status": "amber",
+   "note": "Karnataka hiked guidance values 6–15% in Feb 2026 because the gap to actual transaction prices had widened materially in East and North Bengaluru. Registration fee also doubled (1% → 2%) in Aug 2025 — both signs of an overheated transaction market the state is moving to capture.",
+   "src": "Kaveri / IGR Karnataka",
+   "url": "https://www.propnewz.com/blog/karnataka-guidance-value-hike-bangalore-impact-2026"
   },
   {
    "name": "Registration volumes",
-   "value": "stable",
-   "status": "green",
-   "note": "Karnataka stamp-duty collections and Kaveri registration counts show transaction demand holding — real absorption, not just listings.",
-   "src": "IGR Karnataka / Kaveri",
-   "url": "https://igr.karnataka.gov.in/"
+   "value": "Bengaluru sales +33% YoY in Q1 2026 (15,603 units)",
+   "status": "red",
+   "note": "Bengaluru is the only major metro with simultaneous peak sequential sales growth and 24% YoY price appreciation. Registration fee hike and guidance-value revision boost state collections, but velocity at these prices is a classic late-cycle froth signal.",
+   "src": "PropEquity Q1 2026",
+   "url": "https://newsable.asianetnews.com/business/bengaluru-leads-indias-housing-boom-with-24-price-surge-in-q1-2026-articleshow-4l0dnn8"
   }
  ]
 }

@@ -242,14 +242,14 @@
   },
   {
    "builder": "Sobha",
-   "name": "Sobha World City",
-   "loc": "Hoskote",
+   "name": "Sobha One World (formerly Sobha World City)",
+   "loc": "Hoskote Rd, near Whitefield",
    "lat": 13.07,
    "lng": 77.798,
    "type": "Township (300ac plan)",
-   "status": "Pre-launch",
+   "status": "Launched",
    "price": "from ₹1.09Cr",
-   "note": "One of East BLR's largest townships.",
+   "note": "Mega ~300ac township; Ph1 on 48ac with 18 towers up to 54 floors, 3,484 units of 1/2/3/4 BHK. Launched May 2026; phased delivery 2028–2031.",
    "color": "#8b5cf6"
   },
   {
@@ -1655,6 +1655,222 @@
    "price": "from ₹57L",
    "note": "19-acre development, 2 & 3 BHK off Hosur Rd, 40+ amenities; possession Jan 2027.",
    "color": "#eab308"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Dew Drops",
+   "loc": "Yelahanka, Doddaballapur Rd",
+   "lat": 13.1007,
+   "lng": 77.5963,
+   "type": "Villas",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "5.4-acre premium villa project, 5 rows of villas; launch ~Oct 2026, possession Oct 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Crystal Lawns (Autumn Leaves Ph2)",
+   "loc": "IVC Rd, Devanahalli",
+   "lat": 13.1645,
+   "lng": 77.6075,
+   "type": "Plots (25ac)",
+   "status": "Launched",
+   "price": "from ₹2.38Cr",
+   "note": "25-acre plotted gated community, 750 plots; bookings open 2026.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Yelahanka (Quiet Luxury)",
+   "loc": "Yelahanka",
+   "lat": 13.1007,
+   "lng": 77.5963,
+   "type": "Apartments (5ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "5-acre luxury 2/3/4 BHK; 70%+ open space; 1km from upcoming Blue Line metro; 25 min to KIA.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Pearl at Brigade Atmosphere",
+   "loc": "Devanahalli (Brigade Atmosphere)",
+   "lat": 13.252,
+   "lng": 77.708,
+   "type": "Villas",
+   "status": "Launched",
+   "price": "–",
+   "note": "Luxury courtyard villaments cluster at Brigade Atmosphere township; airport-corridor.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Ivory Ph2 at Brigade Orchards",
+   "loc": "Devanahalli (Brigade Orchards)",
+   "lat": 13.228,
+   "lng": 77.7,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹41L",
+   "note": "Phase 2 within 135-ac Orchards township; 1/1.5/2/3 BHK; 10 min to KIA.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Budigere",
+   "loc": "Budigere Cross, Old Madras Rd",
+   "lat": 13.0445,
+   "lng": 77.747,
+   "type": "Apartments (4.5ac)",
+   "status": "Launched",
+   "price": "–",
+   "note": "2 towers (2B+G+30), 420 units Studio-4 BHK (468-2,530 sqft); launched Jun 2026; possession 2029+.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Granada",
+   "loc": "Whitefield–Hoskote Rd",
+   "lat": 13.004,
+   "lng": 77.774,
+   "type": "Apartments (20.19ac)",
+   "status": "Launched",
+   "price": "from ₹1.45Cr",
+   "note": "20.19-acre integrated township; 14 high-rise towers, ~2,000 units of 2.5/3/4 BHK.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Magnum Opus",
+   "loc": "Kothnur, JP Nagar / Bannerghatta Rd",
+   "lat": 12.8755,
+   "lng": 77.587,
+   "type": "Apartments (5.85ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "5.85ac, 294 units, 2/3/4 BHK (1,249-2,577 sqft), 2B+G+9. Near Pink Line metro (Dec 2026).",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Scarlet",
+   "loc": "Sarjapur Rd",
+   "lat": 12.891,
+   "lng": 77.694,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "3/3.5/4 BHK premium apartments; ~4-year construction window from 2026 launch.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Hennur 51",
+   "loc": "Hennur Main Rd",
+   "lat": 13.054,
+   "lng": 77.6443,
+   "type": "Apartments (4.5ac)",
+   "status": "Pre-launch",
+   "price": "₹90L–4.5Cr",
+   "note": "4.5-acre ultra-luxury 3/4/5 BHK project; possession 2029-30; launch 2026.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Park Royale",
+   "loc": "Vajarahalli, Kanakapura Rd",
+   "lat": 12.8633,
+   "lng": 77.5471,
+   "type": "Apartments (6ac)",
+   "status": "Launched",
+   "price": "from ₹1.35Cr",
+   "note": "6 acres, ~450 units, 1-4 BHK (1,200-2,400 sqft). Bookings opened Jan 2026; possession Dec 2029.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Puravankara Hoodi Junction",
+   "loc": "Hoodi Circle, Whitefield",
+   "lat": 12.9921,
+   "lng": 77.7095,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹1.10Cr",
+   "note": "600+ units, 2 & 3 BHK (1,100-1,550 sqft) high-rise next to Hoodi metro; launched early 2026.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Blubelle",
+   "loc": "Magadi Rd, Rajajinagar",
+   "lat": 12.9876,
+   "lng": 77.5421,
+   "type": "Apartments (3.8ac)",
+   "status": "Under construction",
+   "price": "₹2.25–2.60Cr",
+   "note": "3.8ac, 378 units in 2 towers, 3 BHK only (1,434-1,630 sqft); 80% open space, 8,000 sqft clubhouse; possession late 2027–early 2028.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand Kogilu",
+   "loc": "Kogilu, Yelahanka",
+   "lat": 13.1145,
+   "lng": 77.608,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Premium apartment development off Yelahanka, 2026 launch.",
+   "color": "#f472b6"
+  },
+  {
+   "builder": "Mahindra",
+   "name": "Mahindra Zen",
+   "loc": "Singasandra / Begur, Hosur Rd",
+   "lat": 12.878,
+   "lng": 77.63,
+   "type": "Apartments (4.25ac)",
+   "status": "Under construction",
+   "price": "₹1.05–2.48Cr",
+   "note": "4.25ac, 2 towers, 228 units, 2/3/3.5/4 BHK; Japanese-zen theme; launched 2025, possession 2026 onwards.",
+   "color": "#fb923c"
+  },
+  {
+   "builder": "Tata",
+   "name": "Tata Promont Ph2",
+   "loc": "Hosakerehalli, Banashankari",
+   "lat": 12.922,
+   "lng": 77.551,
+   "type": "Apartments (14.2ac, ultra-luxury)",
+   "status": "Under construction",
+   "price": "from ₹3Cr",
+   "note": "14.2-acre hilltop, 3 & 4 BHK; launched Jul 2024, possession Jan 2029.",
+   "color": "#10b981"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Aaranya",
+   "loc": "Kenchanahalli, RR Nagar (Mysore Rd)",
+   "lat": 12.9425,
+   "lng": 77.5093,
+   "type": "Apartments (6.52ac)",
+   "status": "Launched",
+   "price": "₹3.19–4.40Cr",
+   "note": "6.52ac, 418 units, 3/3.5/4 BHK (2,117-2,944 sqft) luxury; adjacent Jnanabharathi metro (Purple Line); launched Jan 2026.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Magnificia",
+   "loc": "Hoodi, Whitefield",
+   "lat": 12.9952,
+   "lng": 77.7167,
+   "type": "Apartments (12ac)",
+   "status": "Launched",
+   "price": "from ₹1.75Cr",
+   "note": "12-acre luxury, 8 towers; 2/3/4 BHK + penthouses (1,400-4,500 sqft); possession Dec 2030.",
+   "color": "#22c55e"
   }
  ],
  "builders": {
@@ -1695,7 +1911,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 138,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated June 2026."
+  "count": 156,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 14 June 2026."
  }
 }
