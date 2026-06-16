@@ -254,6 +254,21 @@ input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:5
   .fab{display:inline-flex}
   #legendStack{max-width:46vw;top:10px;right:10px}
 }
+/* project search (LLM + keyword) */
+.projSearch{display:flex;flex-direction:column;gap:6px;margin:0 0 7px;padding:6px 0 8px;border-bottom:1px dashed var(--line)}
+.projSearch .row{display:flex;gap:5px;align-items:center}
+.projSearch input{flex:1;min-width:0;padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font-size:11px}
+.projSearch input:focus{outline:none;border-color:var(--accent)}
+.projSearch .pbtn{flex:none;height:26px;padding:0 8px;border-radius:7px;border:1px solid var(--line);background:rgba(79,157,255,.10);color:var(--accent);font-size:10.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.projSearch .pbtn:hover{border-color:var(--accent);background:rgba(79,157,255,.18)}
+.projSearch .pbtn.busy{opacity:.55;cursor:wait}
+.projSearch .pbtn.clear{background:transparent;color:var(--muted);border-color:var(--line);padding:0 7px}
+.projSearch .meta{font-size:9.5px;color:var(--muted);min-height:12px;line-height:1.35}
+.projSearch .meta b{color:var(--txt);font-weight:600}
+.projSearch .meta .ai{color:var(--accent2)}
+.projSearch .meta .err{color:#ff8f8f}
+.projpin.dim>div{opacity:.18;filter:saturate(.3)}
+.projpin.hit>div{box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 4px rgba(255,206,122,.55);transform:rotate(45deg) scale(1.25)}
 </style>
 <meta name="description" content="Interactive Bengaluru (Bangalore) property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, new-launch projects, and schools, water &amp; safety livability across 127 localities. A Zillow-style heatmap for Bangalore."/>
 <meta name="keywords" content="Bangalore property prices, Bengaluru real estate, property price map, Namma Metro map, Bangalore localities, price per sqft, Whitefield, Sarjapur, Electronic City, HSR Layout, property heatmap, Cauvery water, BengaluruValue"/>

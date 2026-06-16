@@ -331,12 +331,14 @@ function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
 map.createPane('projectPane');map.getPane('projectPane').style.zIndex=520;
 let projectsOn=false;
 const projectLayers=[];
+const projectIndex=[];   // parallel to projectLayers, holds the source project object
 PROJECTS.projects.forEach(pr=>{
   const icon=L.divIcon({className:'projpin',iconSize:[12,12],html:'<div style="width:11px;height:11px;background:'+pr.color+';border:1.5px solid #fff;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(0,0,0,.55)"></div>'});
   const mk=L.marker([pr.lat,pr.lng],{pane:'projectPane',icon});
   mk.bindTooltip('<b>'+pr.name+'</b><br>'+pr.builder+' · '+pr.status,{className:'pin',direction:'top',offset:[0,-6]});
   mk.on('click',()=>showProject(pr));
   projectLayers.push(mk);
+  projectIndex.push(pr);
 });
 function showProject(pr){
   document.getElementById('detail').classList.add('open');
@@ -358,14 +360,133 @@ function showProject(pr){
   refreshMap();refreshList();syncDetailActions();
   showProjectRoutes(pr);
 }
-function refreshProjects(){projectLayers.forEach(mk=>{if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}else if(map.hasLayer(mk))mk.remove();});}
+// projSearch state: null = no filter; Set<name> = only these projects match
+let projMatchSet=null, projSearchMode='', projSearchReason='';
+function projMatches(pr){return projMatchSet===null||projMatchSet.has(pr.name);}
+function refreshProjects(){
+  projectLayers.forEach((mk,i)=>{
+    const pr=projectIndex[i];
+    const hit=projMatchSet!==null&&projMatchSet.has(pr.name);
+    const dim=projMatchSet!==null&&!hit;
+    const el=mk.getElement&&mk.getElement();
+    if(el){el.classList.toggle('hit',hit);el.classList.toggle('dim',dim);}
+    if(projectsOn){if(!map.hasLayer(mk))mk.addTo(map);}
+    else if(map.hasLayer(mk))mk.remove();
+  });
+  // pin classes set on next paint for markers added just now
+  if(projectsOn)setTimeout(()=>{
+    projectLayers.forEach((mk,i)=>{const el=mk.getElement&&mk.getElement();if(!el)return;
+      const pr=projectIndex[i];
+      const hit=projMatchSet!==null&&projMatchSet.has(pr.name);
+      const dim=projMatchSet!==null&&!hit;
+      el.classList.toggle('hit',hit);el.classList.toggle('dim',dim);});},0);
+}
+
+// --- local keyword fuzzy match (free, instant, handles typos a bit via token-startsWith) ---
+function localFuzzy(q){
+  const tokens=q.toLowerCase().split(/\s+/).filter(t=>t.length>=2);
+  if(tokens.length===0)return null;
+  const hits=new Set();
+  PROJECTS.projects.forEach(pr=>{
+    const hay=(pr.name+' '+pr.builder+' '+pr.loc+' '+pr.type+' '+pr.status+' '+pr.price+' '+(pr.note||'')).toLowerCase();
+    if(tokens.every(t=>hay.includes(t)))hits.add(pr.name);
+  });
+  return hits;
+}
+
+function applyProjectSearch(matches,mode,reason){
+  projMatchSet=matches;projSearchMode=mode||'';projSearchReason=reason||'';
+  updateProjectMatchUi();refreshProjects();
+  // Ensure overlay is on if user searched
+  if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
+}
+// Light update — does NOT wipe innerHTML, so the input keeps focus while typing.
+function updateProjectMatchUi(){
+  const total=PROJECTS.projects.length;
+  const matchN=projMatchSet?projMatchSet.size:total;
+  const ltEl=document.getElementById('projLegendTitle');
+  if(ltEl)ltEl.textContent='🏗️ New builds — '+matchN+(projMatchSet?'/'+total:'')+' projects';
+  const metaEl=document.getElementById('projSearchMeta');
+  if(metaEl){
+    if(projMatchSet!==null){
+      const modeBadge=projSearchMode==='ai'?'<span class="ai">✦ AI</span> · ':(projSearchMode==='keyword'?'kw · ':'');
+      metaEl.innerHTML=modeBadge+'<b>'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>';
+    }else{
+      metaEl.innerHTML='Try: <i>near airport, under 1.5 Cr</i> · <i>luxury Whitefield</i> · <i>plots Devanahalli</i>';
+    }
+  }
+}
+function clearProjectSearch(){
+  const inp=document.getElementById('projSearchInp');
+  if(inp){inp.value='';inp.focus();}
+  applyProjectSearch(null,'','');
+}
+
+async function aiProjectSearch(){
+  const inp=document.getElementById('projSearchInp');
+  if(!inp)return;
+  const q=inp.value.trim();
+  if(q.length<2){applyProjectSearch(null,'','');return;}
+  const btn=document.getElementById('projAiBtn');
+  if(btn){btn.classList.add('busy');btn.textContent='✦ thinking…';}
+  try{
+    const r=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
+    if(!r.ok){
+      // graceful fallback to keyword if proxy missing / errored
+      const reason=r.status===503?'AI search not configured — using keyword match':('AI error '+r.status+' — using keyword match');
+      const set=localFuzzy(q)||new Set();
+      applyProjectSearch(set,'keyword',reason);
+      return;
+    }
+    const data=await r.json();
+    const names=Array.isArray(data.matches)?data.matches:[];
+    applyProjectSearch(new Set(names),'ai',data.reason||'');
+  }catch(e){
+    const set=localFuzzy(q)||new Set();
+    applyProjectSearch(set,'keyword','Network error — using keyword match');
+  }finally{
+    if(btn){btn.classList.remove('busy');btn.innerHTML='✦ Ask AI';}
+  }
+}
+
+// Build the legend ONCE at boot. After that we only update the count/meta line
+// so the search input never loses focus while typing.
 function buildProjectsLegend(){
   const b=PROJECTS.builders;
-  document.getElementById('projLegend').innerHTML='<div class="lt">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
-   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
-   Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
-   '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>';
+  document.getElementById('projLegend').innerHTML=
+    '<div class="lt" id="projLegendTitle">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
+    '<div class="projSearch">'+
+      '<div class="row">'+
+        '<input id="projSearchInp" type="text" placeholder="Search projects… (builder, locality, BHK)" maxlength="240" autocomplete="off"/>'+
+      '</div>'+
+      '<div class="row">'+
+        '<button id="projAiBtn" class="pbtn" title="Natural-language search via LLM">✦ Ask AI</button>'+
+        '<button class="pbtn clear" onclick="clearProjectSearch()" title="Clear search">clear</button>'+
+      '</div>'+
+      '<div class="meta" id="projSearchMeta">Try: <i>near airport, under 1.5 Cr</i> · <i>luxury Whitefield</i> · <i>plots Devanahalli</i></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
+    Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
+    '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>';
+  const inp=document.getElementById('projSearchInp');
+  if(inp){
+    // local fuzzy as you type (free, instant)
+    inp.addEventListener('input',()=>{
+      const q=inp.value.trim();
+      if(q.length<2){applyProjectSearch(null,'','');return;}
+      const hits=localFuzzy(q);
+      applyProjectSearch(hits||new Set(),'keyword','');
+    });
+    // Enter = LLM
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();aiProjectSearch();}});
+  }
+  const aiBtn=document.getElementById('projAiBtn');
+  if(aiBtn)aiBtn.addEventListener('click',aiProjectSearch);
 }
+
+// tiny HTML escape for the reason string
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
 document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);document.getElementById('projLegend').style.display=projectsOn?'block':'none';refreshProjects();};
 buildProjectsLegend();refreshProjects();
 
