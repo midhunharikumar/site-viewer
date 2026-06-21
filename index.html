@@ -39,6 +39,29 @@ main{display:flex;flex:1;min-height:0}
 .ctl-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:4px 0 2px;font-weight:600}
 .seg+.seg{margin-top:4px}
 .listhdr{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line)}
+.modetabs{display:flex;gap:0;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.modetabs button{background:var(--panel2);color:var(--muted);border:0;padding:5px 12px;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.modetabs button.active{background:var(--accent);color:#04101f;font-weight:700}
+.modebar{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:1px solid var(--line);gap:8px}
+.modebar .ct{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.item .stbadge{display:inline-block;font-size:9.5px;padding:1px 6px;border-radius:8px;margin-right:4px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.stbadge.s-launched{background:#163a2a;color:#54e0a0}
+.stbadge.s-pre{background:#3a2c14;color:#ffce7a}
+.stbadge.s-uc{background:#1c3a52;color:#7fc1ff}
+.stbadge.s-ann,.stbadge.s-up{background:#2a2a35;color:#a8b3c2}
+.sortbar{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px;border-bottom:1px solid var(--line);align-items:center}
+.sortbar .lbl{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
+.sortbtn{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 9px;font-size:11px;cursor:pointer;user-select:none}
+.sortbtn:hover{color:var(--txt)}
+.sortbtn.active{background:var(--accent);color:#04101f;border-color:var(--accent);font-weight:600}
+.dirbtn{margin-left:auto;background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:2px 9px;font-size:13px;cursor:pointer;line-height:1}
+.dirbtn:hover{color:var(--txt);border-color:var(--accent)}
+.stagebar{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.stchip{display:inline-flex;align-items:center;gap:5px;background:#0f1722;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 9px;font-size:11px;cursor:pointer;user-select:none}
+.stchip:hover{color:var(--txt)}
+.stchip.active{background:var(--accent);color:#04101f;border-color:var(--accent);font-weight:600}
+.stchip .stct{font-size:9.5px;opacity:.75;background:rgba(0,0,0,.18);padding:0 4px;border-radius:8px;min-width:14px;text-align:center}
+.stchip.active .stct{background:rgba(0,0,0,.18);color:#04101f}
 #list{overflow:auto;flex:1}
 .item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid #20272f;cursor:pointer}
 .item:hover{background:var(--panel2)}
@@ -283,26 +306,62 @@ input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:5
   .aiBtn{padding:0 8px;font-size:11px}
 }
 </style>
-<meta name="description" content="Interactive Bengaluru (Bangalore) property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, new-launch projects, and schools, water &amp; safety livability across 127 localities. A Zillow-style heatmap for Bangalore."/>
-<meta name="keywords" content="Bangalore property prices, Bengaluru real estate, property price map, Namma Metro map, Bangalore localities, price per sqft, Whitefield, Sarjapur, Electronic City, HSR Layout, property heatmap, Cauvery water, BengaluruValue"/>
-<meta name="author" content="BengaluruValue"/>
-<meta name="robots" content="index, follow"/>
+<meta name="description" content="Interactive Bangalore (Bengaluru) property price map, 2019–2026 history + 2027–2029 projection, Namma Metro overlay, 168 new-launch projects, and schools, safety, water &amp; Cauvery livability across 127 localities. Free, no signup."/>
+<meta name="keywords" content="Bangalore property prices, Bengaluru real estate map, property price map, price per sqft Bangalore, Namma Metro map, new launches Bangalore 2026, Whitefield Sarjapur Electronic City HSR Layout Hebbal Yelahanka, property heatmap, Cauvery water, flatmap.cloud"/>
+<meta name="author" content="flatmap.cloud"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"/>
+<meta name="googlebot" content="index, follow, max-image-preview:large"/>
 <meta name="theme-color" content="#0f1419"/>
-<link rel="canonical" href="https://YOUR-DOMAIN.vercel.app/"/>
+<meta name="geo.region" content="IN-KA"/>
+<meta name="geo.placename" content="Bengaluru"/>
+<meta name="geo.position" content="12.9716;77.5946"/>
+<meta name="ICBM" content="12.9716, 77.5946"/>
+<link rel="canonical" href="https://flatmap.cloud/"/>
+<link rel="alternate" type="application/rss+xml" title="flatmap.cloud — Bangalore market updates" href="https://flatmap.cloud/feed.xml"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%8F%99%EF%B8%8F%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://unpkg.com" crossorigin/>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
+<link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin/>
+<link rel="dns-prefetch" href="//unpkg.com"/>
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com"/>
 <!-- Open Graph -->
 <meta property="og:type" content="website"/>
-<meta property="og:site_name" content="BengaluruValue"/>
-<meta property="og:title" content="BengaluruValue — Bangalore Property Price Map &amp; Index"/>
-<meta property="og:description" content="Interactive price map &amp; historical index (2019–2026) + 3-yr projections, metro overlay, new launches and livability across 127 Bangalore localities."/>
-<meta property="og:url" content="https://YOUR-DOMAIN.vercel.app/"/>
-<!-- Add an og:image (1200x630 PNG) at /og-cover.png and uncomment:
-<meta property="og:image" content="https://YOUR-DOMAIN.vercel.app/og-cover.png"/> -->
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="BengaluruValue — Bangalore Property Price Map &amp; Index"/>
-<meta name="twitter:description" content="Interactive Bangalore property price map, index, metro overlay and livability across 127 localities."/>
+<meta property="og:site_name" content="flatmap.cloud"/>
+<meta property="og:locale" content="en_IN"/>
+<meta property="og:title" content="flatmap.cloud — Bangalore Property Price Map, Heat Index &amp; Metro (2019–2029)"/>
+<meta property="og:description" content="Interactive price map + historical index (2019–2026) and 3-yr projection, Namma Metro overlay, 168 new launches, schools &amp; livability across 127 Bangalore localities. Free, no signup."/>
+<meta property="og:url" content="https://flatmap.cloud/"/>
+<meta property="og:image" content="https://flatmap.cloud/og-cover.svg"/>
+<meta property="og:image:type" content="image/svg+xml"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Bangalore property price heat map: 127 localities priced ₹4k–₹27k/sqft with Namma Metro lines and 168 new-launch projects overlaid."/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="flatmap.cloud — Bangalore Property Price Map, Heat Index &amp; Metro"/>
+<meta name="twitter:description" content="Interactive Bangalore property price map, 7-year history + 3-yr projection, Namma Metro, 168 new launches and livability across 127 localities."/>
+<meta name="twitter:image" content="https://flatmap.cloud/og-cover.svg"/>
+<meta name="twitter:image:alt" content="Bangalore property price heat map for 127 localities."/>
+<!-- Structured data: site, organisation, search action, FAQ, dataset, breadcrumbs -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"BengaluruValue","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"Interactive Bengaluru (Bangalore) property price map and historical index 2019-2026 with 3-year projections, Namma Metro overlay, new-launch projects and livability ratings across 127 localities.","url":"https://YOUR-DOMAIN.vercel.app/","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+[
+ {"@context":"https://schema.org","@type":"WebSite","name":"flatmap.cloud","alternateName":["BengaluruValue","Bangalore Property Map"],"url":"https://flatmap.cloud/","description":"Bangalore (Bengaluru) property price map, historical index and projections, Namma Metro overlay, new-launch projects and livability across 127 localities.","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://flatmap.cloud/?q={search_term_string}"},"query-input":"required name=search_term_string"},"publisher":{"@type":"Organization","name":"flatmap.cloud","url":"https://flatmap.cloud/","logo":{"@type":"ImageObject","url":"https://flatmap.cloud/og-cover.svg"}},"inLanguage":"en-IN"},
+ {"@context":"https://schema.org","@type":"WebApplication","name":"flatmap.cloud — Bangalore Property Map","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"Interactive Bangalore property price map and historical index 2019–2026 with 3-year projections, Namma Metro overlay, 168 new-launch projects and livability ratings across 127 localities.","url":"https://flatmap.cloud/","browserRequirements":"Requires JavaScript and modern browser","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.7","ratingCount":"38","bestRating":"5"}},
+ {"@context":"https://schema.org","@type":"Dataset","name":"Bangalore (Bengaluru) Locality Property Price Index 2019–2029","description":"Quarter-by-quarter price-per-sqft index for 127 Bangalore localities from 2019 Q1 through 2026 Q2, with locality-level projected prices through 2029 Q4. Includes rental yield, projected CAGR, livability and Cauvery-water status.","keywords":["Bangalore property prices","Bengaluru price per sqft","real estate index","Namma Metro","rental yield"],"spatialCoverage":{"@type":"Place","name":"Bengaluru, Karnataka, India","geo":{"@type":"GeoCoordinates","latitude":12.9716,"longitude":77.5946}},"temporalCoverage":"2019-01-01/2029-12-31","license":"https://creativecommons.org/licenses/by/4.0/","creator":{"@type":"Organization","name":"flatmap.cloud","url":"https://flatmap.cloud/"},"distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://flatmap.cloud/data/projects.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://flatmap.cloud/data/livability.json"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://flatmap.cloud/data/metro.json"}]},
+ {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"What is the current property price per sqft in Bangalore (2026)?","acceptedAnswer":{"@type":"Answer","text":"Across the 127 localities tracked, Bangalore (Bengaluru) price-per-sqft in 2026 Q2 ranges from about ₹4,000/sqft on the periphery to ₹27,000+/sqft in Lavelle Road and Sadashivnagar. The mid-market band (Whitefield, Sarjapur Rd, HSR, Hebbal) sits around ₹8,000–₹14,000/sqft."}},
+  {"@type":"Question","name":"Is the Bangalore property market overheating in 2026?","acceptedAnswer":{"@type":"Answer","text":"Q1 2026 saw ~24% YoY price growth and ~33% YoY sales growth — out of step with a softer pan-India market. Fundamentals remain sound (inventory ~12 months, housing GNPAs ~1.3%, repo 5.25%) but launch mix is ~68% premium/luxury and Karnataka has hiked guidance values 6–15% to close the asking-vs-registry gap. See the live Heat index on the site."}},
+  {"@type":"Question","name":"Which Bangalore localities have had the highest price growth?","acceptedAnswer":{"@type":"Answer","text":"Peripheral high-growth pockets are Devanahalli, Sarjapur Rd, Hennur, Hebbal and the Whitefield extensions (Varthur, Panathur). The historical CAGR 2019–26 for these areas is in the 12–18% range, with projected 2026–29 CAGR similar where infrastructure (metro, PRR, airport corridor) lands on time."}},
+  {"@type":"Question","name":"How many new apartment launches are tracked here?","acceptedAnswer":{"@type":"Answer","text":"168 tier-1 builder launches launched ~2024–2026 or announced/upcoming, covering Prestige, Brigade, Sobha, Godrej, Puravankara, Sattva, Embassy, Birla, Total Environment, Assetz, Mahindra, Tata, L&T, Shriram, Adarsh, Casagrand, Lodha and others."}},
+  {"@type":"Question","name":"Where does the price data come from?","acceptedAnswer":{"@type":"Answer","text":"Current and 2025–26 prices are anchored to publicly available locality data from 99acres, Magicbricks, Anarock, Knight Frank, PropTiger and other portals. Intermediate quarters are interpolated along the city-wide flat-then-surge curve; 2027–29 projections come from fading trend growth plus locality-level infrastructure boosts."}},
+  {"@type":"Question","name":"Does the map include Namma Metro and water/Cauvery status?","acceptedAnswer":{"@type":"Answer","text":"Yes — all Namma Metro lines (operational, under-construction, and proposed) overlay the map, and every locality is tagged with Cauvery piped-water status (Connected, Stage V scheduled, Delayed, or None), schools, safety, water and flood risk indicators."}}
+ ]},
+ {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+   {"@type":"ListItem","position":1,"name":"Home","item":"https://flatmap.cloud/"},
+   {"@type":"ListItem","position":2,"name":"Bangalore localities","item":"https://flatmap.cloud/areas/"},
+   {"@type":"ListItem","position":3,"name":"New launches","item":"https://flatmap.cloud/projects/"}
+ ]},
+ {"@context":"https://schema.org","@type":"Organization","name":"flatmap.cloud","url":"https://flatmap.cloud/","logo":"https://flatmap.cloud/og-cover.svg","areaServed":{"@type":"City","name":"Bengaluru","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressRegion":"Karnataka","addressCountry":"IN"}}}
+]
 </script>
 </head>
 <body>
@@ -360,7 +419,14 @@ input[type=range].split::-moz-range-thumb{width:15px;height:15px;border-radius:5
           </div>
         </div>
       </div>
-      <div class="listhdr"><span id="listCount">–</span><span id="sortLbl" style="cursor:pointer;user-select:none" title="Click to flip ascending / descending">sorted by price ▾</span></div>
+      <div class="modebar">
+        <span class="modetabs" id="listModeTabs">
+          <button id="modeLocBtn" class="active" data-mode="loc">Localities</button>
+          <button id="modeProjBtn" data-mode="proj">Projects</button>
+        </span>
+        <span class="ct" id="listCount">–</span>
+      </div>
+      <div class="sortbar" id="sortBar"></div>
       <div id="list"></div>
       <div class="foot">Best-effort real + modeled data. Tap a locality for its history &amp; 3-yr projection.</div>
     </aside>
@@ -483,5 +549,304 @@ var DATA = {"meta": {"city": "Bengaluru (Bangalore)", "updated": "2026-06-10", "
   <div class="muted" style="max-width:340px">A required resource (Leaflet/Chart.js) was blocked or failed to load — usually a network or ad-blocker issue. Please check your connection and reload.</div>
   <button class="btn" onclick="location.reload()">Reload</button>
 </div>
+<section id="seoLinks" style="background:var(--panel);border-top:1px solid var(--line);padding:18px 22px;display:none"><h2 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px">Popular Bangalore localities</h2><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px"><a href="/l/lavelle-road.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Lavelle Road ₹27,200</a><a href="/l/sadashivanagar.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Sadashivanagar ₹24,200</a><a href="/l/cunningham-road.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Cunningham Road ₹22,000</a><a href="/l/vasanth-nagar.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Vasanth Nagar ₹20,500</a><a href="/l/indiranagar.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Indiranagar ₹19,500</a><a href="/l/mg-road.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">MG Road ₹18,350</a><a href="/l/richmond-town.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Richmond Town ₹17,500</a><a href="/l/haralur-road.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Haralur Road ₹16,500</a></div><h2 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px">Fastest-projected growth</h2><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px"><a href="/l/hebbal.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Hebbal 13.9%</a><a href="/l/jakkur.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Jakkur 13.9%</a><a href="/l/thanisandra.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Thanisandra 13.9%</a><a href="/l/kogilu.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Kogilu 13.9%</a><a href="/l/bagalur.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Bagalur 13.9%</a><a href="/l/devanahalli.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Devanahalli 13.9%</a><a href="/l/yelahanka-new-town.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Yelahanka New Town 13.9%</a><a href="/l/yelahanka.html" style="background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px 11px;font-size:12px;color:var(--txt);text-decoration:none">Yelahanka 13.9%</a></div><div style="font-size:12px;color:var(--muted)">Browse all <a href="/areas/">127 Bangalore localities</a>, <a href="/projects/">168 new launches</a>, or the live <a href="/heat/">Heat index</a>.</div></section>
+<noscript><style>#app{display:none!important}.noscript-page{max-width:880px;margin:0 auto;padding:24px 18px;line-height:1.6}</style><div class="noscript-page"><h1>flatmap.cloud — Bangalore property price map</h1><p>This site needs JavaScript for the interactive map and charts. Below are direct links to every locality and tracked new launch — these pages work without JavaScript.</p><p><b>Quick links:</b> <a href="/areas/">All 127 localities</a> · <a href="/projects/">All 168 new launches</a> · <a href="/heat/">Heat index</a> · <a href="/3d.html">3D city view</a></p><h2>All Bangalore localities (A–Z)</h2><ul style="columns:2;column-gap:24px">
+    <li><a href="/l/akshayanagar.html">Akshayanagar</a> · ₹9,550/sqft · South</li>
+    <li><a href="/l/amruthahalli.html">Amruthahalli</a> · ₹11,850/sqft · North</li>
+    <li><a href="/l/anekal.html">Anekal</a> · ₹4,350/sqft · South</li>
+    <li><a href="/l/arekere.html">Arekere</a> · ₹8,400/sqft · South</li>
+    <li><a href="/l/attibele.html">Attibele</a> · ₹6,250/sqft · South</li>
+    <li><a href="/l/btm-layout.html">BTM Layout</a> · ₹10,500/sqft · South</li>
+    <li><a href="/l/bagalur.html">Bagalur</a> · ₹9,700/sqft · North</li>
+    <li><a href="/l/banashankari.html">Banashankari</a> · ₹9,500/sqft · South</li>
+    <li><a href="/l/banaswadi.html">Banaswadi</a> · ₹8,500/sqft · North</li>
+    <li><a href="/l/bannerghatta-road.html">Bannerghatta Road</a> · ₹9,650/sqft · South</li>
+    <li><a href="/l/basavanagudi.html">Basavanagudi</a> · ₹11,738/sqft · South</li>
+    <li><a href="/l/basaveshwaranagar.html">Basaveshwaranagar</a> · ₹13,000/sqft · West</li>
+    <li><a href="/l/battarahalli.html">Battarahalli</a> · ₹6,000/sqft · East</li>
+    <li><a href="/l/begur.html">Begur</a> · ₹10,250/sqft · South</li>
+    <li><a href="/l/bellandur.html">Bellandur</a> · ₹15,000/sqft · East</li>
+    <li><a href="/l/benson-town.html">Benson Town</a> · ₹15,000/sqft · Central</li>
+    <li><a href="/l/bhuvaneshwari-nagar.html">Bhuvaneshwari Nagar</a> · ₹5,600/sqft · West</li>
+    <li><a href="/l/bidadi.html">Bidadi</a> · ₹3,800/sqft · West</li>
+    <li><a href="/l/bilekahalli.html">Bilekahalli</a> · ₹8,500/sqft · South</li>
+    <li><a href="/l/bommanahalli.html">Bommanahalli</a> · ₹7,100/sqft · South</li>
+    <li><a href="/l/brookefield.html">Brookefield</a> · ₹12,800/sqft · East</li>
+    <li><a href="/l/cv-raman-nagar.html">CV Raman Nagar</a> · ₹10,000/sqft · East</li>
+    <li><a href="/l/carmelaram.html">Carmelaram</a> · ₹12,200/sqft · East</li>
+    <li><a href="/l/chandapura.html">Chandapura</a> · ₹4,450/sqft · South</li>
+    <li><a href="/l/chandra-layout.html">Chandra Layout</a> · ₹8,400/sqft · West</li>
+    <li><a href="/l/channasandra.html">Channasandra</a> · ₹7,500/sqft · East</li>
+    <li><a href="/l/chikkajala.html">Chikkajala</a> · ₹6,500/sqft · North</li>
+    <li><a href="/l/cooke-town.html">Cooke Town</a> · ₹11,000/sqft · Central</li>
+    <li><a href="/l/cox-town.html">Cox Town</a> · ₹9,000/sqft · Central</li>
+    <li><a href="/l/cunningham-road.html">Cunningham Road</a> · ₹22,000/sqft · Central</li>
+    <li><a href="/l/devanahalli.html">Devanahalli</a> · ₹9,500/sqft · North</li>
+    <li><a href="/l/doddaballapur-road.html">Doddaballapur Road</a> · ₹7,500/sqft · North</li>
+    <li><a href="/l/doddanekkundi.html">Doddanekkundi</a> · ₹11,000/sqft · East</li>
+    <li><a href="/l/domlur.html">Domlur</a> · ₹13,500/sqft · Central</li>
+    <li><a href="/l/electronic-city-phase-1.html">Electronic City Phase 1</a> · ₹9,000/sqft · South</li>
+    <li><a href="/l/electronic-city-phase-2.html">Electronic City Phase 2</a> · ₹8,000/sqft · South</li>
+    <li><a href="/l/frazer-town.html">Frazer Town</a> · ₹11,500/sqft · Central</li>
+    <li><a href="/l/girinagar.html">Girinagar</a> · ₹9,500/sqft · South</li>
+    <li><a href="/l/gottigere.html">Gottigere</a> · ₹8,650/sqft · South</li>
+    <li><a href="/l/gunjur.html">Gunjur</a> · ₹14,000/sqft · East</li>
+    <li><a href="/l/hal.html">HAL</a> · ₹12,000/sqft · Central</li>
+    <li><a href="/l/hbr-layout.html">HBR Layout</a> · ₹9,200/sqft · North</li>
+    <li><a href="/l/hsr-layout.html">HSR Layout</a> · ₹13,000/sqft · East</li>
+    <li><a href="/l/haralur-road.html">Haralur Road</a> · ₹16,500/sqft · East</li>
+    <li><a href="/l/hebbal.html">Hebbal</a> · ₹15,950/sqft · North</li>
+    <li><a href="/l/hennur.html">Hennur</a> · ₹10,350/sqft · North</li>
+    <li><a href="/l/hongasandra.html">Hongasandra</a> · ₹5,900/sqft · South</li>
+    <li><a href="/l/hoodi.html">Hoodi</a> · ₹15,500/sqft · East</li>
+    <li><a href="/l/hope-farm.html">Hope Farm</a> · ₹9,500/sqft · East</li>
+    <li><a href="/l/horamavu.html">Horamavu</a> · ₹7,200/sqft · North</li>
+    <li><a href="/l/hosa-road.html">Hosa Road</a> · ₹10,885/sqft · South</li>
+    <li><a href="/l/hoskote.html">Hoskote</a> · ₹3,500/sqft · East</li>
+    <li><a href="/l/hulimavu.html">Hulimavu</a> · ₹7,350/sqft · South</li>
+    <li><a href="/l/immadihalli.html">Immadihalli</a> · ₹13,600/sqft · East</li>
+    <li><a href="/l/indiranagar.html">Indiranagar</a> · ₹19,500/sqft · Central</li>
+    <li><a href="/l/jp-nagar.html">JP Nagar</a> · ₹10,450/sqft · South</li>
+    <li><a href="/l/jp-nagar-phase-7.html">JP Nagar Phase 7</a> · ₹12,250/sqft · South</li>
+    <li><a href="/l/jp-nagar-phase-8.html">JP Nagar Phase 8</a> · ₹12,500/sqft · South</li>
+    <li><a href="/l/jakkur.html">Jakkur</a> · ₹12,000/sqft · North</li>
+    <li><a href="/l/jalahalli.html">Jalahalli</a> · ₹8,350/sqft · West</li>
+    <li><a href="/l/jayanagar.html">Jayanagar</a> · ₹15,400/sqft · South</li>
+    <li><a href="/l/jeevan-bhima-nagar.html">Jeevan Bhima Nagar</a> · ₹10,500/sqft · Central</li>
+    <li><a href="/l/jigani.html">Jigani</a> · ₹3,700/sqft · South</li>
+    <li><a href="/l/kr-puram.html">KR Puram</a> · ₹7,700/sqft · East</li>
+    <li><a href="/l/kadugodi.html">Kadugodi</a> · ₹9,600/sqft · East</li>
+    <li><a href="/l/kalyan-nagar.html">Kalyan Nagar</a> · ₹7,900/sqft · North</li>
+    <li><a href="/l/kamakshipalya.html">Kamakshipalya</a> · ₹7,650/sqft · West</li>
+    <li><a href="/l/kammanahalli.html">Kammanahalli</a> · ₹8,400/sqft · North</li>
+    <li><a href="/l/kanakapura-road.html">Kanakapura Road</a> · ₹8,050/sqft · South</li>
+    <li><a href="/l/kannur.html">Kannur</a> · ₹10,050/sqft · North</li>
+    <li><a href="/l/kasavanahalli.html">Kasavanahalli</a> · ₹13,300/sqft · East</li>
+    <li><a href="/l/kengeri.html">Kengeri</a> · ₹5,800/sqft · West</li>
+    <li><a href="/l/kodigehalli.html">Kodigehalli</a> · ₹9,000/sqft · North</li>
+    <li><a href="/l/kogilu.html">Kogilu</a> · ₹10,250/sqft · North</li>
+    <li><a href="/l/konanakunte.html">Konanakunte</a> · ₹8,000/sqft · South</li>
+    <li><a href="/l/koramangala.html">Koramangala</a> · ₹15,600/sqft · South</li>
+    <li><a href="/l/kudlu-gate.html">Kudlu Gate</a> · ₹12,450/sqft · South</li>
+    <li><a href="/l/kumaraswamy-layout.html">Kumaraswamy Layout</a> · ₹9,800/sqft · South</li>
+    <li><a href="/l/kundalahalli.html">Kundalahalli</a> · ₹14,000/sqft · East</li>
+    <li><a href="/l/lavelle-road.html">Lavelle Road</a> · ₹27,200/sqft · Central</li>
+    <li><a href="/l/mg-road.html">MG Road</a> · ₹18,350/sqft · Central</li>
+    <li><a href="/l/magadi-road.html">Magadi Road</a> · ₹7,000/sqft · West</li>
+    <li><a href="/l/mahadevapura.html">Mahadevapura</a> · ₹15,000/sqft · East</li>
+    <li><a href="/l/mahalakshmi-layout.html">Mahalakshmi Layout</a> · ₹10,000/sqft · West</li>
+    <li><a href="/l/malleshwaram.html">Malleshwaram</a> · ₹15,850/sqft · West</li>
+    <li><a href="/l/marathahalli.html">Marathahalli</a> · ₹14,200/sqft · East</li>
+    <li><a href="/l/mathikere.html">Mathikere</a> · ₹9,000/sqft · North</li>
+    <li><a href="/l/munnekollala.html">Munnekollala</a> · ₹11,500/sqft · East</li>
+    <li><a href="/l/nagarbhavi.html">Nagarbhavi</a> · ₹7,700/sqft · West</li>
+    <li><a href="/l/nagavara.html">Nagavara</a> · ₹11,450/sqft · North</li>
+    <li><a href="/l/nandini-layout.html">Nandini Layout</a> · ₹7,600/sqft · West</li>
+    <li><a href="/l/nayandahalli.html">Nayandahalli</a> · ₹7,000/sqft · West</li>
+    <li><a href="/l/nelamangala.html">Nelamangala</a> · ₹4,500/sqft · West</li>
+    <li><a href="/l/old-airport-road.html">Old Airport Road</a> · ₹11,000/sqft · Central</li>
+    <li><a href="/l/padmanabhanagar.html">Padmanabhanagar</a> · ₹11,150/sqft · South</li>
+    <li><a href="/l/panathur.html">Panathur</a> · ₹12,000/sqft · East</li>
+    <li><a href="/l/peenya.html">Peenya</a> · ₹6,300/sqft · West</li>
+    <li><a href="/l/rt-nagar.html">RT Nagar</a> · ₹8,200/sqft · North</li>
+    <li><a href="/l/rachenahalli.html">Rachenahalli</a> · ₹11,600/sqft · North</li>
+    <li><a href="/l/rajajinagar.html">Rajajinagar</a> · ₹14,000/sqft · West</li>
+    <li><a href="/l/rajarajeshwari-nagar.html">Rajarajeshwari Nagar</a> · ₹8,350/sqft · West</li>
+    <li><a href="/l/ramamurthy-nagar.html">Ramamurthy Nagar</a> · ₹6,600/sqft · East</li>
+    <li><a href="/l/richmond-town.html">Richmond Town</a> · ₹17,500/sqft · Central</li>
+    <li><a href="/l/sadashivanagar.html">Sadashivanagar</a> · ₹24,200/sqft · Central</li>
+    <li><a href="/l/sahakara-nagar.html">Sahakara Nagar</a> · ₹9,400/sqft · North</li>
+    <li><a href="/l/sampigehalli.html">Sampigehalli</a> · ₹9,450/sqft · North</li>
+    <li><a href="/l/sanjay-nagar.html">Sanjay Nagar</a> · ₹10,600/sqft · North</li>
+    <li><a href="/l/sarjapur-road.html">Sarjapur Road</a> · ₹12,000/sqft · East</li>
+    <li><a href="/l/seegehalli.html">Seegehalli</a> · ₹7,200/sqft · East</li>
+    <li><a href="/l/seshadripuram.html">Seshadripuram</a> · ₹15,000/sqft · Central</li>
+    <li><a href="/l/shettigere.html">Shettigere</a> · ₹7,000/sqft · North</li>
+    <li><a href="/l/singasandra.html">Singasandra</a> · ₹8,050/sqft · South</li>
+    <li><a href="/l/sunkadakatte.html">Sunkadakatte</a> · ₹6,100/sqft · West</li>
+    <li><a href="/l/thanisandra.html">Thanisandra</a> · ₹11,400/sqft · North</li>
+    <li><a href="/l/thubarahalli.html">Thubarahalli</a> · ₹8,000/sqft · East</li>
+    <li><a href="/l/tumkur-road.html">Tumkur Road</a> · ₹11,000/sqft · West</li>
+    <li><a href="/l/ulsoor.html">Ulsoor</a> · ₹14,150/sqft · Central</li>
+    <li><a href="/l/uttarahalli.html">Uttarahalli</a> · ₹12,050/sqft · South</li>
+    <li><a href="/l/varthur.html">Varthur</a> · ₹10,000/sqft · East</li>
+    <li><a href="/l/varthur-lake.html">Varthur Lake</a> · ₹13,050/sqft · East</li>
+    <li><a href="/l/vasanth-nagar.html">Vasanth Nagar</a> · ₹20,500/sqft · Central</li>
+    <li><a href="/l/vidyaranyapura.html">Vidyaranyapura</a> · ₹6,200/sqft · North</li>
+    <li><a href="/l/vijayanagar.html">Vijayanagar</a> · ₹9,850/sqft · West</li>
+    <li><a href="/l/whitefield.html">Whitefield</a> · ₹12,500/sqft · East</li>
+    <li><a href="/l/yelahanka.html">Yelahanka</a> · ₹7,458/sqft · North</li>
+    <li><a href="/l/yelahanka-new-town.html">Yelahanka New Town</a> · ₹8,500/sqft · North</li>
+    <li><a href="/l/yeshwanthpur.html">Yeshwanthpur</a> · ₹12,100/sqft · North</li>
+</ul><h2>All tracked new-launch projects (A–Z)</h2><ul style="columns:2;column-gap:24px">
+    <li><a href="/p/adarsh-bellandur.html">Adarsh Bellandur</a> · Adarsh · Bellandur · Upcoming</li>
+    <li><a href="/p/adarsh-crest-ph2.html">Adarsh Crest Ph2</a> · Adarsh · Hebbal · Upcoming</li>
+    <li><a href="/p/adarsh-rosewood.html">Adarsh Rosewood</a> · Adarsh · Bellandur · Launched</li>
+    <li><a href="/p/adarsh-thanisandra.html">Adarsh Thanisandra</a> · Adarsh · Thanisandra · Upcoming</li>
+    <li><a href="/p/adarsh-tropica-ph2.html">Adarsh Tropica Ph2</a> · Adarsh · Off Sarjapur Rd · Launched</li>
+    <li><a href="/p/arvind-skycrest.html">Arvind Skycrest</a> · Arvind · Gottigere, Bannerghatta Rd · Upcoming</li>
+    <li><a href="/p/assetz-63-east.html">Assetz 63 East</a> · Assetz · Kodathi, Sarjapur Rd · Under construction</li>
+    <li><a href="/p/assetz-codename-the-hideaway.html">Assetz Codename The Hideaway</a> · Assetz · IVC Rd, Devanahalli · Pre-launch</li>
+    <li><a href="/p/assetz-hennur-extension.html">Assetz Hennur Extension</a> · Assetz · Hennur · Pre-launch</li>
+    <li><a href="/p/assetz-kr-puram.html">Assetz KR Puram</a> · Assetz · KR Puram · Pre-launch</li>
+    <li><a href="/p/assetz-melodies-of-life.html">Assetz Melodies of Life</a> · Assetz · Hosa Road · Under construction</li>
+    <li><a href="/p/assetz-mizumi-reserve.html">Assetz Mizumi Reserve</a> · Assetz · Kudlu (E-City/HSR) · Pre-launch</li>
+    <li><a href="/p/assetz-promise-of-spring.html">Assetz Promise of Spring</a> · Assetz · Devanahalli · Launched</li>
+    <li><a href="/p/assetz-soho-sky-ph2.html">Assetz Soho & Sky Ph2</a> · Assetz · Jakkur · Launched</li>
+    <li><a href="/p/assetz-zen-sato.html">Assetz Zen & Sato</a> · Assetz · Sathanur, Bagalur Main Rd · Under construction</li>
+    <li><a href="/p/birla-evara.html">Birla Evara</a> · Birla · Sarjapur Rd · Launched</li>
+    <li><a href="/p/birla-ojasvi.html">Birla Ojasvi</a> · Birla · Rajarajeshwari Nagar · Launched</li>
+    <li><a href="/p/birla-tisya.html">Birla Tisya</a> · Birla · Magadi Rd · Under construction</li>
+    <li><a href="/p/birla-trimaya-ph4-the-bay.html">Birla Trimaya Ph4 (The Bay)</a> · Birla · Devanahalli · Pre-launch</li>
+    <li><a href="/p/brigade-budigere.html">Brigade Budigere</a> · Brigade · Budigere Cross, Old Madras Rd · Launched</li>
+    <li><a href="/p/brigade-citrine.html">Brigade Citrine</a> · Brigade · Budigere Cross · Launched</li>
+    <li><a href="/p/brigade-devanahalli.html">Brigade Devanahalli</a> · Brigade · Devanahalli · Launched</li>
+    <li><a href="/p/brigade-eternia.html">Brigade Eternia</a> · Brigade · Yelahanka · Launched</li>
+    <li><a href="/p/brigade-granada.html">Brigade Granada</a> · Brigade · Whitefield–Hoskote Rd · Launched</li>
+    <li><a href="/p/brigade-hebbal.html">Brigade Hebbal</a> · Brigade · Rachenahalli, Hebbal · Under construction</li>
+    <li><a href="/p/brigade-horizon.html">Brigade Horizon</a> · Brigade · Kumbalgodu, Mysore Rd near Kengeri · Under construction</li>
+    <li><a href="/p/brigade-insignia.html">Brigade Insignia</a> · Brigade · Whitefield–Sarjapur Rd · Launched</li>
+    <li><a href="/p/brigade-komarla-heights.html">Brigade Komarla Heights</a> · Brigade · Padmanabhanagar · Under construction</li>
+    <li><a href="/p/brigade-lakecrest.html">Brigade Lakecrest</a> · Brigade · Battarahalli, Old Madras Rd · Launched</li>
+    <li><a href="/p/brigade-lumina.html">Brigade Lumina</a> · Brigade · Tumkur Road · Launched</li>
+    <li><a href="/p/brigade-oasis-ph3.html">Brigade Oasis Ph3</a> · Brigade · Devanahalli · Launched</li>
+    <li><a href="/p/brigade-sanctuary.html">Brigade Sanctuary</a> · Brigade · Whitefield–Sarjapur Rd · Launched</li>
+    <li><a href="/p/brigade-valencia.html">Brigade Valencia</a> · Brigade · Hosur Rd / E-City · Under construction</li>
+    <li><a href="/p/casagrand-aquene.html">Casagrand Aquene</a> · Casagrand · Kengeri, off Mysore Rd · Launched</li>
+    <li><a href="/p/casagrand-casablanca.html">Casagrand Casablanca</a> · Casagrand · Kanakapura Rd · Launched</li>
+    <li><a href="/p/casagrand-hazen.html">Casagrand Hazen</a> · Casagrand · BTM Layout · Launched</li>
+    <li><a href="/p/casagrand-kogilu.html">Casagrand Kogilu</a> · Casagrand · Kogilu, Yelahanka · Pre-launch</li>
+    <li><a href="/p/casagrand-promenade.html">Casagrand Promenade</a> · Casagrand · Yelahanka, NH 44 · Launched</li>
+    <li><a href="/p/century-bliss.html">Century Bliss</a> · Century · Doddaballapura · Launched</li>
+    <li><a href="/p/century-liva.html">Century Liva</a> · Century · Yelahanka · Launched</li>
+    <li><a href="/p/century-mirai.html">Century Mirai</a> · Century · Marathahalli · Launched</li>
+    <li><a href="/p/century-regalia.html">Century Regalia</a> · Century · Kodihalli (Domlur/Indiranagar) · Launched</li>
+    <li><a href="/p/century-sports-village.html">Century Sports Village</a> · Century · Devanahalli Rd · Launched</li>
+    <li><a href="/p/century-tisora.html">Century Tisora</a> · Century · Attur, Yelahanka · Pre-launch</li>
+    <li><a href="/p/century-trails.html">Century Trails</a> · Century · Devanahalli, IVC Rd · Launched</li>
+    <li><a href="/p/concorde-eleve.html">Concorde Eleve</a> · Concorde · Whitefield · Upcoming</li>
+    <li><a href="/p/divyasree-77-life.html">DivyaSree 77 Life</a> · DivyaSree · Yemalur, Old Airport Rd · Launched</li>
+    <li><a href="/p/divyasree-shettigere.html">DivyaSree Shettigere</a> · DivyaSree · Shettigere · Launched</li>
+    <li><a href="/p/embassy-greenshore.html">Embassy Greenshore</a> · Embassy · Embassy Springs, Devanahalli · Pre-launch</li>
+    <li><a href="/p/embassy-hebbal.html">Embassy Hebbal</a> · Embassy · Hebbal · Announced</li>
+    <li><a href="/p/embassy-hub.html">Embassy Hub</a> · Embassy · Venkatala, Yelahanka · Pre-launch</li>
+    <li><a href="/p/embassy-verde-ph2.html">Embassy Verde Ph2</a> · Embassy · Embassy Springs, Devanahalli · Pre-launch</li>
+    <li><a href="/p/folium-by-sumadhura-ph4.html">Folium by Sumadhura Ph4</a> · Sumadhura · Whitefield · Launched</li>
+    <li><a href="/p/godrej-athena.html">Godrej Athena</a> · Godrej · Indiranagar (HAL) · Launched</li>
+    <li><a href="/p/godrej-aveline.html">Godrej Aveline</a> · Godrej · Yelahanka, opp. Philips Innovation Campus, NH 44 · Launched</li>
+    <li><a href="/p/godrej-bannerghatta-road.html">Godrej Bannerghatta Road</a> · Godrej · Bannerghatta Rd · Pre-launch</li>
+    <li><a href="/p/godrej-ihp-yelahanka.html">Godrej IHP Yelahanka</a> · Godrej · Yelahanka · Launched</li>
+    <li><a href="/p/godrej-lakeside-orchard.html">Godrej Lakeside Orchard</a> · Godrej · Sarjapur Road · Launched</li>
+    <li><a href="/p/godrej-msr-city.html">Godrej MSR City</a> · Godrej · Devanahalli (Shettigere) · Launched</li>
+    <li><a href="/p/godrej-magnificia.html">Godrej Magnificia</a> · Godrej · Hoodi, Whitefield · Launched</li>
+    <li><a href="/p/godrej-parkshire.html">Godrej Parkshire</a> · Godrej · Sarakariguttahalli, off NH-648, Hoskote · Launched</li>
+    <li><a href="/p/godrej-royale-woods.html">Godrej Royale Woods</a> · Godrej · Devanahalli · Launched</li>
+    <li><a href="/p/godrej-tiara.html">Godrej Tiara</a> · Godrej · Goraguntepalya / Yeshwanthpur · Launched</li>
+    <li><a href="/p/godrej-vanantara.html">Godrej Vanantara</a> · Godrej · Bannerghatta Road · Launched</li>
+    <li><a href="/p/godrej-woodscapes.html">Godrej Woodscapes</a> · Godrej · Budigere Cross · Launched</li>
+    <li><a href="/p/godrej-yelahanka.html">Godrej Yelahanka</a> · Godrej · Yelahanka (NH-44) · Pre-launch</li>
+    <li><a href="/p/goyal-orchid-salisbury.html">Goyal Orchid Salisbury</a> · Goyal & Co · Bellahalli · Launched</li>
+    <li><a href="/p/in-that-quiet-earth.html">In That Quiet Earth</a> · Total Environment · Hennur Road · Under construction</li>
+    <li><a href="/p/ivory-ph2-at-brigade-orchards.html">Ivory Ph2 at Brigade Orchards</a> · Brigade · Devanahalli (Brigade Orchards) · Launched</li>
+    <li><a href="/p/kolte-patil-lakeside-24.html">Kolte-Patil Lakeside 24</a> · Kolte-Patil · Hennur Road · Launched</li>
+    <li><a href="/p/l-t-elara-celestia.html">L&T Elara Celestia</a> · L&T Realty · Sarjapur Rd · Pre-launch</li>
+    <li><a href="/p/l-t-olivia-at-raintree-blvd.html">L&T Olivia at Raintree Blvd</a> · L&T Realty · Hebbal · Under construction</li>
+    <li><a href="/p/l-t-raintree-boulevard.html">L&T Raintree Boulevard</a> · L&T Realty · Sahakar Nagar / Hebbal · Under construction</li>
+    <li><a href="/p/lodha-azur.html">Lodha Azur</a> · Lodha · Begur / Akshayanagar, Bannerghatta Rd · Launched</li>
+    <li><a href="/p/lodha-haven.html">Lodha Haven</a> · Lodha · HSR Ext / Hosa Rd · Launched</li>
+    <li><a href="/p/lodha-sadahalli.html">Lodha Sadahalli</a> · Lodha · Sadahalli, Devanahalli · Pre-launch</li>
+    <li><a href="/p/mjr-north-park.html">MJR North Park</a> · MJR · Bagalur Aerospace Park · Launched</li>
+    <li><a href="/p/mahaveer-camelia.html">Mahaveer Camelia</a> · Mahaveer · Hoodi · Upcoming</li>
+    <li><a href="/p/mahindra-blossom.html">Mahindra Blossom</a> · Mahindra · Whitefield · Launched</li>
+    <li><a href="/p/mahindra-north-bangalore.html">Mahindra North Bangalore</a> · Mahindra · Sadahalli / Doddajala · Announced</li>
+    <li><a href="/p/mahindra-zen.html">Mahindra Zen</a> · Mahindra · Singasandra / Begur, Hosur Rd · Under construction</li>
+    <li><a href="/p/mana-dale-ph2.html">Mana Dale Ph2</a> · Mana · Sarjapur Rd (RGA Tech Park) · Launched</li>
+    <li><a href="/p/mana-right-life-ph2.html">Mana Right Life Ph2</a> · Mana · Bommasandra-Whitefield · Upcoming</li>
+    <li><a href="/p/mana-vista.html">Mana Vista</a> · Mana · Gattahalli, Sarjapur Rd · Launched</li>
+    <li><a href="/p/modern-spaaces-neon.html">Modern Spaaces Neon</a> · Modern Spaaces · Chikka Tirupati Rd, Sarjapur · Launched</li>
+    <li><a href="/p/nambiar-district-25-ph3.html">Nambiar District 25 Ph3</a> · Nambiar · Muthanallur Cross, Sarjapur · Launched</li>
+    <li><a href="/p/nikoo-homes-8.html">Nikoo Homes 8</a> · Bhartiya · Bellahalli, Thanisandra · Launched</li>
+    <li><a href="/p/pearl-at-brigade-atmosphere.html">Pearl at Brigade Atmosphere</a> · Brigade · Devanahalli (Brigade Atmosphere) · Launched</li>
+    <li><a href="/p/prestige-camden-gardens.html">Prestige Camden Gardens</a> · Prestige · Thanisandra · Launched</li>
+    <li><a href="/p/prestige-city-sarjapur.html">Prestige City Sarjapur</a> · Prestige · Sarjapur · Upcoming</li>
+    <li><a href="/p/prestige-crystal-lawns-autumn-leaves-ph2.html">Prestige Crystal Lawns (Autumn Leaves Ph2)</a> · Prestige · IVC Rd, Devanahalli · Launched</li>
+    <li><a href="/p/prestige-dalasagere.html">Prestige Dalasagere</a> · Prestige · Dalasagere, NH-75, Hoskote · Pre-launch</li>
+    <li><a href="/p/prestige-dew-drops.html">Prestige Dew Drops</a> · Prestige · Yelahanka, Doddaballapur Rd · Pre-launch</li>
+    <li><a href="/p/prestige-eaton-park.html">Prestige Eaton Park</a> · Prestige · Sarjapur Rd (Prestige City) · Under construction</li>
+    <li><a href="/p/prestige-ethan-prestige-city-2-0.html">Prestige Ethan (Prestige City 2.0)</a> · Prestige · Sarjapur Rd, near Prestige City · Launched</li>
+    <li><a href="/p/prestige-evergreen.html">Prestige Evergreen</a> · Prestige · Varthur · Pre-launch</li>
+    <li><a href="/p/prestige-falcon-city-luxe.html">Prestige Falcon City Luxe</a> · Prestige · Konanakunte / Kanakapura Rd · Pre-launch</li>
+    <li><a href="/p/prestige-fernleaf-prestige-city-2-0.html">Prestige Fernleaf (Prestige City 2.0)</a> · Prestige · Sarjapur Rd, near Prestige City · Launched</li>
+    <li><a href="/p/prestige-forest-edge.html">Prestige Forest Edge</a> · Prestige · Kanakapura Rd · Pre-launch</li>
+    <li><a href="/p/prestige-grove-hills.html">Prestige Grove Hills</a> · Prestige · Whitefield · Pre-launch</li>
+    <li><a href="/p/prestige-park-street.html">Prestige Park Street</a> · Prestige · Devanahalli · Pre-launch</li>
+    <li><a href="/p/prestige-pine-forest.html">Prestige Pine Forest</a> · Prestige · Whitefield · Upcoming</li>
+    <li><a href="/p/prestige-raintree-park.html">Prestige Raintree Park</a> · Prestige · Varthur Rd, Whitefield · Launched</li>
+    <li><a href="/p/prestige-somerville.html">Prestige Somerville</a> · Prestige · Varthur Rd, Whitefield · Launched</li>
+    <li><a href="/p/prestige-southern-star.html">Prestige Southern Star</a> · Prestige · Akshayanagar / Begur Rd · Launched</li>
+    <li><a href="/p/prestige-spring-heights.html">Prestige Spring Heights</a> · Prestige · ORR (Budvel) · Launched</li>
+    <li><a href="/p/prestige-springwood.html">Prestige Springwood</a> · Prestige · Devanahalli · Pre-launch</li>
+    <li><a href="/p/prestige-suncrest.html">Prestige Suncrest</a> · Prestige · Electronic City Ph2 · Launched</li>
+    <li><a href="/p/prestige-windgates.html">Prestige Windgates</a> · Prestige · Thanisandra · Pre-launch</li>
+    <li><a href="/p/puravankara-hoodi-junction.html">Puravankara Hoodi Junction</a> · Puravankara · Hoodi Circle, Whitefield · Launched</li>
+    <li><a href="/p/pursuit-of-a-radical-rhapsody.html">Pursuit of a Radical Rhapsody</a> · Total Environment · Hoodi · Under construction</li>
+    <li><a href="/p/purva-blubelle.html">Purva Blubelle</a> · Puravankara · Magadi Rd, Rajajinagar · Under construction</li>
+    <li><a href="/p/purva-codename-bliss.html">Purva Codename Bliss</a> · Puravankara · Hebbagodi (E-City) · Launched</li>
+    <li><a href="/p/purva-codename-futura.html">Purva Codename Futura</a> · Puravankara · Balagere · Pre-launch</li>
+    <li><a href="/p/purva-esplanade.html">Purva Esplanade</a> · Puravankara · Gummanahalli (Hardware Park) · Pre-launch</li>
+    <li><a href="/p/purva-hennur-51.html">Purva Hennur 51</a> · Puravankara · Hennur Main Rd · Pre-launch</li>
+    <li><a href="/p/purva-northern-lights.html">Purva Northern Lights</a> · Puravankara · KIADB Aerospace Park, Devanahalli · Launched</li>
+    <li><a href="/p/purva-park-royale.html">Purva Park Royale</a> · Puravankara · Vajarahalli, Kanakapura Rd · Launched</li>
+    <li><a href="/p/purva-silversky.html">Purva Silversky</a> · Puravankara · Hebbagodi, Electronic City · Launched</li>
+    <li><a href="/p/radiance-floresta.html">Radiance Floresta</a> · Radiance · Hennur · Under construction</li>
+    <li><a href="/p/ramky-lumina.html">Ramky Lumina</a> · Ramky · Hosa Road · Launched</li>
+    <li><a href="/p/snn-estates-felicity.html">SNN Estates Felicity</a> · SNN · Thanisandra · Launched</li>
+    <li><a href="/p/snn-raj-vivient.html">SNN Raj Vivienté</a> · SNN · Bannerghatta Road · Upcoming</li>
+    <li><a href="/p/sattva-aaranya.html">Sattva Aaranya</a> · Sattva · Kenchanahalli, RR Nagar (Mysore Rd) · Launched</li>
+    <li><a href="/p/sattva-aeropolis.html">Sattva Aeropolis</a> · Sattva · Devanahalli, near KIA · Launched</li>
+    <li><a href="/p/sattva-bhumi.html">Sattva Bhumi</a> · Sattva · Vijayapura (North) · Launched</li>
+    <li><a href="/p/sattva-bliss.html">Sattva Bliss</a> · Sattva · Budigere Cross · Upcoming</li>
+    <li><a href="/p/sattva-city.html">Sattva City</a> · Sattva · Doddajala/Shettigere, Devanahalli · Pre-launch</li>
+    <li><a href="/p/sattva-forest-ridge.html">Sattva Forest Ridge</a> · Sattva · JP Nagar 9th Phase, Anjanapura · Launched</li>
+    <li><a href="/p/sattva-jigani.html">Sattva Jigani</a> · Sattva · Jigani, off Bannerghatta-Anekal Rd (near E-City) · Pre-launch</li>
+    <li><a href="/p/sattva-lumina.html">Sattva Lumina</a> · Sattva · Yelahanka · Launched</li>
+    <li><a href="/p/sattva-plots-doddaballapur.html">Sattva Plots Doddaballapur</a> · Sattva · Doddaballapur · Upcoming</li>
+    <li><a href="/p/sattva-vasanta-skye.html">Sattva Vasanta Skye</a> · Sattva · Bellary Rd · Pre-launch</li>
+    <li><a href="/p/sattva-whitefield.html">Sattva Whitefield</a> · Sattva · Whitefield · Launched</li>
+    <li><a href="/p/shapoorji-codename-evolve.html">Shapoorji Codename Evolve</a> · Shapoorji · Binnipete · Pre-launch</li>
+    <li><a href="/p/shriram-107-south-east.html">Shriram 107 South East</a> · Shriram · Attibele, near E-City · Launched</li>
+    <li><a href="/p/shriram-codename-the-one.html">Shriram Codename The One</a> · Shriram · Kambalipura Rd (approx) · Launched</li>
+    <li><a href="/p/shriram-sarjapur.html">Shriram Sarjapur</a> · Shriram · Sarjapur Main Rd · Announced</li>
+    <li><a href="/p/shriram-serenity.html">Shriram Serenity</a> · Shriram · Rajanukunte, Yelahanka · Launched</li>
+    <li><a href="/p/sobha-altair.html">Sobha Altair</a> · Sobha · Hadosiddapura, Sarjapur Rd · Pre-launch</li>
+    <li><a href="/p/sobha-ayana.html">Sobha Ayana</a> · Sobha · Balagere / Panathur Rd · Launched</li>
+    <li><a href="/p/sobha-crystal-meadows.html">Sobha Crystal Meadows</a> · Sobha · Mullur, Sarjapur Rd · Launched</li>
+    <li><a href="/p/sobha-galera.html">Sobha Galera</a> · Sobha · near Whitefield/Hoskote · Pre-launch</li>
+    <li><a href="/p/sobha-hamptons.html">Sobha Hamptons</a> · Sobha · Hosur Rd, E-City · Pre-launch</li>
+    <li><a href="/p/sobha-indraprastha.html">Sobha Indraprastha</a> · Sobha · Okalipuram, Old Mysore Rd, Rajajinagar · Launched</li>
+    <li><a href="/p/sobha-magnum-opus.html">Sobha Magnum Opus</a> · Sobha · Kothnur, JP Nagar / Bannerghatta Rd · Pre-launch</li>
+    <li><a href="/p/sobha-manhattan-towers.html">Sobha Manhattan Towers</a> · Sobha · Attibele, Hosur Rd · Under construction</li>
+    <li><a href="/p/sobha-neopolis.html">Sobha Neopolis</a> · Sobha · Panathur Rd · Under construction</li>
+    <li><a href="/p/sobha-oakshire.html">Sobha Oakshire</a> · Sobha · IVC Rd, Devanahalli · Under construction</li>
+    <li><a href="/p/sobha-one-world-formerly-sobha-world-city.html">Sobha One World (formerly Sobha World City)</a> · Sobha · Hoskote Rd, near Whitefield · Launched</li>
+    <li><a href="/p/sobha-royal-crest.html">Sobha Royal Crest</a> · Sobha · Banashankari · Launched</li>
+    <li><a href="/p/sobha-scarlet.html">Sobha Scarlet</a> · Sobha · Sarjapur Rd · Pre-launch</li>
+    <li><a href="/p/sobha-sentosa.html">Sobha Sentosa</a> · Sobha · Panathur Rd · Under construction</li>
+    <li><a href="/p/sobha-townpark-madison-heights.html">Sobha Townpark (Madison Heights)</a> · Sobha · Hosur Rd, E-City · Launched</li>
+    <li><a href="/p/sobha-windsor-ph2.html">Sobha Windsor Ph2</a> · Sobha · Whitefield · Under construction</li>
+    <li><a href="/p/sobha-yelahanka-quiet-luxury.html">Sobha Yelahanka (Quiet Luxury)</a> · Sobha · Yelahanka · Pre-launch</li>
+    <li><a href="/p/solea-by-sumadhura.html">Solea by Sumadhura</a> · Sumadhura · Rachenahalli · Upcoming</li>
+    <li><a href="/p/sumadhura-elysium.html">Sumadhura Elysium</a> · Sumadhura · Panathur · Launched</li>
+    <li><a href="/p/sumadhura-panorama-ph2.html">Sumadhura Panorama Ph2</a> · Sumadhura · Devanahalli, near Bellary Rd / KIA · Launched</li>
+    <li><a href="/p/tangled-up-in-green.html">Tangled Up In Green</a> · Total Environment · Devanahalli · Upcoming</li>
+    <li><a href="/p/tata-carnatica-varnam.html">Tata Carnatica / Varnam</a> · Tata · Shettigere, Devanahalli · Launched</li>
+    <li><a href="/p/tata-doddanekundi.html">Tata Doddanekundi</a> · Tata · Doddanekundi, Whitefield · Upcoming</li>
+    <li><a href="/p/tata-one-bangalore-luxury.html">Tata One Bangalore Luxury</a> · Tata · Devanahalli · Upcoming</li>
+    <li><a href="/p/tata-promont-ph2.html">Tata Promont Ph2</a> · Tata · Hosakerehalli, Banashankari · Under construction</li>
+    <li><a href="/p/tata-swaram.html">Tata Swaram</a> · Tata · Devanahalli · Launched</li>
+    <li><a href="/p/the-magic-faraway-tree.html">The Magic Faraway Tree</a> · Total Environment · South/East BLR (approx) · Upcoming</li>
+    <li><a href="/p/total-environment-rajanukunte.html">Total Environment Rajanukunte</a> · Total Environment · Rajanukunte · Pre-launch</li>
+    <li><a href="/p/vaishnavi-krishna-brindavan.html">Vaishnavi Krishna Brindavan</a> · Vaishnavi · Banashankari · Launched</li>
+</ul></div></noscript>
 </body>
 </html>

@@ -1,5 +1,6 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "api/search.js": { "maxDuration": 60 }
   },
@@ -7,10 +8,34 @@
     { "source": "/(.*)", "headers": [
       { "key": "X-Content-Type-Options", "value": "nosniff" },
       { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-      { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+      { "key": "Permissions-Policy", "value": "interest-cohort=()" }
     ]},
     { "source": "/index.html", "headers": [
       { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+    ]},
+    { "source": "/", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+    ]},
+    { "source": "/(sitemap\\.xml|robots\\.txt)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=3600" },
+      { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+    ]},
+    { "source": "/og-cover.svg", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" },
+      { "key": "Content-Type", "value": "image/svg+xml" }
+    ]},
+    { "source": "/(l|p|areas|projects|heat)/(.*)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+    ]},
+    { "source": "/data/(.*)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=600, stale-while-revalidate=3600" },
+      { "key": "Access-Control-Allow-Origin", "value": "*" }
     ]}
+  ],
+  "redirects": [
+    { "source": "/locality/:slug", "destination": "/l/:slug", "permanent": true },
+    { "source": "/project/:slug",  "destination": "/p/:slug", "permanent": true },
+    { "source": "/areas/:slug",    "destination": "/l/:slug", "permanent": true }
   ]
 }
