@@ -891,13 +891,13 @@
   {
    "builder": "Casagrand",
    "name": "Casagrand Promenade",
-   "loc": "Yelahanka",
-   "lat": 13.1,
-   "lng": 77.596,
+   "loc": "Yelahanka, NH 44",
+   "lat": 13.1007,
+   "lng": 77.5963,
    "type": "Apartments (3.89ac)",
-   "status": "Pre-launch",
-   "price": "–",
-   "note": "Compact premium Yelahanka.",
+   "status": "Launched",
+   "price": "₹95L–₹1.89Cr",
+   "note": "Launched 5 Mar 2026; 223 low-rise units of 2/3/4 BHK (1,336–2,670 sqft); pre-launch ~₹7,499/sqft; 13k sqft clubhouse, 65+ amenities.",
    "color": "#f472b6"
   },
   {
@@ -1871,6 +1871,150 @@
    "price": "from ₹1.75Cr",
    "note": "12-acre luxury, 8 towers; 2/3/4 BHK + penthouses (1,400-4,500 sqft); possession Dec 2030.",
    "color": "#22c55e"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Aveline",
+   "loc": "Yelahanka, opp. Philips Innovation Campus, NH 44",
+   "lat": 13.1007,
+   "lng": 77.5963,
+   "type": "Apartments (10ac)",
+   "status": "Launched",
+   "price": "from ₹2.88Cr",
+   "note": "Pre-launch Feb, launched Mar 2026; 9 towers (2B+G+15), ~800 units of 3/3.5/4.5 BHK (1,600–2,500 sqft); 72% open; possession Mar 2031.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Panorama Ph2",
+   "loc": "Devanahalli, near Bellary Rd / KIA",
+   "lat": 13.2516,
+   "lng": 77.7011,
+   "type": "Plots (80ac)",
+   "status": "Launched",
+   "price": "₹75L–₹2Cr",
+   "note": "FY26 launch; ~700 plots (1,200/1,500/2,000/2,400 sqft); part of Sumadhura's 6-project, ₹10,000Cr Bengaluru pipeline.",
+   "color": "#0d9488"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Springwood",
+   "loc": "Devanahalli",
+   "lat": 13.2469,
+   "lng": 77.7128,
+   "type": "Apartments (2ac, boutique)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Boutique luxury; 2 towers, 180 homes of 3/4 BHK; EOI Jun 2026, formal launch slated Oct 2026.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Aeropolis",
+   "loc": "Devanahalli, near KIA",
+   "lat": 13.2384,
+   "lng": 77.7059,
+   "type": "Apartments (10ac)",
+   "status": "Launched",
+   "price": "from ₹61L",
+   "note": "1,001 units of 1/2/3 BHK; compact airport-corridor product; phased possession from Jul 2026.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Jigani",
+   "loc": "Jigani, off Bannerghatta-Anekal Rd (near E-City)",
+   "lat": 12.7869,
+   "lng": 77.6385,
+   "type": "Apartments (~9ac)",
+   "status": "Pre-launch",
+   "price": "from ₹85L",
+   "note": "3 high-rise towers (B+G+31, ~100m), 432 low-density 2 & 3 BHK (1,050–1,700 sqft), 70%+ open; 2–3 km from E-City, 4 km from Bommasandra metro; K-RERA pending.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Fernleaf (Prestige City 2.0)",
+   "loc": "Sarjapur Rd, near Prestige City",
+   "lat": 12.8854,
+   "lng": 77.7641,
+   "type": "Apartments (4.2ac)",
+   "status": "Launched",
+   "price": "₹1.38–2.35Cr+",
+   "note": "Prestige City 2.0 codename Fernleaf; 2 towers, 350+ units of 2–3 BHK + Home Office; pre-launched Dec 2025, formal launch early 2026.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Ethan (Prestige City 2.0)",
+   "loc": "Sarjapur Rd, near Prestige City",
+   "lat": 12.8862,
+   "lng": 77.7655,
+   "type": "Apartments (6ac)",
+   "status": "Launched",
+   "price": "–",
+   "note": "Prestige City 2.0 codename Ethan; 4 towers, 350+ residences (3B3T ~1,900 sqft); launched early 2026; possession Dec 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Parkshire",
+   "loc": "Sarakariguttahalli, off NH-648, Hoskote",
+   "lat": 13.0651,
+   "lng": 77.7984,
+   "type": "Apartments (13.5ac)",
+   "status": "Launched",
+   "price": "₹1.17–1.94Cr",
+   "note": "Launched 15 Jan 2026; 5 towers, 1,132 units of 2 & 3 BHK (1,050–1,750 sqft).",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Dalasagere",
+   "loc": "Dalasagere, NH-75, Hoskote",
+   "lat": 13.0833,
+   "lng": 77.8125,
+   "type": "Apartments (21ac township)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "EOI/pre-launch 2026; multiple high-rises up to 25F, ~2,000 homes 1–4 BHK; K-RERA pending; possession 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Indraprastha",
+   "loc": "Okalipuram, Old Mysore Rd, Rajajinagar",
+   "lat": 12.9745,
+   "lng": 77.5594,
+   "type": "Apartments (2ac)",
+   "status": "Launched",
+   "price": "₹2.39–5.9Cr",
+   "note": "356 units in a 37-floor tower; 3/4 BHK (1,950–3,381 sqft) ~₹11,773/sqft; close to City Rly/Majestic metro.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Horizon",
+   "loc": "Kumbalgodu, Mysore Rd near Kengeri",
+   "lat": 12.887,
+   "lng": 77.4538,
+   "type": "Apartments (5ac)",
+   "status": "Under construction",
+   "price": "₹78L–₹1.5Cr",
+   "note": "372 units of 1/2/3 BHK; near Kengeri Metro and NICE Rd; possession Dec 2026.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand Aquene",
+   "loc": "Kengeri, off Mysore Rd",
+   "lat": 12.9081,
+   "lng": 77.4826,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "₹45L–₹1.5Cr",
+   "note": "Mid-segment 2/3 BHK launch on Mysore Rd belt; benefits from Kengeri Metro extension.",
+   "color": "#f472b6"
   }
  ],
  "builders": {
@@ -1911,7 +2055,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 156,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 14 June 2026."
+  "count": 168,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 21 June 2026."
  }
 }
