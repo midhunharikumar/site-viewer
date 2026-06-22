@@ -38,7 +38,31 @@ function yieldColor(y){if(y<=2.5)return '#d73027';if(y>=5)return '#1a9850';for(l
 
 // ---------- state ----------
 let timeIdx=29, metric='price', zoneFilter='All', searchTxt='', selected=null, sortDir=-1;
+let listMode='loc'; // 'loc' = localities, 'proj' = projects
+let projSort='recent'; // 'recent' | 'stage' | 'builder' | 'loc' | 'type'
+let projSortDir=-1;    // -1 = desc (newest/active first); +1 = asc
+let projStageFilter='All'; // 'All' | 'Launched' | 'Pre-launch' | 'Under construction' | 'Announced' | 'Upcoming'
 const ZONES=['All','East','South','North','Central','West'];
+// Stage (launch-status) priority for sorting (active/recent first when desc)
+const STATUS_RANK={
+  'Launched':5,
+  'Pre-launch':4,
+  'Under construction':3,
+  'Announced':2,
+  'Upcoming':1
+};
+const PROJ_SORT_LABEL={recent:'recently added',stage:'stage',builder:'builder',loc:'locality',type:'type'};
+const PROJ_SORT_CYCLE=['recent','stage','builder','loc','type'];
+// Stages user can filter by (order = displayed chip order)
+const STAGE_FILTERS=['All','Launched','Pre-launch','Under construction','Announced','Upcoming'];
+const STAGE_SHORT={'All':'All','Launched':'Launched','Pre-launch':'Pre-launch','Under construction':'Building','Announced':'Announced','Upcoming':'Upcoming'};
+function statusBadgeClass(s){
+  if(s==='Launched')return 's-launched';
+  if(s==='Pre-launch')return 's-pre';
+  if(s==='Under construction')return 's-uc';
+  if(s==='Announced')return 's-ann';
+  return 's-up';
+}
 
 // ---------- map ----------
 const map=L.map('map',{zoomControl:true,attributionControl:true}).setView([12.9716,77.5946],11);
@@ -178,7 +202,7 @@ function refreshList(){
     const res=searchAll(searchTxt);
     const tot=res.localities.length+res.projects.length+res.schools.length+res.stations.length;
     document.getElementById('listCount').textContent=tot+' results';
-    document.getElementById('sortLbl').textContent='localities · projects · schools · metro';
+    document.getElementById('sortBar').innerHTML='<span class="lbl" style="opacity:.7">localities · projects · schools · metro</span>';
     if(tot===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
     const sec=(title,n,html)=>n?'<div class="srgroup"><div class="srhd">'+title+' <span class="srct">'+n+'</span></div>'+html+'</div>':'';
     const locsHtml=res.localities.slice(0,30).map(loc=>{
@@ -220,12 +244,17 @@ function refreshList(){
       sec('🚇 Metro stations',res.stations.length,stHtml);
     return;
   }
+  // projects mode: sortable project list (respects zoneFilter best-effort by locality string)
+  if(listMode==='proj'){
+    renderProjectsList(list);
+    return;
+  }
   // default mode: existing locality list
   let rows=DATA.localities.filter(visible);
   const keyOf=l=>metric==='yield'?l.yield:metric==='cagr'?l.cagr:metric==='pcagr'?l.projCagr:(metric==='sch'||metric==='saf'||metric==='wat')?LIVE[l.name][metric]:metric==='cauv'?CAUV_RANK[CAUVERY[l.name].st]:priceAt(l,timeIdx);
   rows.sort((a,b)=>(keyOf(a)-keyOf(b))*sortDir);
   document.getElementById('listCount').textContent=rows.length+" localities";
-  const ML={price:'price',cagr:'hist. growth',pcagr:'proj. growth',yield:'yield',sch:'schools',saf:'safety',wat:'water risk',cauv:'Cauvery'};document.getElementById('sortLbl').textContent='sorted by '+(ML[metric]||metric)+(sortDir===-1?' ▾':' ▴');
+  renderLocSortBar();
   if(rows.length===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
   list.innerHTML=rows.map(loc=>{
     const p=priceAt(loc,timeIdx);
@@ -239,6 +268,112 @@ function refreshList(){
       <button class="pinbtn ${isPinned(loc.name)?'on':''}" title="Add to compare" onclick="event.stopPropagation();togglePin('${esc}')">⇄</button>
     </div>`;
   }).join('');
+}
+
+// Render the all-projects list with current sort + stage filter.
+// "Recently added" uses array index (later index = newer entry in projects.json).
+function renderProjectsList(list){
+  const all=(typeof PROJECTS!=='undefined'?PROJECTS.projects:[])||[];
+  // Tag each project with its original index so we can sort by insertion order
+  // even after we copy the array for sorting.
+  let rows=all.map((p,i)=>({_i:i,p}));
+  // Stage filter (applied before sort)
+  if(projStageFilter&&projStageFilter!=='All'){
+    rows=rows.filter(r=>r.p.status===projStageFilter);
+  }
+  const keyOf=({_i,p})=>{
+    if(projSort==='recent')return _i;                       // higher = newer
+    if(projSort==='stage') return STATUS_RANK[p.status]||0; // higher = more active
+    if(projSort==='builder')return (p.builder||'').toLowerCase();
+    if(projSort==='loc')return (p.loc||'').toLowerCase();
+    if(projSort==='type')return (p.type||'').toLowerCase();
+    return 0;
+  };
+  rows.sort((a,b)=>{
+    const ka=keyOf(a),kb=keyOf(b);
+    if(ka<kb)return -1*projSortDir;
+    if(ka>kb)return  1*projSortDir;
+    // Stable tiebreaker: original index ascending
+    return a._i-b._i;
+  });
+  // Stage filter chips rendered above the list. Per-stage counts ignore the
+  // current filter so the user can see what's available.
+  const stageBar=`<div class="stagebar">${STAGE_FILTERS.map(s=>{
+    const n=s==='All'?all.length:all.filter(p=>p.status===s).length;
+    const active=projStageFilter===s?' active':'';
+    return `<span class="stchip${active}" data-stage="${s}" onclick="setProjStage('${s}')">${STAGE_SHORT[s]||s}<span class="stct">${n}</span></span>`;
+  }).join('')}</div>`;
+  const filtNote=(projStageFilter!=='All')?` · stage: ${STAGE_SHORT[projStageFilter]||projStageFilter}`:'';
+  document.getElementById('listCount').textContent=rows.length+' projects'+filtNote;
+  renderProjSortBar();
+  if(rows.length===0){
+    list.innerHTML=stageBar+'<div class="muted" style="padding:14px 12px">No projects match this stage.</div>';
+    return;
+  }
+  list.innerHTML=stageBar+rows.map(({_i,p})=>{
+    const esc=(p.name||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const cls=statusBadgeClass(p.status);
+    const priceTxt=p.price&&p.price!=='–'?p.price:'';
+    const typeShort=(p.type||'').split('(')[0].trim();
+    return `<div class="item" title="${p.builder} · ${p.loc}" onclick="openProjectByName('${esc}')">
+      <div class="dot" style="background:${p.color||'#888'};transform:rotate(45deg);border-radius:0"></div>
+      <div style="min-width:0">
+        <div class="nm">${p.name}</div>
+        <div class="zn"><span class="stbadge ${cls}">${p.status||''}</span>${p.builder} · ${p.loc}</div>
+      </div>
+      <div class="pr">
+        <div class="p" style="font-size:11px">${priceTxt||typeShort}</div>
+        ${priceTxt?`<div class="c muted" style="font-size:10px">${typeShort}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+// Called from stage filter chips; also auto-switches sort to 'recent' when picking a specific stage.
+function setProjStage(s){
+  projStageFilter=s;
+  if(s!=='All'&&projSort==='stage'){projSort='recent';projSortDir=-1;}
+  refreshList();
+}
+// Sort bar — one button per sort field + a separate direction toggle.
+// (Replaces the old single sortLbl cycle.)
+const LOC_SORT_FIELDS=[
+  {k:'price',label:'price'},
+  {k:'cagr',label:'growth'},
+  {k:'pcagr',label:'proj.'},
+  {k:'yield',label:'yield'},
+  {k:'sch',label:'schools'},
+  {k:'saf',label:'safety'},
+  {k:'wat',label:'water'},
+  {k:'cauv',label:'cauvery'}
+];
+function renderLocSortBar(){
+  const bar=document.getElementById('sortBar');if(!bar)return;
+  const btns=LOC_SORT_FIELDS.map(f=>`<span class="sortbtn${metric===f.k?' active':''}" data-loc-sort="${f.k}">${f.label}</span>`).join('');
+  bar.innerHTML='<span class="lbl">Sort</span>'+btns+`<span class="dirbtn" id="locDirBtn" title="${sortDir===-1?'High → low':'Low → high'}">${sortDir===-1?'▾':'▴'}</span>`;
+  bar.querySelectorAll('[data-loc-sort]').forEach(el=>{
+    el.onclick=()=>{
+      const k=el.dataset.locSort;
+      if(metric===k){sortDir=-sortDir;}else{metric=k;sortDir=-1;}
+      // Keep the legacy metric segs in sync
+      document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x.dataset.m===metric));
+      renderAll();updateHash();
+    };
+  });
+  document.getElementById('locDirBtn').onclick=()=>{sortDir=-sortDir;refreshList();};
+}
+function renderProjSortBar(){
+  const bar=document.getElementById('sortBar');if(!bar)return;
+  const btns=PROJ_SORT_CYCLE.map(k=>`<span class="sortbtn${projSort===k?' active':''}" data-proj-sort="${k}">${PROJ_SORT_LABEL[k]}</span>`).join('');
+  bar.innerHTML='<span class="lbl">Sort</span>'+btns+`<span class="dirbtn" id="projDirBtn" title="${projSortDir===-1?'High → low':'Low → high'}">${projSortDir===-1?'▾':'▴'}</span>`;
+  bar.querySelectorAll('[data-proj-sort]').forEach(el=>{
+    el.onclick=()=>{
+      const k=el.dataset.projSort;
+      if(projSort===k){projSortDir=-projSortDir;}
+      else{projSort=k;projSortDir=(k==='recent'||k==='stage')?-1:1;}
+      refreshList();
+    };
+  });
+  document.getElementById('projDirBtn').onclick=()=>{projSortDir=-projSortDir;refreshList();};
 }
 
 // ---------- KPIs ----------
@@ -338,7 +473,14 @@ document.getElementById('search').oninput=e=>{
   renderAll();
 };
 document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();aiProjectSearch();}});
-document.getElementById('sortLbl').onclick=()=>{sortDir=-sortDir;refreshList();};
+// Localities/Projects mode toggle in the sidebar header
+document.querySelectorAll('#listModeTabs button').forEach(b=>{
+  b.onclick=()=>{
+    listMode=b.dataset.mode;
+    document.querySelectorAll('#listModeTabs button').forEach(x=>x.classList.toggle('active',x===b));
+    refreshList();
+  };
+});
 document.getElementById('time').oninput=e=>{timeIdx=+e.target.value;renderAll();updateHash();};
 
 // ---------- play/animate ----------
@@ -957,6 +1099,34 @@ function applyHash(){
   _hashLock=false;
   return opened;
 }
+// ---- SEO landing deep-links ----
+// /?locality=whitefield  → open that locality
+// /?project=prestige-fernleaf  → open that project
+// Matches the URLs emitted by the static SEO pages under /l/ and /p/.
+function _slugify(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function applySEOQueryParam(){
+  try{
+    const u=new URL(location.href);
+    const ql=u.searchParams.get('locality');
+    const qp=u.searchParams.get('project');
+    if(ql){
+      const loc=DATA.localities.find(l=>_slugify(l.name)===ql);
+      if(loc){openDetail(loc.name);return true;}
+    }
+    if(qp&&typeof PROJECTS!=='undefined'){
+      const pr=PROJECTS.projects.find(p=>_slugify(p.name)===qp);
+      if(pr){
+        if(!projectsOn&&document.getElementById('buildsToggle'))document.getElementById('buildsToggle').click();
+        panToPoint(pr.lat,pr.lng,14);
+        if(typeof showProject==='function')showProject(pr);
+        return true;
+      }
+    }
+  }catch(e){}
+  return false;
+}
+// Run after main hash apply on load
+setTimeout(applySEOQueryParam, 50);
 function copyShareLink(){updateHash();const url=location.href;const ok=()=>toast('Link copied ✓');
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(()=>prompt('Copy this link:',url));
   else prompt('Copy this link:',url);

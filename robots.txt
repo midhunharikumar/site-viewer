@@ -1,3 +1,19 @@
 User-agent: *
 Allow: /
-Sitemap: https://YOUR-DOMAIN.vercel.app/sitemap.xml
+Disallow: /api/
+Disallow: /.vercel/
+Disallow: /node_modules/
+Sitemap: https://flatmap.cloud/sitemap.xml
+
+# Crawl-rate hint (Bingbot honors)
+Crawl-delay: 1
+
+# Block aggressive AI scrapers that don't drive traffic
+User-agent: GPTBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
