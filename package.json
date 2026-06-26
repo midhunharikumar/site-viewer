@@ -1,4 +1,8 @@
 {
+	"scripts": {
+		"alerts": "node scripts/send-price-alerts.mjs",
+		"newsletter": "node scripts/send-newsletter.mjs"
+	},
 	"dependencies": {
 		"dotenv": "^17.4.2"
 	}

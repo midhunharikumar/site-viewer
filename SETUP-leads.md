@@ -66,6 +66,9 @@ Point the browser straight at the Apps Script URL instead:
 The Vercel-function path above is preferred because it gives real success/failure and
 hides the URL.
 
-## Later (not built yet)
-- **Monthly send**: Vercel Cron → function → email provider (e.g. Mailgun) broadcasting to the list.
-- **Price alerts**: scheduled check comparing current modeled price vs each saved threshold.
+## Sending (built — manual/offline)
+The send side is now wired up via Mailgun, run on demand from your machine (no cron):
+- **Newsletter**: `npm run newsletter` broadcasts a manual draft to the report list.
+- **Price alerts**: `npm run alerts` compares current modeled price vs each saved threshold.
+
+See **`SETUP-email.md`** for setup (Mailgun env + reading the list back from the Sheet) and usage.
