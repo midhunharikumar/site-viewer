@@ -1,7 +1,27 @@
 # Weekly newsletter drafts
 
-Write each week's issue as a markdown file here (e.g. `2026-06-26.md`). Copy
-`TEMPLATE.md` to start. Then send it **offline** with the Mailgun script:
+> **Automation:** a Vercel Cron sends a freshly-generated newsletter every Saturday
+> morning automatically (see `../SETUP-email.md` §4). The steps below are for
+> generating/sending **manually** (testing or ad-hoc issues).
+
+## Fastest path: generate a draft from real data
+`npm run draft` builds `newsletter/<today>.md` for you — price movers, new launches,
+and the market-heat verdict are auto-filled from the repo's real data
+(`index.html`, `data/projects.json`, `data/overheat.json`), and the **intro** is written
+by the LLM (OpenRouter / Gemini, using `OPENROUTER_API_KEY`). Only the intro is
+LLM-generated; every number/name comes straight from the data, so it can't be misquoted.
+
+```bash
+npm run draft                  # writes newsletter/<today>.md (LLM intro if key set)
+npm run draft -- --no-llm      # skip the LLM, deterministic intro
+npm run draft -- --movers 6 --launches 5
+npm run draft -- --model anthropic/claude-haiku-4.5   # override the model
+```
+
+Then **review/edit** the generated file and send it (see below).
+
+## Or write it by hand
+Copy `TEMPLATE.md` to e.g. `2026-06-26.md` and edit. Then send it with the Mailgun script:
 
 ```bash
 # 1. Always preview first (dry-run, no email sent)

@@ -4,8 +4,26 @@
   "functions": {
     "api/search.js": {
       "maxDuration": 60
+    },
+    "api/cron/newsletter.mjs": {
+      "maxDuration": 60,
+      "includeFiles": "{index.html,data/**}"
+    },
+    "api/cron/alerts.mjs": {
+      "maxDuration": 60,
+      "includeFiles": "{index.html,data/**}"
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/newsletter",
+      "schedule": "30 2 * * 6"
+    },
+    {
+      "path": "/api/cron/alerts",
+      "schedule": "45 2 * * 6"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

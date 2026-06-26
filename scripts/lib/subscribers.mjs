@@ -37,14 +37,17 @@ function parseMeta(v) {
   try { return JSON.parse(v); } catch { return null; }
 }
 
-function normalize(rows) {
+function normalize(rows, { dedupe = true } = {}) {
   // rows: array of {when,kind,email,meta} objects already
   const seen = new Set();
   const out = [];
   for (const r of rows) {
     const email = String(r.email || '').trim().toLowerCase();
-    if (!EMAIL_RE.test(email) || seen.has(email + '|' + r.kind)) continue;
-    seen.add(email + '|' + r.kind);
+    if (!EMAIL_RE.test(email)) continue;
+    if (dedupe) {
+      if (seen.has(email + '|' + r.kind)) continue;
+      seen.add(email + '|' + r.kind);
+    }
     out.push({ when: r.when || '', kind: String(r.kind || '').trim(), email, meta: parseMeta(r.meta) });
   }
   return out;
@@ -74,8 +77,25 @@ async function fromSheet() {
 }
 
 // kind: 'price-alert' | 'report' | 'request-area' | undefined (all). csv: optional path.
-export async function getSubscribers({ kind, csv } = {}) {
+// dedupe: collapse to one row per email+kind (default true). Pass false to keep every
+// row — needed for log-style kinds like 'alert-sent' where one email has many rows.
+export async function getSubscribers({ kind, csv, dedupe = true } = {}) {
   const raw = csv ? await fromCsv(csv) : await fromSheet();
-  const all = normalize(raw);
+  const all = normalize(raw, { dedupe });
   return kind ? all.filter((s) => s.kind === kind) : all;
+}
+
+// Append a row to the Sheet via the same Apps Script webhook the site uses
+// (api/lead.js → SHEET_WEBHOOK_URL). Used to persist 'alert-sent' state so the
+// serverless cron can dedupe without a local file. No-op if the URL isn't set.
+export async function recordEvent({ kind, email, meta }) {
+  const hook = process.env.SHEET_WEBHOOK_URL;
+  if (!hook) return { ok: false, error: 'no_webhook' };
+  const r = await fetch(hook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ kind, email, meta, when: new Date().toISOString(), ref: 'cron', ua: 'cron' }),
+  });
+  if (!r.ok) throw new Error('record_event_' + r.status);
+  return { ok: true };
 }

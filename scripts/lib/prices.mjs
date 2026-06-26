@@ -6,12 +6,23 @@
 //
 // Returns: { meta, localities, priceByName } where priceByName maps name → price2026.
 
-import { readFile } from 'node:fs/promises';
+import { readFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const INDEX_HTML = join(HERE, '..', '..', 'index.html');
+// Resolve index.html for both the CLI (cwd=repo root) and the Vercel runtime
+// (functions run with cwd=project root; the file is included via vercel.json).
+const CANDIDATES = [
+  join(process.cwd(), 'index.html'),
+  join(HERE, '..', '..', 'index.html'),
+];
+async function resolveIndexHtml() {
+  for (const p of CANDIDATES) {
+    try { await access(p); return p; } catch { /* next */ }
+  }
+  return CANDIDATES[0];
+}
 
 // Find the object literal starting after `var DATA =` and return its text by
 // brace-matching while ignoring braces inside string literals.
@@ -36,7 +47,7 @@ function extractObjectLiteral(src, marker = 'var DATA') {
 }
 
 export async function loadData() {
-  const src = await readFile(INDEX_HTML, 'utf8');
+  const src = await readFile(await resolveIndexHtml(), 'utf8');
   const literal = extractObjectLiteral(src);
   // eslint-disable-next-line no-new-func
   const DATA = Function('"use strict"; return (' + literal + ');')();
