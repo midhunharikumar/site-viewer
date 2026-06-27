@@ -2,6 +2,19 @@
 <html lang="en-IN">
     <head>
         <meta charset="utf-8" />
+        <script>
+            /* No-flash theme: apply saved choice or OS preference before paint. */
+            (function () {
+                try {
+                    var t = localStorage.getItem("bv_theme");
+                    if (t !== "light" && t !== "dark")
+                        t = matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    document.documentElement.dataset.theme = t;
+                } catch (e) {}
+            })();
+        </script>
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -10,6 +23,13 @@
             BengaluruValue — Bangalore Property Price Map, Index &amp; Metro
             (2019–2029)
         </title>
+        <!-- Editorial typography: Spectral (display) · Hanken Grotesk (UI) · IBM Plex Mono (labels) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        />
         <link
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -36,15 +56,65 @@
         </script>
         <style>
             :root {
-                --bg: #0f1419;
-                --panel: #171d26;
-                --panel2: #1d2530;
-                --line: #2a3441;
-                --txt: #e6edf3;
-                --muted: #8b97a7;
-                --accent: #4f9dff;
-                --accent2: #21c198;
-                --shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+                /* Editorial / broadsheet — warm paper, ink, oxblood */
+                --bg: #efe9da; /* page: deeper cream so panels lift off it */
+                --panel: #faf6ec; /* card / sidebar paper */
+                --panel2: #f1ead9; /* recessed inputs & inset cards */
+                --line: #d9cdb4; /* warm hairline rule */
+                --txt: #20180f; /* ink */
+                --muted: #857a64; /* warm grey-brown */
+                --accent: #7d2a2a; /* oxblood */
+                --accent2: #2f6b4f; /* forest (positive / secondary) */
+                --on-accent: #f9f3e6; /* cream text on oxblood */
+                --gold: #b8902f; /* ochre (projected / caution) */
+                --shadow:
+                    0 1px 0 rgba(32, 24, 15, 0.04),
+                    0 10px 30px -12px rgba(60, 42, 20, 0.28);
+                /* themed pieces consumed by JS (map pins, charts) + on-map glass */
+                --glass: var(--glass);
+                --sheen: var(--sheen);
+                --sel-row: rgba(125, 42, 42, 0.07);
+                --pin-stroke: #0b0f14;
+                --pin-sel: #7d2a2a;
+                --pin-heat: #9a8f7a;
+                --chart-grid: #e3dccb;
+                --chart-tick: #7a6f5d;
+                --chart-actual: #7d2a2a;
+                --chart-proj: #b8902f;
+                --cmp1: #7d2a2a;
+                --cmp2: #2f6b4f;
+                --cmp3: #b8902f;
+                color-scheme: light;
+            }
+            :root[data-theme="dark"] {
+                /* Dark broadsheet — warm near-black, paper text, terracotta */
+                --bg: #16130e;
+                --panel: #201c15;
+                --panel2: #2a241b;
+                --line: #3a3328;
+                --txt: #ece3d2;
+                --muted: #a99a82;
+                --accent: #cf6048;
+                --accent2: #5cba8e;
+                --on-accent: #17130d;
+                --gold: #d9a93f;
+                --shadow:
+                    0 1px 0 rgba(0, 0, 0, 0.3),
+                    0 14px 34px -14px rgba(0, 0, 0, 0.6);
+                --glass: rgba(32, 28, 21, 0.94);
+                --sheen: rgba(60, 50, 36, 0.45);
+                --sel-row: rgba(207, 96, 72, 0.16);
+                --pin-stroke: #0a0905;
+                --pin-sel: #ffffff;
+                --pin-heat: #cdbfa3;
+                --chart-grid: #322c22;
+                --chart-tick: #a99a82;
+                --chart-actual: #cf6048;
+                --chart-proj: #d9a93f;
+                --cmp1: #cf6048;
+                --cmp2: #5cba8e;
+                --cmp3: #d9a93f;
+                color-scheme: dark;
             }
             * {
                 box-sizing: border-box;
@@ -54,8 +124,9 @@
                 margin: 0;
                 height: 100%;
                 font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    Helvetica, Arial, sans-serif;
+                    "Hanken Grotesk", -apple-system, BlinkMacSystemFont,
+                    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-feature-settings: "tnum" 1, "cv11" 1;
                 background: var(--bg);
                 color: var(--txt);
                 overscroll-behavior: none;
@@ -163,7 +234,7 @@
             }
             .chip.active {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border-color: var(--accent);
                 font-weight: 600;
             }
@@ -184,7 +255,7 @@
             }
             .seg button.active {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 font-weight: 600;
             }
             .ctl-label {
@@ -228,7 +299,7 @@
             }
             .modetabs button.active {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 font-weight: 700;
             }
             .modebar {
@@ -303,7 +374,7 @@
             }
             .sortbtn.active {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border-color: var(--accent);
                 font-weight: 600;
             }
@@ -348,7 +419,7 @@
             }
             .stchip.active {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border-color: var(--accent);
                 font-weight: 600;
             }
@@ -363,7 +434,7 @@
             }
             .stchip.active .stct {
                 background: rgba(0, 0, 0, 0.18);
-                color: #04101f;
+                color: var(--on-accent);
             }
             #list {
                 overflow: auto;
@@ -491,7 +562,7 @@
             }
             .playbtn {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border: 0;
                 border-radius: 8px;
                 width: 34px;
@@ -1116,7 +1187,7 @@
                 height: 15px;
                 border-radius: 50%;
                 background: var(--accent);
-                border: 2px solid #04101f;
+                border: 2px solid var(--on-accent);
                 cursor: pointer;
             }
             input[type="range"].split::-moz-range-thumb {
@@ -1124,7 +1195,7 @@
                 height: 15px;
                 border-radius: 50%;
                 background: var(--accent);
-                border: 2px solid #04101f;
+                border: 2px solid var(--on-accent);
                 cursor: pointer;
             }
             /* sun panel: time-of-day slider (native range renders invisibly on dark bg, so style it explicitly) */
@@ -1172,7 +1243,7 @@
                 height: 16px;
                 border-radius: 50%;
                 background: #ffd54a;
-                border: 2px solid #04101f;
+                border: 2px solid var(--on-accent);
                 cursor: pointer;
                 box-shadow: 0 0 4px rgba(255, 213, 74, 0.6);
             }
@@ -1181,7 +1252,7 @@
                 height: 16px;
                 border-radius: 50%;
                 background: #ffd54a;
-                border: 2px solid #04101f;
+                border: 2px solid var(--on-accent);
                 cursor: pointer;
             }
             #todSlider::-moz-range-track {
@@ -1258,7 +1329,7 @@
             }
             .btn {
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border: 0;
                 border-radius: 9px;
                 padding: 0 14px;
@@ -1521,7 +1592,7 @@
                 transform: translateX(-50%);
                 z-index: 520;
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 font-weight: 600;
                 font-size: 12.5px;
                 padding: 8px 14px;
@@ -1558,7 +1629,7 @@
                 height: 46px;
                 border-radius: 50%;
                 background: var(--accent);
-                color: #04101f;
+                color: var(--on-accent);
                 border: 0;
                 cursor: pointer;
                 box-shadow: var(--shadow);
@@ -1741,6 +1812,295 @@
                     font-size: 11px;
                 }
             }
+
+            /* ============================================================
+               EDITORIAL THEME LAYER — "The Bengaluru Property Index"
+               A broadsheet over a data app: Spectral display, oxblood ink,
+               warm paper, hairline rules, tabular figures. Layered last so
+               it refines the variable-driven base above.
+               ============================================================ */
+
+            /* — Paper atmosphere: warm sheen + faint print grain — */
+            body {
+                background:
+                    radial-gradient(
+                        115% 70% at 12% -8%,
+                        rgba(255, 252, 244, 0.85),
+                        rgba(255, 252, 244, 0) 60%
+                    ),
+                    var(--bg);
+            }
+            #app {
+                border-top: 3px solid var(--accent); /* masthead ribbon */
+            }
+            #app::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 5;
+                pointer-events: none;
+                opacity: 0.05;
+                mix-blend-mode: multiply;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            }
+
+            /* — Masthead / nameplate — */
+            header {
+                background: var(--panel);
+                border-bottom: 1px solid var(--accent);
+                box-shadow: 0 3px 0 -1px var(--line); /* second rule = broadsheet double underline */
+            }
+            .brand {
+                font-family: "Spectral", Georgia, serif;
+                font-weight: 800;
+                font-size: 23px;
+                letter-spacing: -0.015em;
+            }
+            .brand span {
+                font-style: italic;
+                font-weight: 600;
+                color: var(--accent);
+            }
+            .tagline {
+                font-family: "Spectral", Georgia, serif;
+                font-style: italic;
+                font-size: 13px;
+                color: var(--muted);
+            }
+
+            /* — Headlines: serif everywhere a title appears — */
+            .dhd h2,
+            .modal h2,
+            .empty .big,
+            .cmphd .ttl,
+            #ohBody h2,
+            .cta h4 {
+                font-family: "Spectral", Georgia, serif;
+                letter-spacing: -0.01em;
+            }
+            .dhd h2 {
+                font-size: 21px;
+                font-weight: 700;
+            }
+
+            /* — Tabular figures for every number (financial feel) — */
+            .kpi .v,
+            .item .pr .p,
+            .stat .v,
+            .timebar .now,
+            .oh-val,
+            .legend .lbls {
+                font-family: "Spectral", Georgia, serif;
+                font-variant-numeric: tabular-nums;
+                font-weight: 700;
+            }
+            .stat .v {
+                font-size: 19px;
+            }
+
+            /* — Small-caps mono labels: the "data terminal" texture — */
+            .ctl-label,
+            .sublabel,
+            .listhdr,
+            .modebar .ct,
+            .sortbar .lbl,
+            .stat .l,
+            .kpi .l,
+            .stagebar,
+            .taxis,
+            .modal h3,
+            #seoLinks h2,
+            .leaflet-control-attribution {
+                font-family: "IBM Plex Mono", ui-monospace, monospace;
+            }
+
+            /* — KPI strip: drop the boxes, use ruled columns — */
+            .kpi {
+                background: transparent;
+                border: 0;
+                border-left: 1px solid var(--line);
+                border-radius: 0;
+                padding: 2px 0 2px 12px;
+            }
+            .kpi .l {
+                color: var(--muted);
+            }
+
+            /* — Inputs: pressed-into-paper — */
+            .search,
+            .capform input {
+                background: var(--panel2);
+                box-shadow: inset 0 1px 2px rgba(60, 42, 20, 0.06);
+            }
+            .search:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow:
+                    inset 0 1px 2px rgba(60, 42, 20, 0.06),
+                    0 0 0 3px rgba(125, 42, 42, 0.12);
+            }
+
+            /* — List: hairline ledger rows, editorial up/down — */
+            .item {
+                border-bottom: 1px solid var(--line);
+            }
+            .item:hover {
+                background: var(--panel2);
+            }
+            .item.sel {
+                background: var(--sel-row);
+                box-shadow: inset 3px 0 0 var(--accent);
+            }
+            .up {
+                color: var(--accent2);
+            }
+            .down {
+                color: var(--accent);
+            }
+            .dot {
+                box-shadow: 0 0 0 2px rgba(32, 24, 15, 0.06);
+            }
+
+            /* — On-map glass panels: paper, not slate — */
+            .timebar,
+            #compareTray {
+                background: rgba(250, 246, 236, 0.95);
+                border-color: var(--line);
+            }
+            .legend,
+            .legendhead {
+                background: var(--glass);
+                border-color: var(--line);
+            }
+            .leaflet-tooltip.pin {
+                background: var(--panel);
+                border-color: var(--line);
+                color: var(--txt);
+            }
+            .leaflet-tooltip.pin b {
+                color: var(--accent);
+            }
+
+            /* — Badges & pills: light tints instead of dark blocks — */
+            .badge.actual {
+                background: rgba(47, 107, 79, 0.14);
+                color: #2f6b4f;
+            }
+            .badge.projected {
+                background: rgba(184, 144, 47, 0.18);
+                color: #8a6a1f;
+            }
+            .stbadge.s-launched,
+            .conf.High {
+                background: rgba(47, 107, 79, 0.14);
+                color: #2f6b4f;
+            }
+            .stbadge.s-pre,
+            .conf.Medium {
+                background: rgba(184, 144, 47, 0.18);
+                color: #8a6a1f;
+            }
+            .stbadge.s-uc {
+                background: rgba(125, 42, 42, 0.12);
+                color: var(--accent);
+            }
+            .stbadge.s-ann,
+            .stbadge.s-up,
+            .conf.Low {
+                background: rgba(133, 122, 100, 0.16);
+                color: var(--muted);
+            }
+            .stchip {
+                background: var(--panel2);
+            }
+
+            /* — Capture / CTA card: ruled paper with an oxblood spine — */
+            .cta {
+                background: var(--panel2);
+                border: 1px solid var(--line);
+                border-left: 3px solid var(--accent);
+            }
+            .caperr {
+                color: var(--accent);
+            }
+            .capok {
+                color: var(--accent2);
+            }
+
+            /* — Buttons: oxblood, crisp — */
+            .btn {
+                border-radius: 7px;
+                letter-spacing: 0.01em;
+            }
+            .aiBtn:hover {
+                background: rgba(125, 42, 42, 0.1);
+            }
+            .pinbtn.on {
+                background: rgba(125, 42, 42, 0.1);
+            }
+
+            /* — Heat gauge needle reads on a light gauge — */
+            .oh-needle {
+                border-top-color: var(--txt);
+            }
+
+            /* — Range sliders: warm tracks, oxblood/gold thumbs on paper — */
+            input[type="range"].split {
+                background: linear-gradient(
+                    90deg,
+                    rgba(125, 42, 42, 0.28) 0 var(--split, 67%),
+                    rgba(184, 144, 47, 0.28) var(--split, 67%) 100%
+                );
+            }
+            #todSlider {
+                background: linear-gradient(90deg, #cfd9c8, #ecd9a6);
+            }
+            #todSlider::-webkit-slider-thumb {
+                box-shadow: 0 0 0 3px rgba(184, 144, 47, 0.25);
+            }
+
+            /* — Leaflet chrome — */
+            .leaflet-container {
+                background: var(--panel2);
+            }
+            .leaflet-bar a {
+                background: var(--panel);
+                color: var(--txt);
+                border-bottom-color: var(--line);
+            }
+            .leaflet-bar a:hover {
+                background: var(--panel2);
+                color: var(--accent);
+            }
+            .leaflet-control-attribution {
+                background: var(--glass) !important;
+                color: var(--muted) !important;
+            }
+            .leaflet-control-attribution a {
+                color: var(--accent) !important;
+            }
+
+            /* — Selection & scrollbars — */
+            ::selection {
+                background: var(--accent);
+                color: var(--on-accent);
+            }
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: var(--line) transparent;
+            }
+            ::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--line);
+                border-radius: 6px;
+                border: 2px solid var(--panel);
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--muted);
+            }
         </style>
         <meta
             name="description"
@@ -1911,6 +2271,15 @@
                     "
                 >
                     ⓘ<span class="abt-label"> About &amp; disclaimer</span>
+                </button>
+                <button
+                    class="aboutbtn"
+                    id="themeBtn"
+                    onclick="toggleTheme()"
+                    title="Toggle light / dark theme"
+                    aria-label="Toggle light or dark theme"
+                >
+                    🌙
                 </button>
                 <div class="kpis">
                     <div class="kpi">

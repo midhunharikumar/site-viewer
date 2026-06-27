@@ -64,19 +64,40 @@ function statusBadgeClass(s){
   return 's-up';
 }
 
+// ---------- theme ----------
+function curTheme(){return document.documentElement.dataset.theme==='dark'?'dark':'light';}
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=curTheme()==='dark'?'☀️':'🌙';}
+function applyTheme(t){
+  document.documentElement.dataset.theme=t; try{localStorage.setItem('bv_theme',t);}catch(e){}
+  try{setBasemap();}catch(e){}
+  try{renderAll();}catch(e){}                 // re-strokes pins + rebuilds legends
+  try{if(typeof selected!=='undefined'&&selected&&document.getElementById('detail').classList.contains('open'))openDetail(selected);}catch(e){}
+  try{if(typeof renderCompareTray==='function')renderCompareTray();}catch(e){}
+  updateThemeBtn();
+}
+function toggleTheme(){applyTheme(curTheme()==='dark'?'light':'dark');}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{try{if(!localStorage.getItem('bv_theme'))applyTheme(e.matches?'dark':'light');}catch(_){}});}catch(e){}
+
 // ---------- map ----------
 const map=L.map('map',{zoomControl:true,attributionControl:true}).setView([12.9716,77.5946],11);
 map.createPane('localityPane');map.getPane('localityPane').style.zIndex=500;
 map.zoomControl.setPosition('bottomright');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-  attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:19
-}).addTo(map);
+let baseTiles=null;
+function setBasemap(){
+  const variant=curTheme()==='dark'?'dark_all':'light_all';
+  const url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png';
+  if(baseTiles)map.removeLayer(baseTiles);
+  baseTiles=L.tileLayer(url,{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+  baseTiles.bringToBack();
+}
+setBasemap();
 const markers={};
 DATA.localities.forEach(loc=>{
-  const m=L.circleMarker([loc.lat,loc.lng],{pane:'localityPane',radius:8,weight:1.4,color:'#0b0f14',fillOpacity:.92,fillColor:'#888'});
+  const m=L.circleMarker([loc.lat,loc.lng],{pane:'localityPane',radius:8,weight:1.4,color:cssVar('--pin-stroke')||'#0b0f14',fillOpacity:.92,fillColor:'#888'});
   m.on('click',()=>openDetail(loc.name));
-  m.on('mouseover',()=>m.setStyle({weight:2.6,color:'#fff'}));
-  m.on('mouseout',()=>m.setStyle({weight:1.4,color:'#0b0f14'}));
+  m.on('mouseover',()=>m.setStyle({weight:2.8,color:cssVar('--accent')}));
+  m.on('mouseout',()=>m.setStyle({weight:1.4,color:cssVar('--pin-stroke')}));
   m.addTo(map);
   markers[loc.name]=m;
 });
@@ -117,7 +138,7 @@ function refreshMap(){
     if(!visible(loc)){m.setStyle({opacity:0,fillOpacity:0});m._path&&(m._path.style.pointerEvents='none');return;}
     m._path&&(m._path.style.pointerEvents='auto');
     const sel=selected===loc.name;
-    m.setStyle({opacity:1,fillOpacity:heatmapOn?.10:.82,fillColor:metricColor(loc),radius:metricRadius(loc)+(sel?3:0),weight:sel?3:(heatmapOn?.5:1.2),color:sel?'#fff':(heatmapOn?'#e6edf3':'#0b0f14')});
+    m.setStyle({opacity:1,fillOpacity:heatmapOn?.10:.82,fillColor:metricColor(loc),radius:metricRadius(loc)+(sel?3:0),weight:sel?3:(heatmapOn?.5:1.2),color:sel?cssVar('--pin-sel'):(heatmapOn?cssVar('--pin-heat'):cssVar('--pin-stroke'))});
     m.bindTooltip(`<b>${loc.name}</b><br>${fmtMetric(loc)} · ${loc.zone}`,{className:'pin',direction:'top',offset:[0,-4]});
   });
 }
@@ -444,15 +465,15 @@ function openDetail(name){
   chart=new Chart(document.getElementById('chart'),{
     type:'line',
     data:{labels,datasets:[
-      {label:'Actual',data:actualData,borderColor:'#4f9dff',backgroundColor:'rgba(79,157,255,.12)',fill:true,tension:.3,pointRadius:0,borderWidth:2.5},
-      {label:'Projected',data:projData,borderColor:'#ffce7a',borderDash:[6,4],fill:false,tension:.3,pointRadius:0,borderWidth:2.5}
+      {label:'Actual',data:actualData,borderColor:cssVar('--chart-actual'),backgroundColor:cssVar('--chart-actual')+'1f',fill:true,tension:.3,pointRadius:0,borderWidth:2.5},
+      {label:'Projected',data:projData,borderColor:cssVar('--chart-proj'),borderDash:[6,4],fill:false,tension:.3,pointRadius:0,borderWidth:2.5}
     ]},
     options:{responsive:true,interaction:{mode:'index',intersect:false},
       plugins:{legend:{labels:{color:'#8b97a7',boxWidth:12,font:{size:11}}},
         tooltip:{callbacks:{label:ctx=>ctx.parsed.y?ctx.dataset.label+': '+fmt(ctx.parsed.y):''}}},
       scales:{
-        x:{ticks:{color:'#6b7787',maxTicksLimit:9,font:{size:10}},grid:{color:'#222b35'}},
-        y:{ticks:{color:'#6b7787',font:{size:10},callback:v=>fmtK(v)},grid:{color:'#222b35'}}
+        x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:9,font:{size:10}},grid:{color:cssVar('--chart-grid')}},
+        y:{ticks:{color:cssVar('--chart-tick'),font:{size:10},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}
       }}
   });
   refreshMap();refreshList();
@@ -574,7 +595,7 @@ document.getElementById('futureToggle').onclick=function(){metroFuture=!metroFut
 buildMetroLegend();
 
 // ---------- livability detail ----------
-function livMeter(v,risk){let s='';for(let i=1;i<=5;i++){const on=i<=v;const col=on?(risk?tierRisk(v):tierGood(v)):'#2a3441';s+='<span style="width:8px;height:8px;border-radius:50%;background:'+col+';display:inline-block;margin-right:2px"></span>';}return s;}
+function livMeter(v,risk){let s='';for(let i=1;i<=5;i++){const on=i<=v;const col=on?(risk?tierRisk(v):tierGood(v)):'#ded4c0';s+='<span style="width:8px;height:8px;border-radius:50%;background:'+col+';display:inline-block;margin-right:2px"></span>';}return s;}
 function cauvRowHtml(loc){const cv=CAUVERY[loc.name];if(!cv)return '';const cm=CAUVERY._meta[cv.st],col=CAUV_COLOR[cv.st];return '<div style="margin:7px 0 2px;border-top:1px solid var(--line);padding-top:7px"><div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-size:12px">🚰 Cauvery water</span><span style="font-size:10.5px;padding:2px 8px;border-radius:10px;background:'+col+'22;color:'+col+'">'+cm.label+'</span></div><div class="muted" style="font-size:10.5px;margin-top:2px">'+cm.note+' · ETA '+cm.eta+(cv.conf==='Modeled'?' (modeled)':'')+'</div></div>';}
 function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
   const row=(lab,v,note,risk)=>'<div style="margin:5px 0"><div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-size:12px">'+lab+'</span>'+livMeter(v,risk)+'<span class="muted" style="margin-left:4px">'+v+'/5</span></div><div class="muted" style="font-size:10.5px;margin-top:1px">'+note+'</div></div>';
@@ -930,7 +951,7 @@ function drawSkyDome(){
   skyCtx.strokeStyle='#2b3543';skyCtx.lineWidth=1;
   [1,0.66,0.33].forEach(f=>{skyCtx.beginPath();skyCtx.arc(cx,cy,R*f,0,Math.PI*2);skyCtx.stroke();});
   skyCtx.beginPath();skyCtx.moveTo(cx-R,cy);skyCtx.lineTo(cx+R,cy);skyCtx.moveTo(cx,cy-R);skyCtx.lineTo(cx,cy+R);skyCtx.stroke();
-  skyCtx.fillStyle='#6b7787';skyCtx.font='9px sans-serif';skyCtx.textAlign='center';
+  skyCtx.fillStyle='#7a6f5d';skyCtx.font='9px sans-serif';skyCtx.textAlign='center';
   skyCtx.fillText('N',cx,cy-R-3);skyCtx.fillText('S',cx,cy+R+9);skyCtx.fillText('E',cx+R+6,cy+3);skyCtx.fillText('W',cx-R-6,cy+3);
   skyCtx.strokeStyle='#f5c451';skyCtx.lineWidth=1.6;skyCtx.beginPath();let started=false;
   for(let h=t.rise;h<=t.set+1e-3;h+=(t.set-t.rise)/80){const p=sunPos(CITY[0],CITY[1],s.N,h);if(p.el<0)continue;const r=(90-p.el)/90*R,x=cx+r*Math.sin(p.az*D2R),y=cy-r*Math.cos(p.az*D2R);if(!started){skyCtx.moveTo(x,y);started=true;}else skyCtx.lineTo(x,y);}
@@ -992,9 +1013,9 @@ function sunPathSvg(lat,lng,sz){
   let g='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#2b3543"/>'+
         '<line x1="'+(cx-R)+'" y1="'+cy+'" x2="'+(cx+R)+'" y2="'+cy+'" stroke="#2b3543"/>'+
         '<line x1="'+cx+'" y1="'+(cy-R)+'" x2="'+cx+'" y2="'+(cy+R)+'" stroke="#2b3543"/>'+
-        '<text x="'+cx+'" y="'+(cy-R-2)+'" fill="#6b7787" font-size="8" text-anchor="middle">N</text>'+
-        '<text x="'+(cx+R+5)+'" y="'+(cy+3)+'" fill="#6b7787" font-size="8" text-anchor="middle">E</text>'+
-        '<text x="'+(cx-R-5)+'" y="'+(cy+3)+'" fill="#6b7787" font-size="8" text-anchor="middle">W</text>';
+        '<text x="'+cx+'" y="'+(cy-R-2)+'" fill="#7a6f5d" font-size="8" text-anchor="middle">N</text>'+
+        '<text x="'+(cx+R+5)+'" y="'+(cy+3)+'" fill="#7a6f5d" font-size="8" text-anchor="middle">E</text>'+
+        '<text x="'+(cx-R-5)+'" y="'+(cy+3)+'" fill="#7a6f5d" font-size="8" text-anchor="middle">W</text>';
   let pts=[];
   for(let h=t.rise;h<=t.set+1e-3;h+=(t.set-t.rise)/60){const p=sunPos(lat,lng,s.N,h);if(p.el<0)continue;const r=(90-p.el)/90*R;pts.push((cx+r*Math.sin(p.az*D2R)).toFixed(1)+','+(cy-r*Math.cos(p.az*D2R)).toFixed(1));}
   if(pts.length)g+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#f5c451" stroke-width="1.6"/>';
@@ -1005,7 +1026,7 @@ function sunPathSvg(lat,lng,sz){
 function windRoseSvg(sz){
   const cx=sz/2,cy=sz/2,R=sz*0.4;
   let g='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#2b3543"/>'+
-        '<text x="'+cx+'" y="'+(cy-R-1)+'" fill="#6b7787" font-size="8" text-anchor="middle">N</text>';
+        '<text x="'+cx+'" y="'+(cy-R-1)+'" fill="#7a6f5d" font-size="8" text-anchor="middle">N</text>';
   SEASONS.forEach((s,i)=>{const wm=WIND.monthly[s.m],to=(wm.d+180)%360,len=R*(0.42+wm.s/7);
     const ux=Math.sin(to*D2R),uy=-Math.cos(to*D2R);
     const tipx=cx+len*ux,tipy=cy+len*uy,bx=tipx-ux*6,by=tipy-uy*6,px=-uy*3.2,py=ux*3.2,cur=(timeIdx%4)===i;
@@ -1134,7 +1155,7 @@ function copyShareLink(){updateHash();const url=location.href;const ok=()=>toast
 window.addEventListener('hashchange',()=>{if(!_hashLock)applyHash();});
 
 // ---- H2: compare ----
-let COMPARE=[], cmpChart=null; const CMP_COLORS=['#4f9dff','#21c198','#f59e0b'];
+let COMPARE=[], cmpChart=null; const CMP_COLORS=()=>[cssVar('--cmp1'),cssVar('--cmp2'),cssVar('--cmp3')];
 function loadCompare(){try{COMPARE=JSON.parse(localStorage.getItem('bv_compare')||'[]').filter(n=>DATA.localities.find(l=>l.name===n)).slice(0,3);}catch(e){COMPARE=[];}}
 function saveCompare(){try{localStorage.setItem('bv_compare',JSON.stringify(COMPARE));}catch(e){}}
 function isPinned(n){return COMPARE.indexOf(n)>=0;}
@@ -1150,7 +1171,8 @@ function renderCompareTray(){
   const tray=$('compareTray');
   if(!COMPARE.length){tray.classList.remove('show');if(cmpChart){cmpChart.destroy();cmpChart=null;}return;}
   tray.classList.add('show');
-  $('cmpChips').innerHTML=COMPARE.map((n,i)=>'<span class="cmpchip"><span style="width:9px;height:9px;border-radius:50%;background:'+CMP_COLORS[i]+';display:inline-block"></span>'+escapeHtml(n)+'<span class="rm" title="remove" onclick="togglePin(\''+n.replace(/'/g,"\\'")+'\')">×</span></span>').join('');
+  const cmpc=CMP_COLORS();
+  $('cmpChips').innerHTML=COMPARE.map((n,i)=>'<span class="cmpchip"><span style="width:9px;height:9px;border-radius:50%;background:'+cmpc[i]+';display:inline-block"></span>'+escapeHtml(n)+'<span class="rm" title="remove" onclick="togglePin(\''+n.replace(/'/g,"\\'")+'\')">×</span></span>').join('');
   const rows=COMPARE.map(n=>DATA.localities.find(l=>l.name===n));
   $('cmpTableWrap').innerHTML='<table class="cmptable"><tr><th></th>'+rows.map(l=>'<th>'+escapeHtml(l.name.split(' ')[0])+'</th>').join('')+'</tr>'+
     '<tr><th>₹/sqft now</th>'+rows.map(l=>'<td>'+fmt(priceAt(l,timeIdx))+'</td>').join('')+'</tr>'+
@@ -1158,9 +1180,9 @@ function renderCompareTray(){
     '<tr><th>CAGR 19–26</th>'+rows.map(l=>'<td>'+l.cagr+'%</td>').join('')+'</tr>'+
     '<tr><th>Yield</th>'+rows.map(l=>'<td>'+l.yield+'%</td>').join('')+'</tr></table>';
   const labels=combined(rows[0]).map((p,i)=>tLabel(i));
-  const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:CMP_COLORS[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
+  const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:cmpc[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
   if(cmpChart)cmpChart.destroy();
-  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:'#6b7787',maxTicksLimit:8,font:{size:9}},grid:{color:'#222b35'}},y:{ticks:{color:'#6b7787',font:{size:9},callback:v=>fmtK(v)},grid:{color:'#222b35'}}}}});
+  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:8,font:{size:9}},grid:{color:cssVar('--chart-grid')}},y:{ticks:{color:cssVar('--chart-tick'),font:{size:9},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}}}});
 }
 
 // ---- H3: coach + pulse ----
@@ -1315,3 +1337,6 @@ async function showProjectRoutes(pr){
   if(!projectsOn)document.getElementById('buildsToggle').click();
   setTimeout(()=>showProject(pr),400);
 })();
+
+// init theme toggle button label
+updateThemeBtn();
