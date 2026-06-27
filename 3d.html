@@ -18,7 +18,17 @@
   --txt:#20180f; --muted:#857a64; --accent:#7d2a2a; --accent2:#2f6b4f;
   --on-accent:#f9f3e6; --gold:#b8902f;
   --shadow:0 1px 0 rgba(32,24,15,.04),0 12px 32px -12px rgba(60,42,20,.30);
+  --glass:rgba(250,246,236,.95); --topfade:245,240,230; color-scheme:light;
 }
+:root[data-theme="dark"]{
+  /* Dark broadsheet — warm near-black, paper text, terracotta */
+  --bg:#16130e; --panel:#201c15; --panel2:#2a241b; --line:#3a3328;
+  --txt:#ece3d2; --muted:#a99a82; --accent:#cf6048; --accent2:#5cba8e;
+  --on-accent:#17130d; --gold:#d9a93f;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 14px 34px -14px rgba(0,0,0,.6);
+  --glass:rgba(32,28,21,.94); --topfade:18,15,11; color-scheme:dark;
+}
+:root[data-theme="dark"] .maplibregl-ctrl-group button span{filter:invert(.88)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1.45 'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-feature-settings:'tnum' 1;overflow:hidden}
 .brand,#card h3{font-family:'Spectral',Georgia,serif;letter-spacing:-.01em}
@@ -31,7 +41,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1
 
 /* top bar */
 #topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 12px;
-  background:linear-gradient(180deg,rgba(245,240,230,.94),rgba(245,240,230,.55) 75%,transparent);pointer-events:none}
+  background:linear-gradient(180deg,rgba(var(--topfade),.94),rgba(var(--topfade),.55) 75%,transparent);pointer-events:none}
 #topbar>*{pointer-events:auto}
 .backbtn{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--txt);
   padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;text-decoration:none}
@@ -42,7 +52,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1
 @media(max-width:700px){.tagline{display:none}}
 
 /* control panel */
-#panel{position:absolute;top:52px;right:10px;z-index:20;width:262px;background:rgba(250,246,236,.95);border:1px solid var(--line);
+#panel{position:absolute;top:52px;right:10px;z-index:20;width:262px;background:var(--glass);border:1px solid var(--line);
   border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);overflow:hidden;transition:max-height .25s ease}
 #panel.collapsed{max-height:38px}
 #panelHead{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;user-select:none;font-weight:600;font-size:13px}
@@ -67,7 +77,7 @@ input[type=range]{flex:1;accent-color:var(--accent);height:18px}
 
 /* route / project card */
 #card{position:absolute;left:10px;bottom:10px;z-index:20;width:330px;max-width:calc(100vw - 20px);max-height:55vh;overflow:auto;
-  background:rgba(250,246,236,.97);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);
+  background:var(--glass);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);
   padding:13px 14px;display:none}
 #card h3{margin:0 0 2px;font-size:15px}
 #card .sub{color:var(--muted);font-size:12px;margin-bottom:8px}
@@ -91,7 +101,7 @@ input[type=range]{flex:1;accent-color:var(--accent);height:18px}
 .maplibregl-ctrl-group{background:var(--panel)!important;border:1px solid var(--line)}
 .maplibregl-ctrl-group button{background:var(--panel)!important}
 .maplibregl-ctrl-group button span{filter:none}
-.maplibregl-ctrl-attrib{background:rgba(250,246,236,.82)!important;color:var(--muted)!important;font-size:9px!important}
+.maplibregl-ctrl-attrib{background:rgba(var(--topfade),.82)!important;color:var(--muted)!important;font-size:9px!important}
 .maplibregl-ctrl-attrib a{color:var(--muted)!important}
 @media(max-width:700px){
   #panel{width:228px;top:48px}
@@ -107,6 +117,7 @@ input[type=range]{flex:1;accent-color:var(--accent);height:18px}
   <a class="backbtn" id="backLink" href="index.html">← 2D Map</a>
   <div class="brand">Bengaluru<span>3D</span></div>
   <div class="tagline">terrain · accurate sun &amp; wind · new builds → nearest school &amp; metro</div>
+  <button class="backbtn" id="themeBtn" onclick="toggleTheme3d()" title="Toggle light / dark" style="margin-left:auto;padding:6px 10px">🌙</button>
 </div>
 
 <div id="panel">
@@ -214,6 +225,44 @@ function havKm(a,b){ // [lat,lng]
   return 12742*Math.asin(Math.sqrt(x));
 }
 
+// ---------- theme (shared with the 2D map via localStorage 'bv_theme') ----------
+function prefDark(){try{return matchMedia('(prefers-color-scheme: dark)').matches;}catch(e){return false;}}
+let THEME=(function(){try{return localStorage.getItem('bv_theme')||(prefDark()?'dark':'light');}catch(e){return 'light';}})();
+document.documentElement.dataset.theme=THEME;
+const THEMES={
+  light:{
+    basemap:'light_all', bg:'#e7dfce', brightBase:0.55,
+    hill:{shadow:'#8a7d64',hl:'#fff8ec',accent:'#cdbfa3'},
+    bld:{night:'#6b6250',goldA:'#cdbfa3',goldB:'#c0824a',dayA:'#bcae92',dayB:'#efe6d2',static:'#cdbfa3'},
+    wind:'rgba(33,79,99,.62)',
+    dome:{grid:'#cabd9f',lbl:'#857a64',arc:'#a9781f',glow:'rgba(184,144,47,.55)',sun:'#e0a020',sunrim:'#5a3f10',night:'#3a2e1c'}
+  },
+  dark:{
+    basemap:'dark_all', bg:'#0c0a07', brightBase:0.5,
+    hill:{shadow:'#000a07',hl:'#5a6b80',accent:'#0c1620'},
+    bld:{night:'#241f17',goldA:'#3a342a',goldB:'#b87a4a',dayA:'#2c2920',dayB:'#8f8a76',static:'#3a342a'},
+    wind:'rgba(150,210,255,.55)',
+    dome:{grid:'#3a3328',lbl:'#a99a82',arc:'#d9a93f',glow:'rgba(217,169,63,.4)',sun:'#ffd54a',sunrim:'#5a4410',night:'#cdbfa3'}
+  }
+};
+let DOMECOL=THEMES[THEME].dome, WINDCOL=THEMES[THEME].wind;
+const cartoTiles=(b)=>['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png');
+function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=THEME==='dark'?'☀️':'🌙';}
+function applyTheme3d(t){
+  THEME=t; try{localStorage.setItem('bv_theme',t);}catch(e){}
+  document.documentElement.dataset.theme=t;
+  DOMECOL=THEMES[t].dome; WINDCOL=THEMES[t].wind;
+  const th=THEMES[t];
+  try{ if(typeof map!=='undefined'&&map.getSource('carto'))map.getSource('carto').setTiles(cartoTiles(th.basemap)); }catch(e){}
+  try{ map.setPaintProperty('bg','background-color',th.bg); }catch(e){}
+  try{ if(map.getLayer('hills')){map.setPaintProperty('hills','hillshade-shadow-color',th.hill.shadow);map.setPaintProperty('hills','hillshade-highlight-color',th.hill.hl);map.setPaintProperty('hills','hillshade-accent-color',th.hill.accent);} }catch(e){}
+  try{ applySun(); }catch(e){}
+  updateThemeBtn();
+}
+function toggleTheme3d(){applyTheme3d(THEME==='dark'?'light':'dark');}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{try{if(!localStorage.getItem('bv_theme'))applyTheme3d(e.matches?'dark':'light');}catch(_){}});}catch(e){}
+updateThemeBtn();
+
 // ---------- map ----------
 const TERRARIUM='https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
 const map=new maplibregl.Map({
@@ -225,17 +274,17 @@ const map=new maplibregl.Map({
     version:8,
     glyphs:'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources:{
-      carto:{type:'raster',tiles:['https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png','https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png','https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap, © CARTO · terrain © Mapzen/AWS · buildings © OpenFreeMap'},
+      carto:{type:'raster',tiles:cartoTiles(THEMES[THEME].basemap),tileSize:256,maxzoom:19,attribution:'© OpenStreetMap, © CARTO · terrain © Mapzen/AWS · buildings © OpenFreeMap'},
       dem:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
       demHill:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
       omt:{type:'vector',url:'https://tiles.openfreemap.org/planet'}
     },
     layers:[
-      {id:'bg',type:'background',paint:{'background-color':'#e7dfce'}},
+      {id:'bg',type:'background',paint:{'background-color':THEMES[THEME].bg}},
       {id:'carto',type:'raster',source:'carto',paint:{'raster-opacity':1,'raster-brightness-max':0.95}},
       {id:'hills',type:'hillshade',source:'demHill',paint:{
         'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map',
-        'hillshade-exaggeration':0.45,'hillshade-shadow-color':'#8a7d64','hillshade-highlight-color':'#fff8ec','hillshade-accent-color':'#cdbfa3'}}
+        'hillshade-exaggeration':0.45,'hillshade-shadow-color':THEMES[THEME].hill.shadow,'hillshade-highlight-color':THEMES[THEME].hill.hl,'hillshade-accent-color':THEMES[THEME].hill.accent}}
     ]
   }
 });
@@ -322,7 +371,7 @@ function addBuildings(){
     map.addLayer({
       id:'bld',type:'fill-extrusion',source:'omt','source-layer':'building',minzoom:12.5,
       paint:{
-        'fill-extrusion-color':'#cdbfa3',
+        'fill-extrusion-color':THEMES[THEME].bld.static,
         'fill-extrusion-height':['coalesce',['get','render_height'],8],
         'fill-extrusion-base':['coalesce',['get','render_min_height'],0],
         'fill-extrusion-opacity':0.88,
@@ -356,10 +405,11 @@ function applySun(){
     map.setPaintProperty('hills','hillshade-exaggeration',el>0?0.35+0.3*(1-day):0.25);
   }
   if(map.getLayer('bld')){
-    const base=el<=0?'#6b6250':(golden>0.3?mixHex('#cdbfa3','#c0824a',golden*0.85):mixHex('#bcae92','#efe6d2',day*0.9));
+    const B=THEMES[THEME].bld;
+    const base=el<=0?B.night:(golden>0.3?mixHex(B.goldA,B.goldB,golden*0.85):mixHex(B.dayA,B.dayB,day*0.9));
     map.setPaintProperty('bld','fill-extrusion-color',base);
   }
-  if(map.getLayer('carto'))map.setPaintProperty('carto','raster-brightness-max',0.55+0.4*day);
+  if(map.getLayer('carto'))map.setPaintProperty('carto','raster-brightness-max',THEMES[THEME].brightBase+0.4*day);
   // panel text + dome
   const t=sunTimes(CITY[0],CITY[1],DOY), shadow=(az+180)%360;
   document.getElementById('sunInfo').innerHTML=(el>0
@@ -373,12 +423,12 @@ function drawSkyDome(){
   const c=document.getElementById('skyDome'),ctx=c.getContext('2d');
   const W=190,H=120,cx=95,cy=78,R=54,t=sunTimes(CITY[0],CITY[1],DOY);
   ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle='#2b3543';ctx.lineWidth=1;
+  ctx.strokeStyle=DOMECOL.grid;ctx.lineWidth=1;
   [1,0.66,0.33].forEach(f=>{ctx.beginPath();ctx.arc(cx,cy,R*f,0,Math.PI*2);ctx.stroke();});
   ctx.beginPath();ctx.moveTo(cx-R,cy);ctx.lineTo(cx+R,cy);ctx.moveTo(cx,cy-R);ctx.lineTo(cx,cy+R);ctx.stroke();
-  ctx.fillStyle='#6b7787';ctx.font='9px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle=DOMECOL.lbl;ctx.font='9px IBM Plex Mono, monospace';ctx.textAlign='center';
   ctx.fillText('N',cx,cy-R-3);ctx.fillText('S',cx,cy+R+9);ctx.fillText('E',cx+R+7,cy+3);ctx.fillText('W',cx-R-7,cy+3);
-  ctx.strokeStyle='#f5c451';ctx.lineWidth=1.5;ctx.beginPath();let started=false;
+  ctx.strokeStyle=DOMECOL.arc;ctx.lineWidth=1.8;ctx.beginPath();let started=false;
   for(let h=t.rise;h<=t.set+1e-3;h+=(t.set-t.rise)/80){
     const p=sunPos(CITY[0],CITY[1],DOY,h);if(p.el<0)continue;
     const r=(90-p.el)/90*R,x=cx+r*Math.sin(p.az*D2R),y=cy-r*Math.cos(p.az*D2R);
@@ -387,10 +437,10 @@ function drawSkyDome(){
   ctx.stroke();
   const cur=sunPos(CITY[0],CITY[1],DOY,todHour);
   if(cur.el>0){const r=(90-cur.el)/90*R,x=cx+r*Math.sin(cur.az*D2R),y=cy-r*Math.cos(cur.az*D2R);
-    ctx.strokeStyle='rgba(255,213,74,.4)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.stroke();
-    ctx.fillStyle='#ffd54a';ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=DOMECOL.glow;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.arc(x,y,4.6,0,Math.PI*2);ctx.fillStyle=DOMECOL.sun;ctx.fill();ctx.strokeStyle=DOMECOL.sunrim;ctx.lineWidth=1.2;ctx.stroke();
   }else{const x=cx+R*Math.sin(cur.az*D2R),y=cy-R*Math.cos(cur.az*D2R);
-    ctx.fillStyle='#3a4554';ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fill();}
+    ctx.fillStyle=DOMECOL.night;ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fill();}
 }
 
 // ---------- wind: live Open-Meteo grid (3×3 over the city), bilinear-interpolated particles ----------
@@ -463,7 +513,7 @@ function windFrame(ts){
   wctx.fillStyle='rgba(0,0,0,0.92)';wctx.fillRect(0,0,innerWidth,innerHeight);
   wctx.globalCompositeOperation='source-over';
   const b=map.getBounds(), boost=140*Math.pow(2,Math.max(0,12.5-map.getZoom()));
-  wctx.lineWidth=1.1;wctx.strokeStyle='rgba(150,210,255,.55)';wctx.lineCap='round';wctx.beginPath();
+  wctx.lineWidth=1.35;wctx.strokeStyle=WINDCOL;wctx.lineCap='round';wctx.beginPath();
   for(const p of particles){
     const w=windAt(p.lng,p.lat);
     const mLat=111320, mLng=111320*Math.cos(p.lat*D2R);

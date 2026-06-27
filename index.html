@@ -2,6 +2,19 @@
 <html lang="en-IN">
     <head>
         <meta charset="utf-8" />
+        <script>
+            /* No-flash theme: apply saved choice or OS preference before paint. */
+            (function () {
+                try {
+                    var t = localStorage.getItem("bv_theme");
+                    if (t !== "light" && t !== "dark")
+                        t = matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    document.documentElement.dataset.theme = t;
+                } catch (e) {}
+            })();
+        </script>
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -57,6 +70,51 @@
                 --shadow:
                     0 1px 0 rgba(32, 24, 15, 0.04),
                     0 10px 30px -12px rgba(60, 42, 20, 0.28);
+                /* themed pieces consumed by JS (map pins, charts) + on-map glass */
+                --glass: var(--glass);
+                --sheen: var(--sheen);
+                --sel-row: rgba(125, 42, 42, 0.07);
+                --pin-stroke: #0b0f14;
+                --pin-sel: #7d2a2a;
+                --pin-heat: #9a8f7a;
+                --chart-grid: #e3dccb;
+                --chart-tick: #7a6f5d;
+                --chart-actual: #7d2a2a;
+                --chart-proj: #b8902f;
+                --cmp1: #7d2a2a;
+                --cmp2: #2f6b4f;
+                --cmp3: #b8902f;
+                color-scheme: light;
+            }
+            :root[data-theme="dark"] {
+                /* Dark broadsheet — warm near-black, paper text, terracotta */
+                --bg: #16130e;
+                --panel: #201c15;
+                --panel2: #2a241b;
+                --line: #3a3328;
+                --txt: #ece3d2;
+                --muted: #a99a82;
+                --accent: #cf6048;
+                --accent2: #5cba8e;
+                --on-accent: #17130d;
+                --gold: #d9a93f;
+                --shadow:
+                    0 1px 0 rgba(0, 0, 0, 0.3),
+                    0 14px 34px -14px rgba(0, 0, 0, 0.6);
+                --glass: rgba(32, 28, 21, 0.94);
+                --sheen: rgba(60, 50, 36, 0.45);
+                --sel-row: rgba(207, 96, 72, 0.16);
+                --pin-stroke: #0a0905;
+                --pin-sel: #ffffff;
+                --pin-heat: #cdbfa3;
+                --chart-grid: #322c22;
+                --chart-tick: #a99a82;
+                --chart-actual: #cf6048;
+                --chart-proj: #d9a93f;
+                --cmp1: #cf6048;
+                --cmp2: #5cba8e;
+                --cmp3: #d9a93f;
+                color-scheme: dark;
             }
             * {
                 box-sizing: border-box;
@@ -1890,7 +1948,7 @@
                 background: var(--panel2);
             }
             .item.sel {
-                background: rgba(125, 42, 42, 0.07);
+                background: var(--sel-row);
                 box-shadow: inset 3px 0 0 var(--accent);
             }
             .up {
@@ -1911,7 +1969,7 @@
             }
             .legend,
             .legendhead {
-                background: rgba(250, 246, 236, 0.93);
+                background: var(--glass);
                 border-color: var(--line);
             }
             .leaflet-tooltip.pin {
@@ -2002,6 +2060,9 @@
             }
 
             /* — Leaflet chrome — */
+            .leaflet-container {
+                background: var(--panel2);
+            }
             .leaflet-bar a {
                 background: var(--panel);
                 color: var(--txt);
@@ -2012,7 +2073,7 @@
                 color: var(--accent);
             }
             .leaflet-control-attribution {
-                background: rgba(250, 246, 236, 0.82) !important;
+                background: var(--glass) !important;
                 color: var(--muted) !important;
             }
             .leaflet-control-attribution a {
@@ -2210,6 +2271,15 @@
                     "
                 >
                     ⓘ<span class="abt-label"> About &amp; disclaimer</span>
+                </button>
+                <button
+                    class="aboutbtn"
+                    id="themeBtn"
+                    onclick="toggleTheme()"
+                    title="Toggle light / dark theme"
+                    aria-label="Toggle light or dark theme"
+                >
+                    🌙
                 </button>
                 <div class="kpis">
                     <div class="kpi">

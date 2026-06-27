@@ -64,19 +64,40 @@ function statusBadgeClass(s){
   return 's-up';
 }
 
+// ---------- theme ----------
+function curTheme(){return document.documentElement.dataset.theme==='dark'?'dark':'light';}
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=curTheme()==='dark'?'☀️':'🌙';}
+function applyTheme(t){
+  document.documentElement.dataset.theme=t; try{localStorage.setItem('bv_theme',t);}catch(e){}
+  try{setBasemap();}catch(e){}
+  try{renderAll();}catch(e){}                 // re-strokes pins + rebuilds legends
+  try{if(typeof selected!=='undefined'&&selected&&document.getElementById('detail').classList.contains('open'))openDetail(selected);}catch(e){}
+  try{if(typeof renderCompareTray==='function')renderCompareTray();}catch(e){}
+  updateThemeBtn();
+}
+function toggleTheme(){applyTheme(curTheme()==='dark'?'light':'dark');}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{try{if(!localStorage.getItem('bv_theme'))applyTheme(e.matches?'dark':'light');}catch(_){}});}catch(e){}
+
 // ---------- map ----------
 const map=L.map('map',{zoomControl:true,attributionControl:true}).setView([12.9716,77.5946],11);
 map.createPane('localityPane');map.getPane('localityPane').style.zIndex=500;
 map.zoomControl.setPosition('bottomright');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-  attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:19
-}).addTo(map);
+let baseTiles=null;
+function setBasemap(){
+  const variant=curTheme()==='dark'?'dark_all':'light_all';
+  const url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png';
+  if(baseTiles)map.removeLayer(baseTiles);
+  baseTiles=L.tileLayer(url,{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+  baseTiles.bringToBack();
+}
+setBasemap();
 const markers={};
 DATA.localities.forEach(loc=>{
-  const m=L.circleMarker([loc.lat,loc.lng],{pane:'localityPane',radius:8,weight:1.4,color:'#0b0f14',fillOpacity:.92,fillColor:'#888'});
+  const m=L.circleMarker([loc.lat,loc.lng],{pane:'localityPane',radius:8,weight:1.4,color:cssVar('--pin-stroke')||'#0b0f14',fillOpacity:.92,fillColor:'#888'});
   m.on('click',()=>openDetail(loc.name));
-  m.on('mouseover',()=>m.setStyle({weight:2.8,color:'#7d2a2a'}));
-  m.on('mouseout',()=>m.setStyle({weight:1.4,color:'#0b0f14'}));
+  m.on('mouseover',()=>m.setStyle({weight:2.8,color:cssVar('--accent')}));
+  m.on('mouseout',()=>m.setStyle({weight:1.4,color:cssVar('--pin-stroke')}));
   m.addTo(map);
   markers[loc.name]=m;
 });
@@ -117,7 +138,7 @@ function refreshMap(){
     if(!visible(loc)){m.setStyle({opacity:0,fillOpacity:0});m._path&&(m._path.style.pointerEvents='none');return;}
     m._path&&(m._path.style.pointerEvents='auto');
     const sel=selected===loc.name;
-    m.setStyle({opacity:1,fillOpacity:heatmapOn?.10:.82,fillColor:metricColor(loc),radius:metricRadius(loc)+(sel?3:0),weight:sel?3:(heatmapOn?.5:1.2),color:sel?'#7d2a2a':(heatmapOn?'#9a8f7a':'#0b0f14')});
+    m.setStyle({opacity:1,fillOpacity:heatmapOn?.10:.82,fillColor:metricColor(loc),radius:metricRadius(loc)+(sel?3:0),weight:sel?3:(heatmapOn?.5:1.2),color:sel?cssVar('--pin-sel'):(heatmapOn?cssVar('--pin-heat'):cssVar('--pin-stroke'))});
     m.bindTooltip(`<b>${loc.name}</b><br>${fmtMetric(loc)} · ${loc.zone}`,{className:'pin',direction:'top',offset:[0,-4]});
   });
 }
@@ -444,15 +465,15 @@ function openDetail(name){
   chart=new Chart(document.getElementById('chart'),{
     type:'line',
     data:{labels,datasets:[
-      {label:'Actual',data:actualData,borderColor:'#7d2a2a',backgroundColor:'rgba(125,42,42,.10)',fill:true,tension:.3,pointRadius:0,borderWidth:2.5},
-      {label:'Projected',data:projData,borderColor:'#b8902f',borderDash:[6,4],fill:false,tension:.3,pointRadius:0,borderWidth:2.5}
+      {label:'Actual',data:actualData,borderColor:cssVar('--chart-actual'),backgroundColor:cssVar('--chart-actual')+'1f',fill:true,tension:.3,pointRadius:0,borderWidth:2.5},
+      {label:'Projected',data:projData,borderColor:cssVar('--chart-proj'),borderDash:[6,4],fill:false,tension:.3,pointRadius:0,borderWidth:2.5}
     ]},
     options:{responsive:true,interaction:{mode:'index',intersect:false},
       plugins:{legend:{labels:{color:'#8b97a7',boxWidth:12,font:{size:11}}},
         tooltip:{callbacks:{label:ctx=>ctx.parsed.y?ctx.dataset.label+': '+fmt(ctx.parsed.y):''}}},
       scales:{
-        x:{ticks:{color:'#7a6f5d',maxTicksLimit:9,font:{size:10}},grid:{color:'#e3dccb'}},
-        y:{ticks:{color:'#7a6f5d',font:{size:10},callback:v=>fmtK(v)},grid:{color:'#e3dccb'}}
+        x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:9,font:{size:10}},grid:{color:cssVar('--chart-grid')}},
+        y:{ticks:{color:cssVar('--chart-tick'),font:{size:10},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}
       }}
   });
   refreshMap();refreshList();
@@ -1134,7 +1155,7 @@ function copyShareLink(){updateHash();const url=location.href;const ok=()=>toast
 window.addEventListener('hashchange',()=>{if(!_hashLock)applyHash();});
 
 // ---- H2: compare ----
-let COMPARE=[], cmpChart=null; const CMP_COLORS=['#7d2a2a','#2f6b4f','#b8902f'];
+let COMPARE=[], cmpChart=null; const CMP_COLORS=()=>[cssVar('--cmp1'),cssVar('--cmp2'),cssVar('--cmp3')];
 function loadCompare(){try{COMPARE=JSON.parse(localStorage.getItem('bv_compare')||'[]').filter(n=>DATA.localities.find(l=>l.name===n)).slice(0,3);}catch(e){COMPARE=[];}}
 function saveCompare(){try{localStorage.setItem('bv_compare',JSON.stringify(COMPARE));}catch(e){}}
 function isPinned(n){return COMPARE.indexOf(n)>=0;}
@@ -1150,7 +1171,8 @@ function renderCompareTray(){
   const tray=$('compareTray');
   if(!COMPARE.length){tray.classList.remove('show');if(cmpChart){cmpChart.destroy();cmpChart=null;}return;}
   tray.classList.add('show');
-  $('cmpChips').innerHTML=COMPARE.map((n,i)=>'<span class="cmpchip"><span style="width:9px;height:9px;border-radius:50%;background:'+CMP_COLORS[i]+';display:inline-block"></span>'+escapeHtml(n)+'<span class="rm" title="remove" onclick="togglePin(\''+n.replace(/'/g,"\\'")+'\')">×</span></span>').join('');
+  const cmpc=CMP_COLORS();
+  $('cmpChips').innerHTML=COMPARE.map((n,i)=>'<span class="cmpchip"><span style="width:9px;height:9px;border-radius:50%;background:'+cmpc[i]+';display:inline-block"></span>'+escapeHtml(n)+'<span class="rm" title="remove" onclick="togglePin(\''+n.replace(/'/g,"\\'")+'\')">×</span></span>').join('');
   const rows=COMPARE.map(n=>DATA.localities.find(l=>l.name===n));
   $('cmpTableWrap').innerHTML='<table class="cmptable"><tr><th></th>'+rows.map(l=>'<th>'+escapeHtml(l.name.split(' ')[0])+'</th>').join('')+'</tr>'+
     '<tr><th>₹/sqft now</th>'+rows.map(l=>'<td>'+fmt(priceAt(l,timeIdx))+'</td>').join('')+'</tr>'+
@@ -1158,9 +1180,9 @@ function renderCompareTray(){
     '<tr><th>CAGR 19–26</th>'+rows.map(l=>'<td>'+l.cagr+'%</td>').join('')+'</tr>'+
     '<tr><th>Yield</th>'+rows.map(l=>'<td>'+l.yield+'%</td>').join('')+'</tr></table>';
   const labels=combined(rows[0]).map((p,i)=>tLabel(i));
-  const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:CMP_COLORS[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
+  const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:cmpc[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
   if(cmpChart)cmpChart.destroy();
-  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:'#7a6f5d',maxTicksLimit:8,font:{size:9}},grid:{color:'#e3dccb'}},y:{ticks:{color:'#7a6f5d',font:{size:9},callback:v=>fmtK(v)},grid:{color:'#e3dccb'}}}}});
+  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:8,font:{size:9}},grid:{color:cssVar('--chart-grid')}},y:{ticks:{color:cssVar('--chart-tick'),font:{size:9},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}}}});
 }
 
 // ---- H3: coach + pulse ----
@@ -1315,3 +1337,6 @@ async function showProjectRoutes(pr){
   if(!projectsOn)document.getElementById('buildsToggle').click();
   setTimeout(()=>showProject(pr),400);
 })();
+
+// init theme toggle button label
+updateThemeBtn();
