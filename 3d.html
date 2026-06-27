@@ -6,22 +6,32 @@
 <title>BengaluruValue · 3D City Viewer — terrain, sun &amp; wind, new builds</title>
 <meta name="description" content="Interactive 3D viewer of Bengaluru: real terrain, OSM buildings, astronomically accurate sunlight, live wind animation, metro lines, schools and new construction projects with walking routes."/>
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"/>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" onerror="window.__cdnFail=1"></script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%8F%99%EF%B8%8F%3C/text%3E%3C/svg%3E"/>
 <style>
 :root{
-  --bg:#0f1419; --panel:#171d26; --panel2:#1d2530; --line:#2a3441;
-  --txt:#e6edf3; --muted:#8b97a7; --accent:#4f9dff; --accent2:#21c198;
-  --shadow:0 8px 28px rgba(0,0,0,.45);
+  /* Editorial / broadsheet — warm paper, ink, oxblood (matches index.html) */
+  --bg:#efe9da; --panel:#faf6ec; --panel2:#f1ead9; --line:#d9cdb4;
+  --txt:#20180f; --muted:#857a64; --accent:#7d2a2a; --accent2:#2f6b4f;
+  --on-accent:#f9f3e6; --gold:#b8902f;
+  --shadow:0 1px 0 rgba(32,24,15,.04),0 12px 32px -12px rgba(60,42,20,.30);
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1.45 'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-feature-settings:'tnum' 1;overflow:hidden}
+.brand,#card h3{font-family:'Spectral',Georgia,serif;letter-spacing:-.01em}
+.brand{font-weight:800;font-size:17px}
+.brand span{font-style:italic;font-weight:600}
+.tagline{font-family:'Spectral',Georgia,serif;font-style:italic}
+.sect .lt,.readout,.badge{font-family:'IBM Plex Mono',ui-monospace,monospace}
 #map{position:absolute;inset:0}
 #windCanvas{position:absolute;inset:0;pointer-events:none;z-index:5}
 
 /* top bar */
 #topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 12px;
-  background:linear-gradient(180deg,rgba(15,20,25,.92),rgba(15,20,25,.55) 75%,transparent);pointer-events:none}
+  background:linear-gradient(180deg,rgba(245,240,230,.94),rgba(245,240,230,.55) 75%,transparent);pointer-events:none}
 #topbar>*{pointer-events:auto}
 .backbtn{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--txt);
   padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;text-decoration:none}
@@ -32,7 +42,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1
 @media(max-width:700px){.tagline{display:none}}
 
 /* control panel */
-#panel{position:absolute;top:52px;right:10px;z-index:20;width:262px;background:rgba(23,29,38,.94);border:1px solid var(--line);
+#panel{position:absolute;top:52px;right:10px;z-index:20;width:262px;background:rgba(250,246,236,.95);border:1px solid var(--line);
   border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);overflow:hidden;transition:max-height .25s ease}
 #panel.collapsed{max-height:38px}
 #panelHead{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;user-select:none;font-weight:600;font-size:13px}
@@ -43,7 +53,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:14px/1
 .sect .lt{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;font-weight:600}
 .chiprow{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:11.5px;padding:4px 9px;border-radius:99px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;user-select:none}
-.chip.active{background:rgba(79,157,255,.18);border-color:var(--accent);color:var(--txt)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
 .slrow{display:flex;align-items:center;gap:8px;margin-top:4px}
 input[type=range]{flex:1;accent-color:var(--accent);height:18px}
 .playbtn{width:26px;height:24px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:11px;line-height:1}
@@ -57,12 +67,12 @@ input[type=range]{flex:1;accent-color:var(--accent);height:18px}
 
 /* route / project card */
 #card{position:absolute;left:10px;bottom:10px;z-index:20;width:330px;max-width:calc(100vw - 20px);max-height:55vh;overflow:auto;
-  background:rgba(23,29,38,.96);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);
+  background:rgba(250,246,236,.97);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(6px);
   padding:13px 14px;display:none}
 #card h3{margin:0 0 2px;font-size:15px}
 #card .sub{color:var(--muted);font-size:12px;margin-bottom:8px}
 #card .x{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer}
-#card .x:hover{color:#fff}
+#card .x:hover{color:var(--accent)}
 .route{display:flex;gap:9px;align-items:flex-start;margin-top:9px;padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:var(--panel2)}
 .route .dot{width:10px;height:10px;border-radius:50%;margin-top:3px;flex:none}
 .route b{font-size:12.5px}
@@ -80,8 +90,8 @@ input[type=range]{flex:1;accent-color:var(--accent);height:18px}
 .maplibregl-popup-tip{border-top-color:var(--panel)!important;border-bottom-color:var(--panel)!important}
 .maplibregl-ctrl-group{background:var(--panel)!important;border:1px solid var(--line)}
 .maplibregl-ctrl-group button{background:var(--panel)!important}
-.maplibregl-ctrl-group button span{filter:invert(.85)}
-.maplibregl-ctrl-attrib{background:rgba(15,20,25,.7)!important;color:var(--muted)!important;font-size:9px!important}
+.maplibregl-ctrl-group button span{filter:none}
+.maplibregl-ctrl-attrib{background:rgba(250,246,236,.82)!important;color:var(--muted)!important;font-size:9px!important}
 .maplibregl-ctrl-attrib a{color:var(--muted)!important}
 @media(max-width:700px){
   #panel{width:228px;top:48px}
@@ -215,17 +225,17 @@ const map=new maplibregl.Map({
     version:8,
     glyphs:'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources:{
-      carto:{type:'raster',tiles:['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png','https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png','https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap, © CARTO · terrain © Mapzen/AWS · buildings © OpenFreeMap'},
+      carto:{type:'raster',tiles:['https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png','https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png','https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap, © CARTO · terrain © Mapzen/AWS · buildings © OpenFreeMap'},
       dem:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
       demHill:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
       omt:{type:'vector',url:'https://tiles.openfreemap.org/planet'}
     },
     layers:[
-      {id:'bg',type:'background',paint:{'background-color':'#0f1419'}},
+      {id:'bg',type:'background',paint:{'background-color':'#e7dfce'}},
       {id:'carto',type:'raster',source:'carto',paint:{'raster-opacity':1,'raster-brightness-max':0.95}},
       {id:'hills',type:'hillshade',source:'demHill',paint:{
         'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map',
-        'hillshade-exaggeration':0.45,'hillshade-shadow-color':'#000a14','hillshade-highlight-color':'#5a6b80','hillshade-accent-color':'#0c1620'}}
+        'hillshade-exaggeration':0.45,'hillshade-shadow-color':'#8a7d64','hillshade-highlight-color':'#fff8ec','hillshade-accent-color':'#cdbfa3'}}
     ]
   }
 });
@@ -256,7 +266,7 @@ function addDataLayers(){
   map.addSource('metroLines',{type:'geojson',data:mg.lines});
   map.addSource('metroSts',{type:'geojson',data:mg.sts});
   map.addSource('schools',{type:'geojson',data:pointGeo(DATA.schools.schools,s=>({name:s.n,board:s.b,loc:s.loc}))});
-  map.addSource('projects',{type:'geojson',data:pointGeo(DATA.projects.projects,(p,i)=>({i,name:p.name,builder:p.builder,loc:p.loc,status:p.status,price:p.price,type:p.type,note:p.note,color:p.color||'#4f9dff'}))});
+  map.addSource('projects',{type:'geojson',data:pointGeo(DATA.projects.projects,(p,i)=>({i,name:p.name,builder:p.builder,loc:p.loc,status:p.status,price:p.price,type:p.type,note:p.note,color:p.color||'#7d2a2a'}))});
   map.addSource('routes',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
   map.addSource('routeEnds',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
 
@@ -286,11 +296,11 @@ function addDataLayers(){
     paint:{'line-color':['get','color'],'line-width':3,'line-dasharray':[0,4,3]},
     layout:{'line-cap':'round','line-join':'round'}});
   map.addLayer({id:'route-ends',type:'circle',source:'routeEnds',
-    paint:{'circle-radius':6,'circle-color':['get','color'],'circle-stroke-color':'#fff','circle-stroke-width':1.5}});
+    paint:{'circle-radius':6,'circle-color':['get','color'],'circle-stroke-color':'#4a3a28','circle-stroke-width':1.5}});
 
   map.addLayer({id:'proj-c',type:'circle',source:'projects',
     paint:{'circle-radius':['interpolate',['linear'],['zoom'],9,3.5,12,6.5,16,10],
-      'circle-color':['get','color'],'circle-stroke-color':'#ffffff','circle-stroke-width':1.4,'circle-opacity':0.92}});
+      'circle-color':['get','color'],'circle-stroke-color':'#4a3a28','circle-stroke-width':1.4,'circle-opacity':0.92}});
 
   map.on('click','proj-c',e=>selectProject(e.features[0].properties.i));
   map.on('mouseenter','proj-c',()=>map.getCanvas().style.cursor='pointer');
@@ -312,7 +322,7 @@ function addBuildings(){
     map.addLayer({
       id:'bld',type:'fill-extrusion',source:'omt','source-layer':'building',minzoom:12.5,
       paint:{
-        'fill-extrusion-color':'#3a4554',
+        'fill-extrusion-color':'#cdbfa3',
         'fill-extrusion-height':['coalesce',['get','render_height'],8],
         'fill-extrusion-base':['coalesce',['get','render_min_height'],0],
         'fill-extrusion-opacity':0.88,
@@ -346,7 +356,7 @@ function applySun(){
     map.setPaintProperty('hills','hillshade-exaggeration',el>0?0.35+0.3*(1-day):0.25);
   }
   if(map.getLayer('bld')){
-    const base=el<=0?'#222c3c':(golden>0.3?mixHex('#3a4554','#b87a4a',golden*0.8):mixHex('#2c3645','#8f9cb0',day*0.9));
+    const base=el<=0?'#6b6250':(golden>0.3?mixHex('#cdbfa3','#c0824a',golden*0.85):mixHex('#bcae92','#efe6d2',day*0.9));
     map.setPaintProperty('bld','fill-extrusion-color',base);
   }
   if(map.getLayer('carto'))map.setPaintProperty('carto','raster-brightness-max',0.55+0.4*day);
@@ -537,9 +547,9 @@ function addFlightLayers(){
   map.addLayer({id:'corridor-app',type:'line',source:'corridors',filter:['==',['get','k'],'app'],
     paint:{'line-color':'#9db4d0','line-width':1.2,'line-opacity':0.4,'line-dasharray':[1.5,2.5]}});
   map.addLayer({id:'corridor-rwy',type:'line',source:'corridors',filter:['==',['get','k'],'rwy'],
-    paint:{'line-color':'#cbd5e1','line-width':3,'line-opacity':0.85},layout:{'line-cap':'round'}});
+    paint:{'line-color':'#6b5d47','line-width':3,'line-opacity':0.85},layout:{'line-cap':'round'}});
   map.addLayer({id:'airports-c',type:'circle',source:'airports',
-    paint:{'circle-radius':5,'circle-color':'#cbd5e1','circle-stroke-color':'#0f1419','circle-stroke-width':1.5}});
+    paint:{'circle-radius':5,'circle-color':'#6b5d47','circle-stroke-color':'#0f1419','circle-stroke-width':1.5}});
   map.addLayer({id:'flight-trails',type:'line',source:'flightTrails',
     paint:{'line-color':['get','color'],'line-width':1.6,'line-opacity':0.55},layout:{'line-cap':'round','line-join':'round'}});
   // live noise ring: planes below ~8,000 ft AGL get a ring sized & colored by how low they are
@@ -558,7 +568,7 @@ function addFlightLayers(){
       'icon-allow-overlap':true,'icon-ignore-placement':true,
       'text-field':['get','cs'],'text-font':['Open Sans Semibold'],'text-size':10,
       'text-offset':[0,1.5],'text-anchor':'top','text-optional':true},
-    paint:{'text-color':'#cfe3ff','text-halo-color':'#0f1419','text-halo-width':1.2}});
+    paint:{'text-color':'#20180f','text-halo-color':'#f9f3e6','text-halo-width':1.2}});
   map.on('click','flights-i',e=>{
     const p=e.features[0].properties;
     const alt=p.alt==='ground'?'on ground'
@@ -718,7 +728,7 @@ async function selectProject(i){
     {type:'Feature',properties:{color:met.item.color},geometry:{type:'LineString',coordinates:r2.coords}}
   ]});
   map.getSource('routeEnds').setData({type:'FeatureCollection',features:[
-    {type:'Feature',properties:{color:pr.color||'#4f9dff'},geometry:{type:'Point',coordinates:[pr.lng,pr.lat]}},
+    {type:'Feature',properties:{color:pr.color||'#7d2a2a'},geometry:{type:'Point',coordinates:[pr.lng,pr.lat]}},
     {type:'Feature',properties:{color:'#21c198'},geometry:{type:'Point',coordinates:[sch.item.lng,sch.item.lat]}},
     {type:'Feature',properties:{color:met.item.color},geometry:{type:'Point',coordinates:[met.item.lng,met.item.lat]}}
   ]});
@@ -804,7 +814,7 @@ map.on('load',async()=>{
     addFlightLayers();
   }catch(e){
     console.error(e);
-    document.getElementById('loading').innerHTML='<div style="color:#e6edf3;text-align:center">Couldn\'t load city data files.<br><span style="color:#8b97a7;font-size:12px">'+e.message+'</span></div>';
+    document.getElementById('loading').innerHTML='<div style="color:#20180f;text-align:center">Couldn\'t load city data files.<br><span style="color:#8b97a7;font-size:12px">'+e.message+'</span></div>';
     return;
   }
   applySun();applyLayers();
