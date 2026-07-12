@@ -56,6 +56,14 @@ Run this on every Update so the 🌡️ Heat index panel (`index.html?heat=1`) s
 
 #### Commit and update
 
-- Checkout a new branch with the name format update/date_time. Fill in date and time correctly.
-- Commit the changes to `projects.json` and `data/overheat.json` with a clear message of what was added or removed.
-- Open a PR with the updates. Make sure PR message shows. 1. Changes made , 2. locations added. 3. Locations removed. 4. Heat index: indicator changes and whether the composite score moved up or down.
+Use a single long-lived branch named `update` for every Update run. Do NOT create a new dated branch each time — the date lives in the commit message and PR title instead.
+
+- Sync from main first:
+  - `git fetch origin`
+  - `git checkout main && git pull --ff-only origin main`
+  - `git checkout update` (if it doesn't exist yet: `git checkout -b update main`)
+  - Reset `update` to match the fresh main so every run starts clean: `git reset --hard origin/main`. (Rationale: the previous run's PR should already be merged; if it isn't, land it first before running Update again.)
+- Make the `data/projects.json` and `data/overheat.json` edits.
+- Commit with a title that carries today's date and a one-line delta, e.g. `Update 2026-07-05: +6 launches; heat index refresh (composite 53→57)`. The body must include: 1) Changes made, 2) Locations added, 3) Locations removed, 4) Heat index: indicator changes and whether the composite score moved up or down.
+- Push: `git push --force-with-lease origin update` (force is needed because the branch was reset to main).
+- Open the PR (or update the existing one — if a PR is already open against `update`, the push refreshes it; edit the title/body to reflect this run's date and delta rather than opening a duplicate).
