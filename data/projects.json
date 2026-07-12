@@ -1927,7 +1927,7 @@
    "lat": 12.7869,
    "lng": 77.6385,
    "type": "Apartments (~9ac)",
-   "status": "Pre-launch",
+   "status": "Launched",
    "price": "from ₹85L",
    "note": "3 high-rise towers (B+G+31, ~100m), 432 low-density 2 & 3 BHK (1,050–1,700 sqft), 70%+ open; 2–3 km from E-City, 4 km from Bommasandra metro; K-RERA pending.",
    "color": "#3b82f6"
@@ -2255,6 +2255,162 @@
    "price": "–",
    "note": "Boutique low-density central-Bangalore project targeting HNI/expat segment; ~2.9 km from Palace Rd. RERA/possession TBA.",
    "color": "#e11d48"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Laurel & Maple at Brigade Orchards",
+   "loc": "Brigade Orchards, Devanahalli",
+   "lat": 13.2426,
+   "lng": 77.7126,
+   "type": "Apartments (2.7ac)",
+   "status": "Launched",
+   "price": "–",
+   "note": "311 units of 1/2/3 BHK inside 135-ac Brigade Orchards township; Laurel wing senior-friendly design; airport corridor.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Palm Court",
+   "loc": "Kogilu Main Rd, Yelahanka",
+   "lat": 13.1080,
+   "lng": 77.6003,
+   "type": "Apartments (4.9ac)",
+   "status": "Launched",
+   "price": "from ₹1.19Cr",
+   "note": "2 towers (2B+G+17/18), 294 units of 2/3/3.5 BHK; Mediterranean design, 70% open space; near Kogilu Cross metro corridor.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Concorde",
+   "name": "Concorde Neo",
+   "loc": "Kannur, Thanisandra Main Rd",
+   "lat": 13.0961,
+   "lng": 77.6395,
+   "type": "Apartments (4.5ac)",
+   "status": "Launched",
+   "price": "from ₹1.04Cr",
+   "note": "2 & 3 BHK; 78% open space, 40+ amenities; near Bhartiya City; possession Oct 2028.",
+   "color": "#4d7c0f"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Shettigere Villas",
+   "loc": "Shettigere, KIA Airport corridor",
+   "lat": 13.1855,
+   "lng": 77.6612,
+   "type": "Villas (~8ac)",
+   "status": "Pre-launch",
+   "price": "from ₹4.5Cr",
+   "note": "Boutique gated community; ~60 ultra-luxury villas on airport corridor; RERA filing pending.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Plots Hosur Rd",
+   "loc": "Hosur Rd, South Bangalore",
+   "lat": 12.7409,
+   "lng": 77.8253,
+   "type": "Plots",
+   "status": "Announced",
+   "price": "–",
+   "note": "Premium plotted development on Hosur Rd corridor; possession target Dec 2028.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Assetz",
+   "name": "Assetz Codename Altitude (Meru & Meadow)",
+   "loc": "Off Kanakapura Main Rd",
+   "lat": 12.8639,
+   "lng": 77.5450,
+   "type": "Apartments (5ac)",
+   "status": "Launched",
+   "price": "₹2.65–2.96Cr",
+   "note": "468 units of 3 BHK 1,897–2,111 sqft; 87% open space; RERA-approved; possession Nov 2030.",
+   "color": "#a855f7"
+  },
+  {
+   "builder": "Century",
+   "name": "Century Central",
+   "loc": "Kanakapura Rd",
+   "lat": 12.8760,
+   "lng": 77.5500,
+   "type": "Apartments",
+   "status": "Under construction",
+   "price": "from ₹1.33Cr",
+   "note": "2 & 3 BHK premium apartments on Kanakapura Rd metro corridor.",
+   "color": "#06b6d4"
+  },
+  {
+   "builder": "Shriram",
+   "name": "Shriram Songs of the Earth",
+   "loc": "Off Hosur Rd, near E-City",
+   "lat": 12.8300,
+   "lng": 77.6800,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "–",
+   "note": "New premium apartment launch off Hosur Rd / Electronic City corridor; nature-themed masterplan.",
+   "color": "#eab308"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand Flamingo",
+   "loc": "HSR Layout",
+   "lat": 12.9082,
+   "lng": 77.6476,
+   "type": "Apartments",
+   "status": "Under construction",
+   "price": "–",
+   "note": "3 & 4 BHK, 1,700–2,443 sqft; possession Jul 2026; core HSR micro-market.",
+   "color": "#f472b6"
+  },
+  {
+   "builder": "Adarsh",
+   "name": "Adarsh Welkin Park",
+   "loc": "Gattahalli, off Sarjapur Rd",
+   "lat": 12.8830,
+   "lng": 77.7280,
+   "type": "Apartments (36ac)",
+   "status": "Pre-launch",
+   "price": "from ₹1.38Cr",
+   "note": "8 towers G+25, 832 units of 2.5 & 3 BHK; Phase 2 pre-launch pricing from ₹1.30Cr; 21.5-ac companion Signature Villas cluster from ₹4.14Cr.",
+   "color": "#d946ef"
+  },
+  {
+   "builder": "Adarsh",
+   "name": "Adarsh Lumina",
+   "loc": "Halanayakanahalli, off Sarjapur Rd",
+   "lat": 12.8735,
+   "lng": 77.7395,
+   "type": "Apartments (8.7ac)",
+   "status": "Pre-launch",
+   "price": "₹1.44–1.99Cr",
+   "note": "5 towers, 440 units of 2.5 & 3 BHK; lake-view low-rise in Kasavanahalli micro-market.",
+   "color": "#d946ef"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Codename Peak Life",
+   "loc": "Kengeri, Mysore Rd",
+   "lat": 12.9081,
+   "lng": 77.4826,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "₹1.3–2.64Cr",
+   "note": "Tallest residential in Kengeri micro-market; 1,010–2,400 sqft units; possession Dec 2029.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Abshot",
+   "loc": "Vasanth Nagar (Sankey Rd), Central",
+   "lat": 12.9945,
+   "lng": 77.5878,
+   "type": "Apartments (8.34ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "CBD ultra-luxury; ~100 flats, >75% open space; near Bangalore Golf Club/Palace Grounds; 2026 launch window.",
+   "color": "#e11d48"
   }
  ],
  "builders": {
@@ -2295,7 +2451,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 188,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 5 July 2026."
+  "count": 201,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 12 July 2026."
  }
 }
