@@ -43,9 +43,9 @@
    "lat": 12.878,
    "lng": 77.556,
    "type": "Apartments (41ac)",
-   "status": "Pre-launch",
-   "price": "₹1.2–3.5Cr",
-   "note": "Extension of Falcon City; Kanakapura Rd metro.",
+   "status": "Launched",
+   "price": "from ₹1.40Cr",
+   "note": "Officially launched 15 Apr 2026 (pre-launch 31 Mar 2026); 7 towers 2B+G+30 with 2/3/4 BHK, extension of Falcon City on Kanakapura Rd metro corridor.",
    "color": "#e11d48"
   },
   {
@@ -544,12 +544,12 @@
    "builder": "Sattva",
    "name": "Sattva City",
    "loc": "Doddajala/Shettigere, Devanahalli",
-   "lat": 13.215,
-   "lng": 77.705,
+   "lat": 13.19,
+   "lng": 77.66,
    "type": "Township (50ac)",
-   "status": "Pre-launch",
+   "status": "Launched",
    "price": "–",
-   "note": "Flagship airport township; launch Mar 2026.",
+   "note": "Launched 1 Mar 2026; ~3,460 units of 2/2.5/3/3.5/4 BHK; large integrated airport-corridor township, completion Feb 2032.",
    "color": "#3b82f6"
   },
   {
@@ -1119,13 +1119,13 @@
   {
    "builder": "Birla",
    "name": "Birla Trimaya Ph4 (The Bay)",
-   "loc": "Devanahalli",
-   "lat": 13.2257,
-   "lng": 77.7081,
-   "type": "Apartments",
-   "status": "Pre-launch",
-   "price": "from ₹95L",
-   "note": "Phase 4 of 52-acre Shettigere Rd township; EOI from Jan 2026.",
+   "loc": "Shettigere, Devanahalli",
+   "lat": 13.226,
+   "lng": 77.682,
+   "type": "Apartments (52ac township)",
+   "status": "Launched",
+   "price": "from ₹82L",
+   "note": "Phase 4 RERA 17 Jan 2026; 7 towers G+14, 548 units of 1/2/3 BHK + 4 BHK duplex; 2 BHK from ₹93L, possession Dec 2031.",
    "color": "#f43f5e"
   },
   {
@@ -1276,12 +1276,12 @@
    "builder": "Adarsh",
    "name": "Adarsh Thanisandra",
    "loc": "Thanisandra",
-   "lat": 13.064,
-   "lng": 77.623,
-   "type": "Apartments",
-   "status": "Upcoming",
-   "price": "–",
-   "note": "Premium 2 & 3 BHK on a 9-ac Thanisandra parcel.",
+   "lat": 13.072,
+   "lng": 77.628,
+   "type": "Apartments (9ac)",
+   "status": "Pre-launch",
+   "price": "from ₹1.05Cr",
+   "note": "Q3 2026 launch; pre-launch ~₹12,550/sqft, expected ₹14.5–15k at launch; 2/3 BHK (1100–2000 sqft), possession Dec 2029.",
    "color": "#d946ef"
   },
   {
@@ -2411,6 +2411,138 @@
    "price": "–",
    "note": "CBD ultra-luxury; ~100 flats, >75% open space; near Bangalore Golf Club/Palace Grounds; 2026 launch window.",
    "color": "#e11d48"
+  },
+  {
+   "builder": "Assetz",
+   "name": "Assetz Miru & Miyo",
+   "loc": "Honnenahalli, Yelahanka",
+   "lat": 13.11,
+   "lng": 77.6,
+   "type": "Apartments (6.35ac)",
+   "status": "Launched",
+   "price": "from ₹1.77Cr",
+   "note": "Launched May 2026 (RERA 5 May 2026); 3 towers, 354 units of 3 BHK at ~₹9,999/sqft; 77% open space; possession Mar 2031.",
+   "color": "#a855f7"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Edition",
+   "loc": "Siddapura, Brookefield, Whitefield",
+   "lat": 12.9679,
+   "lng": 77.7218,
+   "type": "Apartments (20ac)",
+   "status": "Launched",
+   "price": "₹2.41–3.72Cr",
+   "note": "British-themed 20-ac township; 11 towers, 1,650 units of 2/3/4 BHK; Ph1 & Ph2 RERA 11 Dec 2025; 66,000 sft clubhouse.",
+   "color": "#0d9488"
+  },
+  {
+   "builder": "Adarsh",
+   "name": "Adarsh Varthur (CDP Road)",
+   "loc": "CDP Road, Varthur",
+   "lat": 12.941,
+   "lng": 77.75,
+   "type": "Apartments (12ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Proposed 12-ac premium project; 11 towers (2B+G+25), 1,248 units of 2/3/4 BHK on CDP Rd near Whitefield/Sarjapur; RERA in process.",
+   "color": "#d946ef"
+  },
+  {
+   "builder": "Lodha",
+   "name": "Lodha Kadugodi",
+   "loc": "Kadugodi, Whitefield",
+   "lat": 12.9992,
+   "lng": 77.7581,
+   "type": "Apartments (9.44ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "9.44-ac luxury; 818 units of 3 & 4 BHK across G+28 towers; pre-launch/pre-RERA phase; near Kadugodi Metro & Tree Park.",
+   "color": "#dc2626"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Hoskote (Dalasagere)",
+   "loc": "Dalasagere, Hoskote",
+   "lat": 13.0707,
+   "lng": 77.7981,
+   "type": "Apartments (10–21ac)",
+   "status": "Pre-launch",
+   "price": "₹92L–₹1.51Cr",
+   "note": "Pre-launch 2/3/4 BHK on 10–21 acres; RERA in progress; EOI in 2026; planned launch late-2026, possession 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Bannerghatta Road",
+   "loc": "Begur Rd, South Bengaluru",
+   "lat": 12.863,
+   "lng": 77.625,
+   "type": "Apartments (40+ac township)",
+   "status": "Pre-launch",
+   "price": "from ₹1.15Cr",
+   "note": "40+ ac multi-tower township with ~4,300 units in 1/2/3/4 BHK; K-RERA pending in H1 2026; near Singasandra, Kudlu and Banashankari metro.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "SNN",
+   "name": "SNN Electronic City",
+   "loc": "Neotown Main Rd, Electronic City",
+   "lat": 12.842,
+   "lng": 77.664,
+   "type": "Apartments (3B+G+36)",
+   "status": "Pre-launch",
+   "price": "from ₹1.15Cr",
+   "note": "Three ~120m landmark towers, 552 residences (2 & 3 BHK), low per-floor density; ~1.1 km from Yellow Line metro on Hosur Rd; K-RERA pending in 2026.",
+   "color": "#b45309"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Infinia Phase 2",
+   "loc": "Koramangala 1st Block, off HSR Layout",
+   "lat": 12.9346,
+   "lng": 77.6266,
+   "type": "Apartments (4.07ac)",
+   "status": "Launched",
+   "price": "from ₹4.17Cr",
+   "note": "Ultra-luxury 3 & 4 BHK (1,922–3,264 sqft); ~180–196 units across 4–6 towers (2B+G+11); prime Koramangala 1st Block adj. Agara Lake; possession Dec 2029.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Sarjapur Rd (Kada Agrahara)",
+   "loc": "Kada Agrahara, Sarjapur Road",
+   "lat": 12.885,
+   "lng": 77.746,
+   "type": "Apartments (21.6ac)",
+   "status": "Pre-launch",
+   "price": "on request",
+   "note": "Premium high-rise 2 & 3 BHK; ~1,600 residences across 2 iconic towers (3B+G+32); positioned near Bellandur/HSR/ORR corridors.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Kensho Hills",
+   "loc": "S. Medihalli, Sarjapur–Attibele Rd",
+   "lat": 12.83,
+   "lng": 77.755,
+   "type": "Plotted (38ac)",
+   "status": "Launched",
+   "price": "₹78L–₹1.56Cr",
+   "note": "Premium plotted development, ~700 plots across 38 acres along Sarjapur–Attibele corridor.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Soukya Road",
+   "loc": "Soukya Road, East Bengaluru",
+   "lat": 13.018,
+   "lng": 77.783,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹90L",
+   "note": "3 towers (A/B/C, 3B+G+24), 523 premium 2 & 3 BHK residences; 2026 launch.",
+   "color": "#0d9488"
   }
  ],
  "builders": {
@@ -2451,7 +2583,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 201,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 12 July 2026."
+  "count": 212,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 19 July 2026."
  }
 }
