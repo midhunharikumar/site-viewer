@@ -462,7 +462,11 @@ function openDetail(name){
   const actualData=c.map((p,i)=>i<=ACTUAL_MAX?p.price:null);
   const projData=c.map((p,i)=>i>=ACTUAL_MAX?p.price:null);
   if(chart)chart.destroy();
-  chart=new Chart(document.getElementById('chart'),{
+  ensureChart().then(function(){
+    var el=document.getElementById('chart');
+    if(!el||selected!==loc.name)return;
+    if(chart)chart.destroy();
+    chart=new Chart(el,{
     type:'line',
     data:{labels,datasets:[
       {label:'Actual',data:actualData,borderColor:cssVar('--chart-actual'),backgroundColor:cssVar('--chart-actual')+'1f',fill:true,tension:.3,pointRadius:0,borderWidth:2.5},
@@ -475,7 +479,8 @@ function openDetail(name){
         x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:9,font:{size:10}},grid:{color:cssVar('--chart-grid')}},
         y:{ticks:{color:cssVar('--chart-tick'),font:{size:10},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}
       }}
-  });
+    });
+  }).catch(function(){});
   refreshMap();refreshList();
   map.flyTo([loc.lat,loc.lng],13,{duration:.6});
   dismissCoach();syncDetailActions();updateHash();
@@ -1182,7 +1187,12 @@ function renderCompareTray(){
   const labels=combined(rows[0]).map((p,i)=>tLabel(i));
   const ds=rows.map((l,i)=>({label:l.name,data:combined(l).map(p=>p.price),borderColor:cmpc[i],backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2.4}));
   if(cmpChart)cmpChart.destroy();
-  cmpChart=new Chart($('cmpChart'),{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:8,font:{size:9}},grid:{color:cssVar('--chart-grid')}},y:{ticks:{color:cssVar('--chart-tick'),font:{size:9},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}}}});
+  ensureChart().then(function(){
+    var el=$('cmpChart');
+    if(!el||!COMPARE.length)return;
+    if(cmpChart)cmpChart.destroy();
+    cmpChart=new Chart(el,{type:'line',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{x:{ticks:{color:cssVar('--chart-tick'),maxTicksLimit:8,font:{size:9}},grid:{color:cssVar('--chart-grid')}},y:{ticks:{color:cssVar('--chart-tick'),font:{size:9},callback:v=>fmtK(v)},grid:{color:cssVar('--chart-grid')}}}}});
+  }).catch(function(){});
 }
 
 // ---- H3: coach + pulse ----
@@ -1340,3 +1350,158 @@ async function showProjectRoutes(pr){
 
 // init theme toggle button label
 updateThemeBtn();
+
+// ============================================================================
+// MOBILE APP SHELL — bottom-sheet controller (≤860px). Reuses existing DOM/JS.
+// Desktop is untouched: everything below is gated on the mobile media query.
+// ============================================================================
+(function mobileShell(){
+  var mq = window.matchMedia('(max-width:860px)');
+  var sheet = document.getElementById('sidebar');
+  var detail = document.getElementById('detail');
+  var mapEl = document.getElementById('map');
+  if(!sheet) return;
+
+  // --- Inject the drag handle at the top of the sheet ---
+  var handle = document.createElement('div');
+  handle.className = 'sheet-handle';
+  handle.setAttribute('aria-label','Drag to resize list');
+  sheet.insertBefore(handle, sheet.firstChild);
+
+  // --- Inject the single "Filters & layers" disclosure chip ---
+  var controls = sheet.querySelector('.controls');
+  var searchwrap = sheet.querySelector('.searchwrap');
+  var bar = document.createElement('div');
+  bar.className = 'm-filterbar';
+  bar.innerHTML = '<button class="m-filterchip" type="button" aria-expanded="false">'
+    + '<span>Colour: <span class="cv" id="mMetricLbl">₹/sqft</span> · Filters &amp; layers</span>'
+    + '<span class="caret">▾</span></button>';
+  if(searchwrap && searchwrap.nextSibling) controls.insertBefore(bar, searchwrap.nextSibling);
+  else if(controls) controls.appendChild(bar);
+  var filterChip = bar.querySelector('.m-filterchip');
+
+  // Keep the "Colour:" label in sync with the active metric button
+  var METRIC_LABELS = {price:'₹/sqft',cagr:'Growth',pcagr:'Proj.',yield:'Yield',
+    sch:'Schools',saf:'Safety',wat:'Water',cauv:'Cauvery'};
+  function syncMetricLabel(){
+    var on = document.querySelector('#metricSeg button.active,#livSeg button.active');
+    var lbl = document.getElementById('mMetricLbl');
+    if(on && lbl) lbl.textContent = METRIC_LABELS[on.dataset.m] || on.textContent.trim();
+  }
+  document.querySelectorAll('#metricSeg button,#livSeg button').forEach(function(b){
+    b.addEventListener('click', syncMetricLabel);
+  });
+  syncMetricLabel();
+
+  // --- Inject floating map actions (time scrubber toggle) ---
+  var mapwrap = document.getElementById('mapwrap');
+  var fabs = document.createElement('div');
+  fabs.className = 'm-fabs';
+  fabs.innerHTML = '<button class="m-fab" id="mTimeFab" type="button" title="Time scrubber" aria-label="Toggle time scrubber">🕐</button>';
+  if(mapwrap) mapwrap.appendChild(fabs);
+  var timeFab = document.getElementById('mTimeFab');
+  if(timeFab) timeFab.addEventListener('click', function(){
+    var on = document.body.classList.toggle('mtime-on');
+    timeFab.classList.toggle('on', on);
+  });
+
+  // --- Detent management ---
+  function vh(){ return window.innerHeight; }
+  function peekPx(){
+    var v = getComputedStyle(sheet).getPropertyValue('--peek').trim();
+    var n = parseFloat(v); return isNaN(n) ? 132 : n;
+  }
+  function posFor(d){
+    if(d==='full') return 0;
+    if(d==='half') return 0.48*vh();
+    return 0.92*vh() - peekPx();            // peek
+  }
+  var detent = 'peek';
+  function setDetent(d){
+    detent = d;
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+    sheet.setAttribute('data-detent', d);
+    // Let the CSS transition run, then tell Leaflet the map box changed
+    clearTimeout(setDetent._t);
+    setDetent._t = setTimeout(function(){ try{ map.invalidateSize(); }catch(e){} }, 340);
+  }
+
+  // Drag on the handle: live-follow, snap to nearest detent on release
+  var dragging=false, moved=false, startY=0, startPos=0;
+  function onDown(e){
+    if(!mq.matches) return;
+    dragging=true; moved=false; startY=(e.touches?e.touches[0].clientY:e.clientY);
+    startPos=posFor(detent);
+    sheet.style.transition='none';
+    handle.style.cursor='grabbing';
+    e.preventDefault();
+  }
+  function onMove(e){
+    if(!dragging) return;
+    var y=(e.touches?e.touches[0].clientY:e.clientY);
+    if(Math.abs(y-startY)>6) moved=true;
+    var pos=Math.min(Math.max(startPos+(y-startY),0), posFor('peek'));
+    sheet.style.transform='translateY('+pos+'px)';
+  }
+  function onUp(e){
+    if(!dragging) return;
+    dragging=false; handle.style.cursor='';
+    var y=(e.changedTouches?e.changedTouches[0].clientY:e.clientY);
+    var pos=Math.min(Math.max(startPos+(y-startY),0), posFor('peek'));
+    // snap to nearest of full/half/peek
+    var opts=[['full',posFor('full')],['half',posFor('half')],['peek',posFor('peek')]];
+    opts.sort(function(a,b){return Math.abs(a[1]-pos)-Math.abs(b[1]-pos);});
+    setDetent(opts[0][0]);
+  }
+  handle.addEventListener('touchstart', onDown, {passive:false});
+  handle.addEventListener('touchmove', onMove, {passive:false});
+  handle.addEventListener('touchend', onUp);
+  handle.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  // Tapping the handle cycles peek → half → full → peek.
+  // `moved` (set during drag) distinguishes a real drag from a tap so the
+  // release-snap and the click don't both fire.
+  handle.addEventListener('click', function(){
+    if(moved){ moved=false; return; }
+    setDetent(detent==='peek'?'half':detent==='half'?'full':'peek');
+  });
+
+  // Filters chip: toggle the dense controls; raise the sheet so they're visible
+  filterChip.addEventListener('click', function(){
+    var open = sheet.classList.toggle('filters-open');
+    filterChip.setAttribute('aria-expanded', open?'true':'false');
+    if(open && detent==='peek') setDetent('half');
+  });
+
+  // When a locality/project is chosen the list auto-collapses to peek so the
+  // detail sheet reads as a clean, focused screen.
+  var _openDetail = window.openDetail;
+  if(typeof _openDetail === 'function'){
+    window.openDetail = function(n){
+      var r = _openDetail.apply(this, arguments);
+      if(mq.matches){ sheet.classList.remove('filters-open'); setDetent('peek'); }
+      return r;
+    };
+  }
+
+  // Swipe-down on the detail header closes it
+  if(detail){
+    var dhd = detail.querySelector('.dhd');
+    var dStartY=null;
+    function dDown(e){ if(!mq.matches) return; dStartY=(e.touches?e.touches[0].clientY:e.clientY); detail.style.transition='none'; }
+    function dMove(e){ if(dStartY==null) return; var y=(e.touches?e.touches[0].clientY:e.clientY); var dy=Math.max(0,y-dStartY); detail.style.transform='translateY('+dy+'px)'; }
+    function dUp(e){ if(dStartY==null) return; var y=(e.changedTouches?e.changedTouches[0].clientY:e.clientY); var dy=Math.max(0,y-dStartY); dStartY=null; detail.style.transition=''; detail.style.transform=''; if(dy>110 && typeof closeDetail==='function') closeDetail(); }
+    if(dhd){
+      dhd.addEventListener('touchstart', dDown, {passive:true});
+      dhd.addEventListener('touchmove', dMove, {passive:true});
+      dhd.addEventListener('touchend', dUp);
+    }
+  }
+
+  // Initialise at peek when entering mobile; recompute on breakpoint change
+  function applyMode(){ if(mq.matches){ setDetent('peek'); } else { sheet.style.transform=''; sheet.removeAttribute('data-detent'); } }
+  (mq.addEventListener ? mq.addEventListener('change',applyMode) : mq.addListener(applyMode));
+  applyMode();
+})();
