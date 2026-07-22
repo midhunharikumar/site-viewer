@@ -1475,6 +1475,40 @@ updateThemeBtn();
     if(open && detent==='peek') setDetent('half');
   });
 
+  // --- Keyboard handling: lift the sheet above the on-screen keypad ---
+  // When the search input is focused the keyboard shrinks the visual viewport
+  // and would otherwise cover the search box (which lives in the sheet peek).
+  // We (a) expand the sheet to full so search + results sit up top, and
+  // (b) offset the sheet bottom by the keyboard height via the VisualViewport API.
+  var searchInput = document.getElementById('search');
+  var vv = window.visualViewport;
+  function applyKb(){
+    if(!mq.matches || !vv){ return; }
+    var kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    if(kb > 120){
+      document.body.classList.add('kb-open');
+      sheet.style.bottom = kb + 'px';
+    } else {
+      document.body.classList.remove('kb-open');
+      sheet.style.bottom = '';
+    }
+  }
+  if(searchInput){
+    searchInput.addEventListener('focus', function(){
+      if(!mq.matches) return;
+      setDetent('full');
+      setTimeout(applyKb, 260);
+    });
+    searchInput.addEventListener('blur', function(){
+      sheet.style.bottom = '';
+      document.body.classList.remove('kb-open');
+    });
+  }
+  if(vv){
+    vv.addEventListener('resize', applyKb);
+    vv.addEventListener('scroll', applyKb);
+  }
+
   // When a locality/project is chosen the list auto-collapses to peek so the
   // detail sheet reads as a clean, focused screen.
   var _openDetail = window.openDetail;
