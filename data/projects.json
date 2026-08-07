@@ -738,10 +738,10 @@
    "loc": "Kudlu (E-City/HSR)",
    "lat": 12.887,
    "lng": 77.648,
-   "type": "Apartments",
-   "status": "Pre-launch",
-   "price": "–",
-   "note": "Japanese-inspired; possession Mar 2029.",
+   "type": "Apartments (3 & 4 BHK lakeside)",
+   "status": "Launched",
+   "price": "from ₹2.47Cr",
+   "note": "Japanese-inspired lakeside 3/4 BHK off Hosa Rd near HSR; RERA-approved and actively selling in H1 2026; possession 2030.",
    "color": "#a855f7"
   },
   {
@@ -2543,6 +2543,114 @@
    "price": "from ₹90L",
    "note": "3 towers (A/B/C, 3B+G+24), 523 premium 2 & 3 BHK residences; 2026 launch.",
    "color": "#0d9488"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Attibele",
+   "loc": "Attibele, near E-City / Hosur Rd",
+   "lat": 12.7845,
+   "lng": 77.771,
+   "type": "Apartments (21ac township, 10 towers, ~2000 units)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Prestige township at Attibele near Electronic City; 1/2/3 BHK, K-RERA in process; actively marketed pre-launch as of mid-2026.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Prestige",
+   "name": "The Prestige City Bidadi",
+   "loc": "Bidadi, Mysore Rd",
+   "lat": 12.7986,
+   "lng": 77.386,
+   "type": "Township (139ac apts + plots + villas)",
+   "status": "Pre-launch",
+   "price": "from ₹42.9L",
+   "note": "Pre-launch 1 Oct 2026, official launch 10 Oct 2026; ~1,000 apartments + 808 plots + 298 villas across 139 acres. Possession Dec 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Whitefield",
+   "loc": "Whitefield, near ITPL corridor",
+   "lat": 12.9698,
+   "lng": 77.75,
+   "type": "Apartments (~8ac, ~500 units, 4 towers G+25–30)",
+   "status": "Announced",
+   "price": "~₹14k/sqft; 1 BHK from ~91L; 4 BHK up to ~4.48Cr",
+   "note": "Pre-launch/EOI window scheduled Oct 2026; 1/2/3/4 BHK single-phase master-planned community adjacent to ITPL.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Soul at Godrej Ananda (Ph3)",
+   "loc": "KIADB Aerospace Park, Bagalur",
+   "lat": 13.14,
+   "lng": 77.67,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "from ₹49.99L",
+   "note": "Phase 3 of 20-acre Godrej Ananda township; 2/3 BHK; possession Aug 2028; positioned as flagship N-Bangalore launch for late 2026.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Codename Flow",
+   "loc": "KIADB Aerospace Park, Bagalur",
+   "lat": 13.136,
+   "lng": 77.666,
+   "type": "Apartments (~25ac township)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "25-acre pre-launch township of 2/3/4 BHK apartments adjacent to Purva Northern Lights parcel; RERA pending.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Lodha",
+   "name": "Lodha Codename Address of Sarjapur",
+   "loc": "Dommasandra, Sarjapur Rd",
+   "lat": 12.8752,
+   "lng": 77.766,
+   "type": "Apartments (~19ac)",
+   "status": "Pre-launch",
+   "price": "from ₹1.79Cr",
+   "note": "Lodha's second Sarjapur foothold; 3 & 3.5 BHK on ~19-acre parcel near Dommasandra; K-RERA pending as of Jul 2026.",
+   "color": "#dc2626"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Anantha",
+   "loc": "Richmond Town / Richmond Rd, Central",
+   "lat": 12.9631,
+   "lng": 77.6015,
+   "type": "Apartments (boutique CBD; 3 & 4 BHK)",
+   "status": "Under construction",
+   "price": "~₹26.2k/sqft (Q1 2026)",
+   "note": "Sobha's flagship Richmond Town boutique tower; families beginning to move in; Q1 2026 rate +5.65% QoQ.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "DivyaSree",
+   "name": "DivyaSree Yelahanka",
+   "loc": "Yelahanka New Town, off Bellary Rd (NH-44)",
+   "lat": 13.102,
+   "lng": 77.595,
+   "type": "Apartments (5.5ac, 3 towers, 270 units)",
+   "status": "Announced",
+   "price": "–",
+   "note": "Large-format 3-tower community of 270 apartments along the planned Hebbal–Yelahanka–Airport metro alignment.",
+   "color": "#1d4ed8"
+  },
+  {
+   "builder": "Total Environment",
+   "name": "Total Environment Yelahanka (Bettahalasur)",
+   "loc": "Bettahalasur, Yelahanka–Bagalur belt",
+   "lat": 13.16,
+   "lng": 77.63,
+   "type": "Plots (eco-luxury; ~60ac, ~500 plots)",
+   "status": "Upcoming",
+   "price": "–",
+   "note": "~60-acre plotted community with 1,500 / 1,800 / 2,400 / 4,000 sqft plots and self-build support; brochure/RERA pending in 2026.",
+   "color": "#84cc16"
   }
  ],
  "builders": {
@@ -2583,7 +2691,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 212,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 19 July 2026."
+  "count": 221,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 2 August 2026."
  }
 }
