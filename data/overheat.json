@@ -1,54 +1,54 @@
 {
- "updated": "2026-08-02",
- "mortgageRate": 8.25,
- "verdict": "Bengaluru retains classic late-cycle froth signals — inventory building faster than absorption, launch mix heavily skewed to luxury, and wide asking-vs-guidance gaps in premium locales — but system-level shock absorbers (housing GNPA ~0.5%, EMI/income ~35%, stable repo at 5.25%) keep it out of distress. RBI MPC meets 3–5 Aug 2026; consensus is a hold, keeping typical home-loan rates around 8.0–8.5%. Composite tilt vs 19-Jul update: broadly unchanged.",
+ "updated": "2026-08-09",
+ "mortgageRate": 7.95,
+ "verdict": "Bengaluru retains classic late-cycle froth signals — inventory building faster than absorption (Q2 2026 unsold +34% YoY), launch mix heavily skewed to luxury (~96% of Q2 launches ≥₹80L), and wide asking-vs-guidance gaps in premium locales — but system-level shock absorbers (housing GNPA ~0.5%, EMI/income 35%, repo held at 5.25% on 5 Aug 2026) keep it out of distress. RBI's Aug MPC unanimously held the repo rate at 5.25% with a neutral stance; typical home-loan rates have drifted lower to ~7.75–8.15% (starting 7.25% at SBI) on the cumulative 125 bps easing. Composite tilt vs 2 Aug update: broadly unchanged — MPC decision known (hold), mortgage rate marginally lower.",
  "indicators": [
   {
    "name": "Unsold inventory overhang",
-   "value": "Bengaluru ~15 months (Q2 2026); pan-India unsold ~6.16 lakh units",
+   "value": "Bengaluru unsold +34% YoY in Q2 2026; pan-India unsold ~6.16 lakh units",
    "status": "amber",
-   "note": "Anarock Q2 2026: Bengaluru launches ~21,670 units (+41% YoY) vs sales ~15,285 units (+1% YoY); unsold stock ended 2025 at 64,863 units (+23% YoY). Anarock expects inventory to peak in Q3 2026 before festive absorption; Q3 2026 report not yet published. Overhang concentrated in East Bengaluru (Whitefield, Sarjapur).",
-   "src": "Anarock Q2 2026 / Outlook Money",
-   "url": "https://www.outlookmoney.com/invest/housing-sales-dip-6-per-cent-across-top-7-cities-says-report"
+   "note": "Anarock Q2 2026: Bengaluru recorded the sharpest inventory build-up among the top 7 cities at +34% YoY, while sales rose only ~1% YoY on a weak base. Launches ~21,670 units (+41% YoY) sharply outpaced absorption. Pan-India unsold stock hit ~6.16 lakh units (+10% YoY) against ~90,715 units sold in the quarter — implying roughly 6–7 quarters to sell, worst in the post-pandemic cycle. Overhang concentrated in East Bengaluru (Whitefield, Sarjapur); Q3 2026 report due end-Sep.",
+   "src": "Anarock Q2 2026 / Zeebiz",
+   "url": "https://www.zeebiz.com/real-estate/news-india-s-top-7-cities-see-6-yoy-drop-in-housing-sales-in-q2-2026-inventory-rises-10-398101"
   },
   {
    "name": "Launch mix skew to luxury",
    "value": "~96% of Q2 2026 Bengaluru launches priced ≥ ₹80L",
    "status": "red",
-   "note": "Anarock Q2 2026 breakdown: ₹80L–1.5Cr = 27% of launches, ₹1.5–2.5Cr = 25%, above ₹2.5Cr = 22%. Only ~4% of supply catered to sub-₹80L buyers. Developers keep pivoting to premium as mid-segment demand thins. Unchanged since 19 Jul 2026 update.",
-   "src": "BusinessToday / Anarock Q2 2026",
-   "url": "https://www.businesstoday.in/personal-finance/real-estate/story/bengaluru-emerges-as-indias-strongest-housing-market-in-q2-mumbai-dominates-sales-ncr-leads-price-growth-540257-2026-07-01"
+   "note": "Anarock Q2 2026 pan-India breakdown: ₹80L–1.5Cr = 27% of launches, ₹1.5–2.5Cr = 25%, above ₹2.5Cr = 22%. Only ~4% of new supply catered to sub-₹80L buyers — Bengaluru mirrors this skew. Developers continue to pivot to premium as mid-segment demand thins and inventory pressure builds. Unchanged since 2 Aug 2026 update.",
+   "src": "Business Standard / Anarock Q2 2026",
+   "url": "https://www.business-standard.com/finance/personal-finance/housing-sales-fall-6-launches-rise-as-builders-pivot-to-premium-projects-126062900384_1.html"
   },
   {
    "name": "EMI-to-income (affordability)",
-   "value": "35% (Knight Frank H1 2026)",
+   "value": "35% (Knight Frank H1 2026); repo held at 5.25%",
    "status": "amber",
-   "note": "Knight Frank India Affordability Index H1 2026: Bengaluru EMI/income worsened marginally to 35% (from 34% in H2 2025) despite ~125 bps of cumulative easing. Home-loan rates now ~8.0–8.5% (typical ~8.25%). RBI held repo at 5.25% at June MPC; MPC meets again 3–5 Aug 2026 with consensus expecting a hold. Unchanged since 19 Jul 2026 update.",
-   "src": "Knight Frank India Affordability Index H1 2026; RBI MPC June 2026",
-   "url": "https://www.business-standard.com/industry/news/home-affordability-remains-strong-in-6-of-8-cities-knight-frank-126070300593_1.html"
+   "note": "Knight Frank India Affordability Index H1 2026: Bengaluru EMI/income worsened marginally to 35% (from 34% in H2 2025) despite ~125 bps of cumulative RBI easing. RBI Aug MPC (3–5 Aug 2026) unanimously held the repo rate at 5.25% with a neutral stance; next MPC 5–7 Oct 2026. Typical home-loan rates now ~7.75–8.15% (SBI starts at 7.25%, HDFC at 7.75%). H2 2026 Knight Frank release expected Dec 2026.",
+   "src": "Knight Frank Affordability Index H1 2026; RBI MPC Aug 2026",
+   "url": "https://www.business-standard.com/finance/news/rbi-mpc-meet-august-repo-rate-governor-sanjay-malhotra-inflation-growth-gdp-126080500231_1.html"
   },
   {
    "name": "Housing-loan defaults (NPAs)",
    "value": "Housing GNPA ~0.5%; system GNPA 1.8% (multi-decade low)",
    "status": "green",
-   "note": "RBI Financial Stability Report June 2026: housing-loan GNPA at 0.5%; system GNPA at multi-decadal low 1.8%, projected to rise only to 1.9% by Mar 2028. CRAR 17.7%, CET1 15.3%. Secured retail GNPA 0.7%; unsecured retail 1.7% flagged for watch. Loans ≥₹50L now 44.7% of outstanding housing credit. Unchanged since 19 Jul 2026 update.",
+   "note": "RBI Financial Stability Report June 2026: housing-loan GNPA at 0.5%; system GNPA at multi-decade low of 1.8%, projected to rise only to 1.9% by Mar 2028 under baseline. Secured retail GNPA 0.7%; unsecured retail 1.7% flagged for watch as non-housing retail now 58.4% of household borrowing. CRAR 17.7%, CET1 15.3%. Next FSR due Dec 2026.",
    "src": "RBI Financial Stability Report June 2026",
-   "url": "https://www.rbi.org.in/Scripts/FsReports.aspx"
+   "url": "https://www.business-standard.com/finance/news/rbi-flags-nascent-stress-in-micro-enterprises-retail-loans-need-monitoring-126063001396_1.html"
   },
   {
    "name": "Asking vs registered price gap",
    "value": "Indiranagar asking 50–80% over guidance; Devanahalli/Hoskote 15–25%",
    "status": "red",
-   "note": "Indiranagar guidance ~₹12k/sqft vs market ₹18–22k/sqft (50–83% premium). Newer corridors (Devanahalli, Hoskote) narrower at 15–25% and partially compressed after the Feb 2026 BBMP guidance hike (6–15%). A further statewide 10–20% guidance revision is under discussion for FY27 but not yet gazetted. Wide gap in prime pockets remains a clear froth signal.",
-   "src": "OneCityProperty / Vault PropTech guidance-value analysis 2026",
-   "url": "https://www.vaultproptech.com/blogs/market-value-vs-guidance-value-karnataka-property-guide-2026"
+   "note": "Indiranagar guidance ~₹12k/sqft vs market asking ₹18–22k/sqft (50–83% premium). Newer corridors (Devanahalli, Hoskote) narrower at 15–25% and partially compressed after the Feb 2026 BBMP guidance hike (6–15%). A further statewide 12–30% zone-wise revision was announced in May 2026 but is still not gazette-notified as of Aug 2026 — sub-registrars remain split on which value to apply. Wide gap in prime pockets remains a clear froth signal.",
+   "src": "PropNewz / Vault PropTech guidance-value analysis 2026",
+   "url": "https://www.propnewz.com/blog/karnataka-guidance-value-hike-proposed-bengaluru-2026-05-09"
   },
   {
    "name": "Registration volumes",
-   "value": "Karnataka FY25–26 stamps revenue ~₹20,837 cr (record); Kaveri 2.0 live; Jul 2026 monthly pending",
+   "value": "Karnataka FY25–26 stamps revenue ~₹20,837 cr (record); Jul 2026 monthly not yet published",
    "status": "amber",
-   "note": "Karnataka Stamps & Registration posted a record ~₹20,837 cr in FY25–26 (largely Bengaluru). Headline revenue is inflated by the Aug 2025 fee doubling (1%→2%) and Feb 2026 guidance hike — transactional volume growth is softer than revenue growth. Kaveri 2.0 fully live statewide (biometric-only in-person step); IGR Karnataka has not yet published monthly aggregates for Jul 2026.",
-   "src": "IGR Karnataka / PropNewz coverage 2026",
+   "note": "Karnataka Stamps & Registration posted a record ~₹20,837 cr in FY25–26 (largely Bengaluru). Headline revenue is inflated by the Aug 2025 fee doubling (1%→2%) and Feb 2026 guidance hike — transactional volume growth is softer than revenue growth. Kaveri 2.0 fully live statewide (biometric-only in-person step); IGR Karnataka has not yet published Jul 2026 monthly aggregates. Kaveri 3.0 (AI-driven) rollout flagged for FY26–27.",
+   "src": "IGR Karnataka / Vault PropTech coverage 2026",
    "url": "https://igr.karnataka.gov.in/page/Department+Statistics/Stamp+Duty+Collected/en"
   }
  ]
