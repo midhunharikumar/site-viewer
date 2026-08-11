@@ -5,6 +5,7 @@ The following data files contain critical information that needs constant updati
 `cauvery.json` : Cauvery water availability
 `concept.json` : New metro connectivity proposals
 `livability.json` : Livability scores for different localities.
+`localities.json` : Per-locality price history, projections, CAGR, and rental yield (127 localities). This is the core dataset the map colours by and the Heat index computes from. It was extracted out of `index.html` (previously an inline `DATA` object) and is now fetched at runtime like the other data files.
 `metro.json` : Metro lines data for bangalore city.
 `overheat.json` : Market overheating indicators (inventory overhang, affordability, NPAs, asking-vs-registry gap) shown in the Heat index panel.
 `projects.json`: Apartment development projects in various stages.
@@ -51,7 +52,7 @@ Run this on every Update so the 🌡️ Heat index panel (`index.html?heat=1`) s
   5. **Asking vs registered price gap** — spot-check 2–3 localities: portal asking rates (99acres/Magicbricks) vs registry transaction averages (Kaveri/IGR Karnataka). A widening gap is a froth signal.
   6. **Registration volumes** — IGR Karnataka stamp-duty collections / Kaveri registration counts trend.
 - For each indicator update `value`, `note`, `src`, `url`, and set `status` using these heuristics: `green` = comfortable/improving, `amber` = stretched or deteriorating, `red` = clear froth signal. Update the top-level `updated` date, `mortgageRate` (typical home-loan rate) and rewrite `verdict` (2–3 sentences) if the picture changed.
-- Do NOT hand-edit the other four panel indicators (rental yield, negative carry, price momentum, boom concentration) — app.js computes them live from the locality DATA in index.html, so they refresh automatically when locality prices/yields are updated.
+- Do NOT hand-edit the other four panel indicators (rental yield, negative carry, price momentum, boom concentration) — app.js computes them live from the locality data in `data/localities.json`, so they refresh automatically when locality prices/yields are updated.
 - Sanity-check the result by loading `index.html?heat=1` and confirming the composite score and bands render.
 
 #### Commit and update
