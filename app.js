@@ -1065,6 +1065,36 @@ function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
 function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function slugify(s){return s.toLowerCase().replace(/[^\w]+/g,'-').replace(/^-|-$/g,'');}
 
+// ---- Google Ads enhanced conversions ----
+// The page-view conversion in the <head> fires before anyone has typed an
+// email, so on its own it can never carry user-provided data -- which is why
+// Google Ads reported enhanced conversions as unused. We fix that here: when a
+// visitor submits a lead we hand gtag the email (gtag.js normalises and
+// SHA-256 hashes it client-side; the raw value never leaves the browser) and
+// persist it so the page-view conversion on later visits is matched too.
+const ADS_CONVERSION_ID='AW-18316898313';
+const EC_EMAIL_KEY='bv_ec_email';
+// Conversion label for the lead/signup action, i.e. the part after the slash in
+// "AW-18316898313/xxxxxxxx". Find it in Google Ads -> Goals -> the conversion
+// action -> Tag setup. Left blank deliberately: firing the page-view label here
+// would double-count it. With no label we still set user_data, so enhanced
+// conversions apply to the page-view conversion on the visitor's next page load.
+const LEAD_CONVERSION_LABEL='';
+function setEnhancedConversionData(email){
+  // Normalise before handing it over: trim + lowercase. gtag.js normalises too,
+  // but doing it here keeps what we persist canonical and avoids the
+  // "user email data field is incorrectly formatted" diagnostic.
+  const e=String(email||'').trim().toLowerCase();
+  if(!isEmail(e))return;
+  try{localStorage.setItem(EC_EMAIL_KEY,e);}catch(err){}
+  if(typeof gtag!=='function')return;
+  try{
+    // Must precede the conversion event, otherwise the 'em' parameter is empty.
+    gtag('set','user_data',{email:e});
+    if(LEAD_CONVERSION_LABEL)gtag('event','conversion',{send_to:ADS_CONVERSION_ID+'/'+LEAD_CONVERSION_LABEL});
+  }catch(err){}
+}
+
 // ---- C1/H4: lead capture ----
 function saveLeadLocal(rec){try{const a=JSON.parse(localStorage.getItem('bv_leads')||'[]');a.push(rec);localStorage.setItem('bv_leads',JSON.stringify(a));}catch(e){}}
 function submitLead(kind,inputEl,btnEl,msgEl,meta){
@@ -1073,7 +1103,7 @@ function submitLead(kind,inputEl,btnEl,msgEl,meta){
   if(!isEmail(email)){if(msgEl)msgEl.innerHTML='<div class="caperr">Please enter a valid email.</div>';inputEl.focus();return;}
   const rec={kind,email,meta:meta||null,when:new Date().toISOString()};
   saveLeadLocal(rec);
-  const done=()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ You\'re in — confirmation on the way.</div>';inputEl.value='';btnEl&&btnEl.classList.remove('busy');toast('Subscribed ✓');};
+  const done=()=>{setEnhancedConversionData(email);if(msgEl)msgEl.innerHTML='<div class="capok">✓ You\'re in — confirmation on the way.</div>';inputEl.value='';btnEl&&btnEl.classList.remove('busy');toast('Subscribed ✓');};
   if(LEAD_ENDPOINT){btnEl&&btnEl.classList.add('busy');
     fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(r=>{if(!r.ok)throw new Error('http '+r.status);return done();}).catch(()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ Saved locally.</div>';btnEl&&btnEl.classList.remove('busy');});
   }else{done();}
