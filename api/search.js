@@ -38,12 +38,32 @@ const RL_WINDOW_MS = 60_000; // 60s
 const RL_MAX = 20; // 20 requests / IP / minute
 const LLM_TIMEOUT_MS = 20_000; // per upstream call (gpt-5-mini reasoning can be slow)
 const AGENT_WALL_MS = 50_000;  // total wall-clock budget for one request
-const AGENT_MAX_ITER = 5;      // max LLM round-trips per request
+const AGENT_MAX_ITER = 6;      // max LLM round-trips per request (geocode + distance + optional web_search + finalise)
 const AGENT_MAX_TOOLS = 20;    // hard cap on tool calls per request
 const OSRM_BASE = "https://router.project-osrm.org";
 
+// --- geocoding + web-search knobs ---
+// Bangalore bounding box (west, north, east, south) used to keep geocoder
+// results inside the city instead of matching same-named places elsewhere.
+const BLR_VIEWBOX = { west: 77.30, north: 13.30, east: 77.90, south: 12.65 };
+const BLR_CENTER = { lat: 12.9716, lng: 77.5946 };
+const NOMINATIM_BASE = "https://nominatim.openstreetmap.org/search";
+const PHOTON_BASE = "https://photon.komoot.io/api/";
+const GEO_TIMEOUT_MS = 5000;
+// Nominatim's usage policy asks for <=1 req/s and a real User-Agent.
+const NOMINATIM_MIN_GAP_MS = 1100;
+const GEO_UA = "bangalore-site/1.0 (property map search; +https://github.com/midhunharikumar)";
+
+const PARALLEL_BASE = "https://api.parallel.ai/v1/search";
+const WEB_TIMEOUT_MS = 12_000;
+
+// Per-tool budgets. The global AGENT_MAX_TOOLS still applies on top of these;
+// these stop one expensive tool from eating the whole allowance.
+const MAX_GEOCODE_CALLS = 8;
+const MAX_WEB_SEARCH_CALLS = 3;
+
 // --- known Bangalore landmarks (lowercase keys; values are [lat, lng]) ---
-// The agent can fetch these via the landmark_coords tool. Add freely.
+// The agent reaches these via the geocode tool, which checks this table first. Add freely.
 const LANDMARKS = {
   airport: [13.1986, 77.7066],
   "kempegowda airport": [13.1986, 77.7066],
@@ -110,15 +130,209 @@ const LANDMARKS = {
   "forum mall": [12.9343, 77.6101],
 };
 
+function escapeRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Curated-table lookup. The fuzzy pass matches on WORD BOUNDARIES only: a raw
+// substring test let 3-letter keys hit inside unrelated words ("Bialkonda" ->
+// bial -> airport, "KIADB Aerospace Park" -> kia -> airport), which silently
+// returned wrong coordinates AND stopped resolvePlace from ever reaching the
+// geocoders. Short keys (orr, kia, cbd) still resolve via the exact match above.
+const FUZZY_MIN_LEN = 4;
+
 function findLandmark(raw) {
   const k = String(raw || "").toLowerCase().trim();
   if (!k) return null;
   if (LANDMARKS[k]) return { name: k, lat: LANDMARKS[k][0], lng: LANDMARKS[k][1] };
-  // loose fuzzy contains
+
+  // Prefer the longest (most specific) key that appears as a whole word/phrase.
+  let best = null;
   for (const [key, [lat, lng]] of Object.entries(LANDMARKS)) {
-    if (k.includes(key) || key.includes(k)) return { name: key, lat, lng };
+    if (key.length < FUZZY_MIN_LEN) continue;
+    const re = new RegExp(`\\b${escapeRe(key)}\\b`);
+    const hit = re.test(k) || (k.length >= FUZZY_MIN_LEN && new RegExp(`\\b${escapeRe(k)}\\b`).test(key));
+    if (hit && (!best || key.length > best.name.length)) best = { name: key, lat, lng };
+  }
+  return best;
+}
+
+// --- geocoding -------------------------------------------------------------
+// The curated LANDMARKS table above covers ~60 well-known places. Anything else
+// -- "Hoodi Circle", "Kadugodi Tree Park", "5th Block Jayanagar", a street
+// address -- used to return not_found, leaving the agent with no coordinates to
+// reason about. resolvePlace() adds two free OSM geocoders behind the table:
+//   1. LANDMARKS  (instant, curated, always wins)
+//   2. Nominatim  (bounded to the Bangalore viewbox)
+//   3. Photon     (fuzzier; catches partial/colloquial names Nominatim misses,
+//                  e.g. "Sathanur Bagalur Main Road")
+// Results are cached in-process so repeated queries cost nothing.
+
+const geoCache = new Map(); // lowercased query -> resolved object (or null)
+const GEO_CACHE_MAX = 500;
+
+function inBlr(lat, lng) {
+  return (
+    lat >= BLR_VIEWBOX.south &&
+    lat <= BLR_VIEWBOX.north &&
+    lng >= BLR_VIEWBOX.west &&
+    lng <= BLR_VIEWBOX.east
+  );
+}
+
+async function fetchJson(url, timeoutMs, headers) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const r = await fetch(url, { signal: ctrl.signal, headers: headers || {} });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+// Serialize Nominatim calls so we never exceed ~1 req/s, per their usage policy.
+let nominatimGate = Promise.resolve();
+function nominatimSlot() {
+  const mine = nominatimGate.then(
+    () => new Promise((r) => setTimeout(r, NOMINATIM_MIN_GAP_MS)),
+  );
+  nominatimGate = mine;
+  return mine;
+}
+
+async function nominatimGeocode(q) {
+  await nominatimSlot();
+  const u = new URL(NOMINATIM_BASE);
+  u.searchParams.set("q", `${q}, Bengaluru, Karnataka, India`);
+  u.searchParams.set("format", "json");
+  u.searchParams.set("limit", "1");
+  u.searchParams.set("addressdetails", "0");
+  u.searchParams.set(
+    "viewbox",
+    `${BLR_VIEWBOX.west},${BLR_VIEWBOX.north},${BLR_VIEWBOX.east},${BLR_VIEWBOX.south}`,
+  );
+  u.searchParams.set("bounded", "1");
+  const j = await fetchJson(u.toString(), GEO_TIMEOUT_MS, {
+    "User-Agent": GEO_UA,
+    "Accept-Language": "en",
+  });
+  const hit = Array.isArray(j) ? j[0] : null;
+  if (!hit) return null;
+  const lat = parseFloat(hit.lat);
+  const lng = parseFloat(hit.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || !inBlr(lat, lng)) return null;
+  return {
+    name: q,
+    lat: +lat.toFixed(5),
+    lng: +lng.toFixed(5),
+    display: String(hit.display_name || "").slice(0, 140),
+    source: "nominatim",
+  };
+}
+
+async function photonGeocode(q) {
+  const u = new URL(PHOTON_BASE);
+  u.searchParams.set("q", `${q} Bengaluru`);
+  u.searchParams.set("limit", "5");
+  u.searchParams.set("lat", String(BLR_CENTER.lat));
+  u.searchParams.set("lon", String(BLR_CENTER.lng));
+  const j = await fetchJson(u.toString(), GEO_TIMEOUT_MS, { "User-Agent": GEO_UA });
+  for (const f of j?.features || []) {
+    const c = f?.geometry?.coordinates;
+    if (!Array.isArray(c) || c.length < 2) continue;
+    const lng = +c[0];
+    const lat = +c[1];
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !inBlr(lat, lng)) continue;
+    const pr = f.properties || {};
+    const display = [pr.name, pr.street, pr.district, pr.city, pr.state]
+      .filter(Boolean)
+      .join(", ")
+      .slice(0, 140);
+    return {
+      name: q,
+      lat: +lat.toFixed(5),
+      lng: +lng.toFixed(5),
+      display,
+      source: "photon",
+    };
   }
   return null;
+}
+
+async function resolvePlace(raw) {
+  const q = String(raw || "").trim();
+  if (q.length < 2) return null;
+  const key = q.toLowerCase();
+  if (geoCache.has(key)) return geoCache.get(key);
+
+  let out = null;
+  const lm = findLandmark(q);
+  if (lm) {
+    out = { ...lm, display: lm.name, source: "landmark" };
+  } else {
+    out = (await nominatimGeocode(q)) || (await photonGeocode(q));
+  }
+
+  if (geoCache.size >= GEO_CACHE_MAX) geoCache.clear();
+  geoCache.set(key, out);
+  return out;
+}
+
+// --- web search (Parallel Search API) ---------------------------------------
+// Gives the agent fresh, off-catalog context: possession dates, RERA numbers,
+// recent launch news, what a locality is known for. Degrades to a soft error
+// (never a thrown exception) so a missing key or an unpaid account just means
+// the agent answers from the catalog alone.
+async function parallelSearch(query, objective) {
+  const key = process.env.PARALLEL_API_KEY;
+  if (!key) return { error: "web_search_not_configured" };
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), WEB_TIMEOUT_MS);
+  try {
+    const r = await fetch(PARALLEL_BASE, {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json", "x-api-key": key },
+      body: JSON.stringify({
+        search_queries: [String(query).slice(0, 200)],
+        objective: String(
+          objective || `Bangalore real-estate context for: ${query}`,
+        ).slice(0, 300),
+        mode: "turbo",
+        max_chars_total: 4000,
+        advanced_settings: {
+          max_results: 4,
+          location: "IN",
+          excerpt_settings: { max_chars_per_result: 600 },
+        },
+      }),
+    });
+    if (!r.ok) {
+      const body = await r.text().catch(() => "");
+      console.log(`[web_search] upstream_${r.status}: ${body.slice(0, 200)}`);
+      // 402 = out of credit, 401 = bad key. Both are operator problems, not
+      // query problems -- tell the agent to carry on without web results.
+      if (r.status === 402) return { error: "web_search_no_credit" };
+      if (r.status === 401 || r.status === 403) return { error: "web_search_unauthorized" };
+      return { error: "web_search_upstream_" + r.status };
+    }
+    const j = await r.json();
+    const results = (j?.results || []).slice(0, 4).map((x) => ({
+      title: String(x.title || "").slice(0, 120),
+      url: String(x.url || "").slice(0, 200),
+      date: x.publish_date || null,
+      excerpt: (Array.isArray(x.excerpts) ? x.excerpts.join(" ") : "").slice(0, 600),
+    }));
+    return { results };
+  } catch (e) {
+    return { error: e?.name === "AbortError" ? "web_search_timeout" : "web_search_error" };
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 function haversineKm(lat1, lng1, lat2, lng2) {
@@ -178,19 +392,43 @@ const TOOLS = [
   {
     type: "function",
     function: {
-      name: "landmark_coords",
+      name: "geocode",
       description:
-        "Look up lat/lng of a known Bangalore landmark (airport, ITPL, Manyata, MG Road, Majestic, Electronic City, ORR, Forum Mall, locality names, etc). Returns { name, lat, lng } or { error: 'not_found' }.",
+        "Resolve ANY Bangalore place to lat/lng: a landmark (airport, ITPL, Manyata, MG Road), a locality (Whitefield, Hennur), a street or road (Bagalur Main Road, Sarjapur-Attibele Road), a junction or micro-landmark (Hoodi Circle, Kadugodi Tree Park, Jayanagar 5th Block), or a full street address. Checks a curated landmark table first, then OpenStreetMap geocoders. Returns { name, lat, lng, display, source } or { error: 'not_found' }. Use this for EVERY place name in the query -- never guess coordinates.",
       parameters: {
         type: "object",
         properties: {
           name: {
             type: "string",
             description:
-              "Landmark name. Examples: 'airport', 'manyata tech park', 'itpl', 'mg road', 'electronic city', 'whitefield', 'cubbon park'.",
+              "Place, address, road or landmark in Bangalore. Do not append 'Bangalore' -- that is added automatically. Examples: 'Hoodi Circle', 'manyata tech park', '5th Block Jayanagar', 'Sathanur Bagalur Main Road', 'Kadugodi Tree Park'.",
           },
         },
         required: ["name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "web_search",
+      description:
+        "Search the live web for Bangalore real-estate context the catalog does not carry: possession/completion dates, RERA numbers, recent launch or price news, builder reputation, what a locality or address is near, whether a project exists at all. Returns { results: [{ title, url, date, excerpt }] } or { error }. Slow (~1-3s) and budget-limited to 3 calls -- use it only when the catalog genuinely cannot answer, and never for plain distance questions (use geocode + haversine_km instead). If it returns an error, carry on using the catalog alone.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: {
+            type: "string",
+            description:
+              "Concise keyword search query, 3-8 words. Example: 'Sobha Neopolis Panathur possession date'.",
+          },
+          objective: {
+            type: "string",
+            description:
+              "One sentence on what you are trying to learn, to focus the search.",
+          },
+        },
+        required: ["query"],
       },
     },
   },
@@ -251,9 +489,14 @@ const TOOLS = [
 
 async function executeTool(name, args) {
   try {
-    if (name === "landmark_coords") {
-      const f = findLandmark(args?.name);
+    if (name === "geocode" || name === "landmark_coords") {
+      const f = await resolvePlace(args?.name);
       return f || { error: "not_found" };
+    }
+    if (name === "web_search") {
+      const q = String(args?.query || "").trim();
+      if (q.length < 2) return { error: "bad_args" };
+      return await parallelSearch(q, args?.objective);
     }
     if (name === "haversine_km") {
       const { lat1, lng1, lat2, lng2 } = args || {};
@@ -362,16 +605,23 @@ function buildPrompt(projects, query) {
     "You are a real-estate search filter for a Bangalore property map. " +
     "Given a user query and a catalog (one project per line: index|name|builder|locality|lat|lng|type|status|price|note), " +
     "select the project indexes that match the user's intent. " +
-    "\n\nYou have tools available for distance/time queries:" +
-    "\n- landmark_coords(name): look up a landmark's lat/lng (airport, ITPL, MG Road, etc.)" +
+    "\n\nYou have tools available:" +
+    "\n- geocode(name): resolve ANY Bangalore place to lat/lng — landmark, locality, road, junction, micro-landmark or full street address" +
     "\n- haversine_km(lat1,lng1,lat2,lng2): cheap straight-line distance" +
     "\n- route_minutes(from,to,profile): real driving or walking minutes via OSRM (slower; only when needed)" +
     "\n- nearest_metro(lat,lng): nearest metro station + km" +
+    "\n- web_search(query, objective): live web results for facts the catalog does not carry (slow, max 3 calls)" +
+    "\n\nHANDLING ADDRESSES AND PLACE NAMES (important):" +
+    "\n- The query may name a place that does NOT appear anywhere in the catalog — a junction ('Hoodi Circle'), a road ('Bagalur Main Road'), a block ('Jayanagar 5th Block'), a micro-landmark ('Kadugodi Tree Park'), or a full street address. This is normal and is NOT a reason to return an empty result." +
+    "\n- For any such place: call geocode(name) to get its lat/lng, then rank catalog projects by haversine_km from that point and return the nearest sensible ones. Default to a ~5 km radius when the user gives no distance, and widen to ~10 km rather than returning nothing." +
+    "\n- NEVER invent coordinates for a place, and never reject a query just because the place string does not literally match a locality field." +
+    "\n- If geocode returns not_found, try one shorter or more canonical form (drop house/plot numbers, keep the road or locality — 'No 104, Srinivasa Nagar, Sathanur' becomes 'Sathanur'). If that still fails, try web_search to learn which locality the address sits in, then geocode that locality." +
     "\n\nWhen to use tools (BE FRUGAL — strict budget of 20 tool calls TOTAL across the whole conversation):" +
     "\n- For text-only queries ('luxury whitefield', 'sobha plots', 'plots near metro station'), DO NOT call tools. Use the lat/lng + locality fields in the catalog to reason directly. The catalog already lists status, type, locality and coordinates." +
     "\n- Only call route_minutes when the user explicitly asks 'X minutes drive/walk'. Even then: call haversine_km on no more than 15 candidates first to short-list to ~6, then route_minutes on those 6 only." +
-    "\n- Use landmark_coords at most once per landmark mentioned." +
+    "\n- Use geocode at most once per distinct place mentioned (max 8 calls). It is cheap and cached — prefer it over guessing." +
     "\n- Use nearest_metro at most 6 times per query. For 'near metro station', you can usually short-list using haversine_km from a small set of major stations rather than nearest_metro on every project." +
+    "\n- Use web_search (max 3 calls) ONLY for facts absent from the catalog: possession/completion timelines, RERA status, recent price or launch news, builder reputation, or what an unfamiliar address is near. Do not use it for distances. If it errors, continue with the catalog and still return your best matches." +
     "\n\nSynonym hints (helpful when no tool needed): " +
     "'near airport' = Devanahalli/Yelahanka/Bagalur/Hennur/Jakkur/Shettigere; " +
     "'IT corridor' = Whitefield/Sarjapur/ORR/Bellandur/Marathahalli/E-City; " +
@@ -454,6 +704,8 @@ async function runAgent({ sys, user, model, referer, title }) {
     { role: "user", content: user },
   ];
   let totalToolCalls = 0;
+  const perTool = new Map(); // tool name -> calls used
+  const PER_TOOL_CAP = { geocode: MAX_GEOCODE_CALLS, web_search: MAX_WEB_SEARCH_CALLS };
 
   for (let iter = 0; iter < AGENT_MAX_ITER; iter++) {
     const elapsed = Date.now() - startedAt;
@@ -493,6 +745,20 @@ async function runAgent({ sys, user, model, referer, title }) {
         totalToolCalls++;
         if (totalToolCalls > AGENT_MAX_TOOLS) {
           return { tc, out: { error: "tool_call_cap" } };
+        }
+        const tname = tc.function?.name;
+        const used = (perTool.get(tname) || 0) + 1;
+        perTool.set(tname, used);
+        if (PER_TOOL_CAP[tname] && used > PER_TOOL_CAP[tname]) {
+          // Budget spent on this specific tool. Tell the model plainly so it
+          // finalises from what it already has instead of retrying.
+          return {
+            tc,
+            out: {
+              error: `${tname}_budget_exhausted`,
+              hint: "Answer from the catalog and results you already have.",
+            },
+          };
         }
         let args = {};
         try { args = JSON.parse(tc.function?.arguments || "{}"); } catch {}

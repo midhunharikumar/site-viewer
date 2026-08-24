@@ -7,7 +7,23 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'AW-18316898313');
+  // allow_enhanced_conversions lets gtag.js send SHA-256 hashed user-provided
+  // data (set via gtag('set','user_data',...)) alongside the conversion.
+  gtag('config', 'AW-18316898313', {'allow_enhanced_conversions': true});
+</script>
+<!-- Enhanced conversions: supply user-provided data BEFORE the conversion event.
+     The page-view conversion fires on load, so the only data available is an
+     email this visitor gave us on an earlier visit (stored by submitLead in
+     app.js). gtag.js normalises and SHA-256 hashes it in the browser -- the raw
+     address never leaves the page. Without this the 'em' parameter is absent
+     and Google Ads reports "enhanced conversions not in use". -->
+<script>
+  (function () {
+    try {
+      var e = localStorage.getItem('bv_ec_email');
+      if (e) gtag('set', 'user_data', { email: e });
+    } catch (err) {}
+  })();
 </script>
 <!-- Event snippet for Page view conversion page -->
 <script>
