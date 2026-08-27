@@ -25,6 +25,9 @@
     } catch (err) {}
   })();
 </script>
+<!-- Runtime config: injects window.CARTO_API_KEY from Vercel env (see api/config.js).
+     Must load BEFORE app.js so setBasemap() can read the key on first paint. -->
+<script src="/api/config"></script>
 <!-- Event snippet for Page view conversion page -->
 <script>
   gtag('event', 'conversion', {'send_to': 'AW-18316898313/0F8LCLi14NIcEInglp5E'});

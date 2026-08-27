@@ -25,6 +25,9 @@
     } catch (err) {}
   })();
 </script>
+<!-- Runtime config: injects window.CARTO_API_KEY from Vercel env (see api/config.js).
+     Must load BEFORE the inline map init below so cartoTiles() sees the key. -->
+<script src="/api/config"></script>
 <!-- Event snippet for Page view conversion page -->
 <script>
   gtag('event', 'conversion', {'send_to': 'AW-18316898313/0F8LCLi14NIcEInglp5E'});
@@ -275,7 +278,13 @@ const THEMES={
   }
 };
 let DOMECOL=THEMES[THEME].dome, WINDCOL=THEMES[THEME].wind;
-const cartoTiles=(b)=>['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png');
+// CARTO basemap tiles now require an API key (free tier at https://carto.com/basemaps/apikey).
+// Set window.CARTO_API_KEY (or hard-code CARTO_API_KEY below). Without a key we fall back
+// to OSM standard tiles so the map still renders.
+const CARTO_API_KEY=(typeof window!=='undefined'&&window.CARTO_API_KEY)||'';
+const cartoTiles=(b)=> CARTO_API_KEY
+  ? ['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png?api_key='+encodeURIComponent(CARTO_API_KEY))
+  : ['a','b','c'].map(s=>'https://'+s+'.tile.openstreetmap.org/{z}/{x}/{y}.png');
 function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=THEME==='dark'?'☀️':'🌙';}
 function applyTheme3d(t){
   THEME=t; try{localStorage.setItem('bv_theme',t);}catch(e){}

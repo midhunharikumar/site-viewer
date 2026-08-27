@@ -84,11 +84,24 @@ const map=L.map('map',{zoomControl:true,attributionControl:true}).setView([12.97
 map.createPane('localityPane');map.getPane('localityPane').style.zIndex=500;
 map.zoomControl.setPosition('bottomright');
 let baseTiles=null;
+// CARTO now requires an API key for basemaps.cartocdn.com/{dark_all,light_all,...}
+// Get a free key at https://carto.com/basemaps/apikey (5M tile requests/mo free tier)
+// and either hard-code it below or set window.CARTO_API_KEY before app.js loads.
+const CARTO_API_KEY=(typeof window!=='undefined'&&window.CARTO_API_KEY)||'';
 function setBasemap(){
   const variant=curTheme()==='dark'?'dark_all':'light_all';
-  const url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png';
+  let url,attribution;
+  if(CARTO_API_KEY){
+    url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png?api_key='+encodeURIComponent(CARTO_API_KEY);
+    attribution='© OpenStreetMap, © CARTO';
+  } else {
+    // Fallback: OSM standard tiles — always free, no key. Only a light style exists,
+    // so the dark theme will look muted until a CARTO key is configured.
+    url='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    attribution='© OpenStreetMap contributors';
+  }
   if(baseTiles)map.removeLayer(baseTiles);
-  baseTiles=L.tileLayer(url,{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+  baseTiles=L.tileLayer(url,{attribution:attribution,subdomains:'abcd',maxZoom:19}).addTo(map);
   baseTiles.bringToBack();
 }
 setBasemap();
