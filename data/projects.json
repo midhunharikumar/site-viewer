@@ -2807,6 +2807,126 @@
    "price": "–",
    "note": "Adjoining 39-ac Melodies of Life masterplan; Miyawaki forest & 45% open space theme.",
    "color": "#a855f7"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Castillo",
+   "loc": "Bannerghatta Rd (nr Kalena Agrahara metro)",
+   "lat": 12.8746,
+   "lng": 77.6014,
+   "type": "Apartments (30ac)",
+   "status": "Launched",
+   "price": "₹1.2Cr–₹2.5Cr",
+   "note": "Second Godrej megacluster on Bannerghatta Rd after Vanantara — 30 acres, 6 blocks / 18 high-rises, ~3,000 units of 1/2/3/4 BHK. Soft launch/EOI Dec 2025, formal launch reported Apr–May 2026; K-RERA finalisation ongoing as of Aug 2026.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Varthur Road",
+   "loc": "Dommasandra Circle, Varthur–Sarjapur SH-35",
+   "lat": 12.883,
+   "lng": 77.766,
+   "type": "Apartments (16ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "~16 acres, 8 towers with 1,363 units of 2/3/4 BHK on the Dommasandra Circle stretch of SH-35 between Varthur and Sarjapur. Pre-launch scheduled Q3 2026, K-RERA pending; targeted completion Mar 2031.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Mana",
+   "name": "Mana Verdant Terraces",
+   "loc": "Doddakannelli, off Sarjapur Rd",
+   "lat": 12.906,
+   "lng": 77.696,
+   "type": "Apartments (8.5ac)",
+   "status": "Launched",
+   "price": "from ₹2.52Cr",
+   "note": "K-RERA PRM/KA/RERA/1251/446/PR/041225/008303 (4 Dec 2025); 8.5 acres, 600 units of 3 BHK only (1,910–2,800 sqft) in 19-floor blocks. Possession Dec 2031.",
+   "color": "#94a3b8"
+  },
+  {
+   "builder": "Century",
+   "name": "Century Kindle (Attur)",
+   "loc": "Attur, Yelahanka New Town",
+   "lat": 13.11,
+   "lng": 77.573,
+   "type": "Apartments (4.6ac)",
+   "status": "Launched",
+   "price": "–",
+   "note": "K-RERA approved 11 Feb 2026; 4.6-acre plot with 2 towers (2B+G+19) and 458 units of 2/3/4 BHK (737–1,773 sqft) on NITTE/Attur Main Rd, Yelahanka New Town.",
+   "color": "#06b6d4"
+  },
+  {
+   "builder": "Century",
+   "name": "Century Astoria (Codename Blue Moon)",
+   "loc": "Jakkur, off NH-44",
+   "lat": 13.077,
+   "lng": 77.606,
+   "type": "Apartments (6ac)",
+   "status": "Launched",
+   "price": "from ₹4.07Cr (~₹17.5–18.5k/sqft)",
+   "note": "Launched 1 Feb 2026; K-RERA PRM/KA/RERA/1251/309/PR/160526/008662 (16 May 2026). 6 acres, 5 towers with 334 luxury 3/4/6 BHK residences. Possession Feb 2031.",
+   "color": "#06b6d4"
+  },
+  {
+   "builder": "Adarsh",
+   "name": "Adarsh Savana Ph2",
+   "loc": "Off IVC Rd, Yelahanka Extension",
+   "lat": 13.142,
+   "lng": 77.636,
+   "type": "Plotted (22ac)",
+   "status": "Launched",
+   "price": "–",
+   "note": "New 22-acre Phase 2 with 249 plots (30×40, 30×50, 40×60, 50×80) opposite the Shriram Rain Forest belt on IVC Rd. Parent Phase 1 K-RERA PRM/KA/RERA/1250/303/PR/201001/003613; 44,000 sqft clubhouse shared across the layout.",
+   "color": "#d946ef"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Devanahalli (apartments)",
+   "loc": "Off Bellary Rd / IVC Rd, Devanahalli",
+   "lat": 13.225,
+   "lng": 77.705,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Sumadhura's first apartment offering in the Devanahalli micro-market — 2/3/4 BHK opposite Orchid Nirvana 2.0/3.0, near NH-44 / IVC Rd / Devanahalli SEZ. Possession target Dec 2029.",
+   "color": "#0d9488"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Aikya",
+   "loc": "Soukya Rd (Kadugodi extension)",
+   "lat": 13.02,
+   "lng": 77.79,
+   "type": "Apartments (5ac)",
+   "status": "Pre-launch",
+   "price": "from ₹1.2Cr",
+   "note": "5 acres, 343 units — 176× 2 BHK, 147× 2.5 BHK, 20× 3 BHK — on Soukya Rd east of Kadugodi. EOI/pre-launch running through Jun–Aug 2026, K-RERA in process; possession Dec 2030.",
+   "color": "#0d9488"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Eminora",
+   "loc": "Vajarahalli, Kanakapura Main Rd",
+   "lat": 12.8432,
+   "lng": 77.548,
+   "type": "Apartments (3.6ac)",
+   "status": "Launched",
+   "price": "from ₹2.76Cr",
+   "note": "Ultra-luxury Kanakapura Rd twin-tower — launched 20 Jul 2026. 3.6 acres, twin 33-floor towers with ~250 units of 3 & 3.5 BHK (1,900–2,250 sqft), 26,000 sqft clubhouse, ~80% open space. 2 min from Thalaghattapura metro (Green Line).",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura Codename Tea & Twilight",
+   "loc": "Siddapura, Whitefield",
+   "lat": 12.985,
+   "lng": 77.755,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "from ₹1.79Cr",
+   "note": "K-RERA PRM/KA/RERA/1251/446/PR/111225/008328 (11 Dec 2025). 2/3/4 BHK, 1,280–2,295 sqft; possession Dec 2029.",
+   "color": "#0d9488"
   }
  ],
  "builders": {
@@ -2847,7 +2967,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 234,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 9 August 2026."
+  "count": 244,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 27 August 2026."
  }
 }
