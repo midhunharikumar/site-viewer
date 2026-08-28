@@ -1080,11 +1080,6 @@
                     width: 42vw;
                     max-width: 150px;
                 }
-                #projLegend {
-                    max-width: 42vw;
-                    max-height: 120px;
-                    font-size: 9px;
-                }
                 #metroLegend {
                     max-width: 38vw;
                     max-height: 120px;
@@ -1192,6 +1187,14 @@
             }
             #legendStack.collapsed .legendhead .caret {
                 transform: rotate(-90deg);
+            }
+            /* Project search feedback — lives under the sidebar search box
+               (it used to sit in the on-map "New builds" legend). */
+            .searchmeta {
+                font-size: 10px;
+                color: var(--muted);
+                margin: -4px 0 0;
+                line-height: 1.45;
             }
             /* H5: scrubber axis */
             .taxis {
@@ -2760,6 +2763,11 @@
                                 ✦ Ask AI
                             </button>
                         </div>
+                        <div
+                            class="searchmeta"
+                            id="projSearchMeta"
+                            style="display: none"
+                        ></div>
                         <div class="ctl-label">Filter zone</div>
                         <div class="row" id="zoneChips"></div>
                         <div class="ctl-label">
@@ -2837,7 +2845,7 @@
                                         /></svg
                                     >Future lines
                                 </div>
-                                <div class="chip" id="buildsToggle">
+                                <div class="chip active" id="buildsToggle">
                                     <svg
                                         class="ic"
                                         width="13"
@@ -2964,7 +2972,7 @@
                 ></div>
                 <section id="mapwrap">
                     <div id="map"></div>
-                    <div id="legendStack">
+                    <div id="legendStack" class="collapsed">
                         <div
                             class="legendhead"
                             id="legendCollapse"
@@ -2988,16 +2996,6 @@
                             class="legend"
                             id="metroLegend"
                             style="max-width: 170px; display: block"
-                        ></div>
-                        <div
-                            class="legend"
-                            id="projLegend"
-                            style="
-                                max-width: 200px;
-                                max-height: 230px;
-                                overflow: auto;
-                                display: block;
-                            "
                         ></div>
                         <div
                             class="legend"
