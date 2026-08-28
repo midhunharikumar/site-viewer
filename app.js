@@ -92,7 +92,9 @@ function setBasemap(){
   const variant=curTheme()==='dark'?'dark_all':'light_all';
   let url,attribution;
   if(CARTO_API_KEY){
-    url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png?api_key='+encodeURIComponent(CARTO_API_KEY);
+    // CARTO's raster tiles take the API key on the `key` query param
+    // (not api_key — that name is silently ignored and tiles come back watermarked).
+    url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png?key='+encodeURIComponent(CARTO_API_KEY);
     attribution='© OpenStreetMap, © CARTO';
   } else {
     // Fallback: OSM standard tiles — always free, no key. Only a light style exists,

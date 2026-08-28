@@ -282,8 +282,9 @@ let DOMECOL=THEMES[THEME].dome, WINDCOL=THEMES[THEME].wind;
 // Set window.CARTO_API_KEY (or hard-code CARTO_API_KEY below). Without a key we fall back
 // to OSM standard tiles so the map still renders.
 const CARTO_API_KEY=(typeof window!=='undefined'&&window.CARTO_API_KEY)||'';
+// CARTO's raster tiles take the key on the `key` query param — `api_key` is ignored.
 const cartoTiles=(b)=> CARTO_API_KEY
-  ? ['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png?api_key='+encodeURIComponent(CARTO_API_KEY))
+  ? ['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png?key='+encodeURIComponent(CARTO_API_KEY))
   : ['a','b','c'].map(s=>'https://'+s+'.tile.openstreetmap.org/{z}/{x}/{y}.png');
 function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=THEME==='dark'?'☀️':'🌙';}
 function applyTheme3d(t){
