@@ -1233,7 +1233,7 @@ function renderCompareTray(){
 
 // ---- H3: coach + pulse ----
 let interacted=false;
-function clearPulse(){document.querySelectorAll('.leaflet-localityPane-pane path.pulse').forEach(p=>p.classList.remove('pulse'));}
+function clearPulse(){document.querySelectorAll('.leaflet-locality-pane path.pulse').forEach(p=>p.classList.remove('pulse'));}
 function dismissCoach(){interacted=true;const c=$('coachTip');if(c)c.remove();clearPulse();}
 function applyPulse(){[...DATA.localities].sort((a,b)=>b.projCagr-a.projCagr).slice(0,3).forEach(l=>{const m=markers[l.name];if(m&&m._path)m._path.classList.add('pulse');});}
 function createCoach(){const d=document.createElement('div');d.className='coach';d.id='coachTip';d.innerHTML='👆 Tap any area for its 10-yr price trajectory<span class="cx" onclick="dismissCoach()">×</span>';$('mapwrap').appendChild(d);}
@@ -1266,7 +1266,9 @@ placeOverlays();
 const _opened=applyHash();
 renderCompareTray();
 applyPulse();
-if(!_opened){ if(!isMobile()) setTimeout(()=>openDetail('Whitefield'),300); else createCoach(); }
+// No deep link? Stay on the full-city view — openDetail() flies to zoom 13,
+// so auto-opening a locality was silently throwing away the Bangalore-wide map.
+if(!_opened) createCoach();
 
 // ---------- market heat (overheating) panel ----------
 (function(){
