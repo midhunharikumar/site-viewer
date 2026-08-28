@@ -1259,10 +1259,66 @@ function placeOverlays(){
 function toggleLayersPop(){placeOverlays();$('layersPop').classList.toggle('show');}
 window.addEventListener('resize',placeOverlays);
 
+// ---- floating search dock (desktop) ----
+// The search input is a single element shared by both layouts: on mobile it
+// sits at the top of the bottom sheet, on desktop it moves into the dock that
+// floats over the bottom of the map. Same pattern as placeOverlays() above.
+const DOCK_HOVER_PX=130;   // how close to the bottom edge counts as "reaching for it"
+function dockEls(){return {dock:$('searchDock'),body:$('searchDockBody'),metaBox:$('searchDockMeta'),
+  wrap:document.querySelector('.searchwrap'),meta:$('projSearchMeta'),
+  controls:document.querySelector('#sidebar .controls')};}
+function placeSearch(){
+  const e=dockEls(); if(!e.dock||!e.wrap)return;
+  if(isMobile()){
+    if(e.wrap.parentElement!==e.controls){e.controls.prepend(e.wrap);e.wrap.after(e.meta);}
+    setDock(false);
+  }else if(e.wrap.parentElement!==e.body){
+    e.metaBox.appendChild(e.meta);e.body.appendChild(e.wrap);
+  }
+}
+// Keep it open while the user is actually using it, whatever the pointer does.
+function dockBusy(){const i=$('search');return !!(i&&(document.activeElement===i||i.value.trim()));}
+function setDock(open){
+  const e=dockEls(); if(!e.dock)return;
+  const want=open||dockBusy();
+  e.dock.classList.toggle('collapsed',!want);
+  const b=$('searchDockBtn');
+  if(b){b.setAttribute('aria-expanded',want?'true':'false');
+        b.setAttribute('aria-label',want?'Close search':'Open search');}
+}
+function initSearchDock(){
+  const b=$('searchDockBtn'),inp=$('search');
+  if(b)b.onclick=function(){
+    const open=$('searchDock').classList.contains('collapsed');
+    setDock(open); if(open&&inp)inp.focus();
+  };
+  // Pointer proximity to the bottom edge of the map.
+  document.addEventListener('mousemove',function(ev){
+    if(isMobile())return;
+    const w=$('mapwrap'); if(!w)return;
+    const r=w.getBoundingClientRect();
+    const near=ev.clientY>r.bottom-DOCK_HOVER_PX&&ev.clientY<=r.bottom
+             &&ev.clientX>=r.left&&ev.clientX<=r.right;
+    setDock(near);
+  });
+  // Keyboard users never move the mouse — focus has to open it too.
+  if(inp){
+    inp.addEventListener('focus',()=>setDock(true));
+    inp.addEventListener('blur',()=>setDock(false));
+    inp.addEventListener('keydown',e=>{if(e.key==='Escape'){inp.value='';inp.blur();setDock(false);}});
+  }
+  const ai=$('mainAiBtn');
+  if(ai){ai.addEventListener('focus',()=>setDock(true));ai.addEventListener('blur',()=>setDock(false));}
+  setDock(false);
+}
+window.addEventListener('resize',placeSearch);
+
 // ---- init ----
 buildScrubAxis();
 loadCompare();
 placeOverlays();
+placeSearch();
+initSearchDock();
 const _opened=applyHash();
 renderCompareTray();
 applyPulse();
