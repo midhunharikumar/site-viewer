@@ -26,7 +26,8 @@
   })();
 </script>
 <!-- Runtime config: injects window.CARTO_API_KEY from Vercel env (see api/config.js).
-     Must load BEFORE the inline map init below so cartoTiles() sees the key. -->
+     Not required today (CARTO vector basemaps serve anonymously), but MapLibre's
+     transformRequest picks it up automatically if CARTO ever locks vector too. -->
 <script src="/api/config"></script>
 <!-- Event snippet for Page view conversion page -->
 <script>
@@ -263,14 +264,16 @@ let THEME=(function(){try{return localStorage.getItem('bv_theme')||(prefDark()?'
 document.documentElement.dataset.theme=THEME;
 const THEMES={
   light:{
-    basemap:'light_all', bg:'#e7dfce', brightBase:0.55,
+    styleUrl:'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+    bg:'#e7dfce', brightBase:0.55,
     hill:{shadow:'#8a7d64',hl:'#fff8ec',accent:'#cdbfa3'},
     bld:{night:'#6b6250',goldA:'#cdbfa3',goldB:'#c0824a',dayA:'#bcae92',dayB:'#efe6d2',static:'#cdbfa3'},
     wind:'rgba(33,79,99,.62)',
     dome:{grid:'#cabd9f',lbl:'#857a64',arc:'#a9781f',glow:'rgba(184,144,47,.55)',sun:'#e0a020',sunrim:'#5a3f10',night:'#3a2e1c'}
   },
   dark:{
-    basemap:'dark_all', bg:'#0c0a07', brightBase:0.5,
+    styleUrl:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+    bg:'#0c0a07', brightBase:0.5,
     hill:{shadow:'#000a07',hl:'#5a6b80',accent:'#0c1620'},
     bld:{night:'#241f17',goldA:'#3a342a',goldB:'#b87a4a',dayA:'#2c2920',dayB:'#8f8a76',static:'#3a342a'},
     wind:'rgba(150,210,255,.55)',
@@ -278,25 +281,29 @@ const THEMES={
   }
 };
 let DOMECOL=THEMES[THEME].dome, WINDCOL=THEMES[THEME].wind;
-// CARTO basemap tiles now require an API key (free tier at https://carto.com/basemaps/apikey).
-// Set window.CARTO_API_KEY (or hard-code CARTO_API_KEY below). Without a key we fall back
-// to OSM standard tiles so the map still renders.
+// CARTO VECTOR basemaps still serve anonymously — no API key required.
+// (Raster tiles at basemaps.cartocdn.com/{dark_all,light_all,...} now demand a key.)
+// If CARTO extends the key requirement to vector, api/config.js can inject it later
+// and MapLibre will fetch style/tile URLs via the transformRequest hook below.
 const CARTO_API_KEY=(typeof window!=='undefined'&&window.CARTO_API_KEY)||'';
-// CARTO's raster tiles take the key on the `key` query param — `api_key` is ignored.
-const cartoTiles=(b)=> CARTO_API_KEY
-  ? ['a','b','c'].map(s=>'https://'+s+'.basemaps.cartocdn.com/'+b+'/{z}/{x}/{y}@2x.png?key='+encodeURIComponent(CARTO_API_KEY))
-  : ['a','b','c'].map(s=>'https://'+s+'.tile.openstreetmap.org/{z}/{x}/{y}.png');
 function updateThemeBtn(){var b=document.getElementById('themeBtn');if(b)b.textContent=THEME==='dark'?'☀️':'🌙';}
 function applyTheme3d(t){
   THEME=t; try{localStorage.setItem('bv_theme',t);}catch(e){}
   document.documentElement.dataset.theme=t;
   DOMECOL=THEMES[t].dome; WINDCOL=THEMES[t].wind;
   const th=THEMES[t];
-  try{ if(typeof map!=='undefined'&&map.getSource('carto'))map.getSource('carto').setTiles(cartoTiles(th.basemap)); }catch(e){}
-  try{ map.setPaintProperty('bg','background-color',th.bg); }catch(e){}
-  try{ if(map.getLayer('hills')){map.setPaintProperty('hills','hillshade-shadow-color',th.hill.shadow);map.setPaintProperty('hills','hillshade-highlight-color',th.hill.hl);map.setPaintProperty('hills','hillshade-accent-color',th.hill.accent);} }catch(e){}
-  try{ applySun(); }catch(e){}
   updateThemeBtn();
+  if(typeof map==='undefined') return;
+  // Swap the CARTO vector style (positron ↔ dark-matter). setStyle wipes custom sources,
+  // layers, and terrain, so we rebuild the whole overlay stack after style.load.
+  try{ map.setStyle(th.styleUrl); }catch(e){return;}
+  map.once('style.load',()=>{
+    addBaseOverlays();
+    try{map.setTerrain({source:'dem',exaggeration:1.7});}catch(e){}
+    try{ if(DATA.projects){ addDataLayers(); addBuildings(); if(typeof addFlightLayers==='function') addFlightLayers(); } }catch(e){console.warn('theme rebuild',e);}
+    try{ applySun(); }catch(e){}
+    try{ if(typeof applyLayers==='function') applyLayers(); }catch(e){}
+  });
 }
 function toggleTheme3d(){applyTheme3d(THEME==='dark'?'light':'dark');}
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{try{if(!localStorage.getItem('bv_theme'))applyTheme3d(e.matches?'dark':'light');}catch(_){}});}catch(e){}
@@ -304,27 +311,36 @@ updateThemeBtn();
 
 // ---------- map ----------
 const TERRARIUM='https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
+// The CARTO vector style loads its own vector source + all styling layers. We layer terrain
+// hillshade, OMT buildings, and our data overlays on top after 'style.load' fires (both on
+// initial load and every theme switch — setStyle() drops everything else).
+function addBaseOverlays(){
+  try{
+    if(!map.getSource('dem'))     map.addSource('dem',    {type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13});
+    if(!map.getSource('demHill')) map.addSource('demHill',{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13});
+    if(!map.getSource('omt'))     map.addSource('omt',    {type:'vector',url:'https://tiles.openfreemap.org/planet'});
+  }catch(e){console.warn('base sources',e);}
+  const th=THEMES[THEME];
+  try{
+    if(!map.getLayer('hills')) map.addLayer({id:'hills',type:'hillshade',source:'demHill',paint:{
+      'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map',
+      'hillshade-exaggeration':0.45,'hillshade-shadow-color':th.hill.shadow,
+      'hillshade-highlight-color':th.hill.hl,'hillshade-accent-color':th.hill.accent
+    }});
+  }catch(e){console.warn('hillshade',e);}
+}
 const map=new maplibregl.Map({
   container:'map',
   center:[77.5946,12.9716],
   zoom:11.4, pitch:58, bearing:-15,
   maxPitch:80, antialias:true, attributionControl:true, hash:true,
-  style:{
-    version:8,
-    glyphs:'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
-    sources:{
-      carto:{type:'raster',tiles:cartoTiles(THEMES[THEME].basemap),tileSize:256,maxzoom:19,attribution:'© OpenStreetMap, © CARTO · terrain © Mapzen/AWS · buildings © OpenFreeMap'},
-      dem:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
-      demHill:{type:'raster-dem',tiles:[TERRARIUM],encoding:'terrarium',tileSize:256,maxzoom:13},
-      omt:{type:'vector',url:'https://tiles.openfreemap.org/planet'}
-    },
-    layers:[
-      {id:'bg',type:'background',paint:{'background-color':THEMES[THEME].bg}},
-      {id:'carto',type:'raster',source:'carto',paint:{'raster-opacity':1,'raster-brightness-max':0.95}},
-      {id:'hills',type:'hillshade',source:'demHill',paint:{
-        'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map',
-        'hillshade-exaggeration':0.45,'hillshade-shadow-color':THEMES[THEME].hill.shadow,'hillshade-highlight-color':THEMES[THEME].hill.hl,'hillshade-accent-color':THEMES[THEME].hill.accent}}
-    ]
+  style:THEMES[THEME].styleUrl,
+  // If a CARTO API key is ever required for vector too, this hook appends ?key=… to CARTO URLs.
+  transformRequest:(url,rt)=>{
+    if(!CARTO_API_KEY) return {url};
+    if(url.indexOf('basemaps.cartocdn.com')<0 && url.indexOf('.basemaps.cartocdn.com')<0) return {url};
+    var sep=url.indexOf('?')<0?'?':'&';
+    return {url:url+sep+'key='+encodeURIComponent(CARTO_API_KEY)};
   }
 });
 map.addControl(new maplibregl.NavigationControl({visualizePitch:true}),'bottom-right');
@@ -448,7 +464,7 @@ function applySun(){
     const base=el<=0?B.night:(golden>0.3?mixHex(B.goldA,B.goldB,golden*0.85):mixHex(B.dayA,B.dayB,day*0.9));
     map.setPaintProperty('bld','fill-extrusion-color',base);
   }
-  if(map.getLayer('carto'))map.setPaintProperty('carto','raster-brightness-max',THEMES[THEME].brightBase+0.4*day);
+  // (Raster 'carto' layer removed with vector migration — the CARTO vector style handles its own tinting.)
   // panel text + dome
   const t=sunTimes(CITY[0],CITY[1],DOY), shadow=(az+180)%360;
   document.getElementById('sunInfo').innerHTML=(el>0
@@ -893,6 +909,7 @@ map.on('moveend',()=>{
 addEventListener('resize',wcResize);
 
 map.on('load',async()=>{
+  addBaseOverlays();
   try{map.setTerrain({source:'dem',exaggeration:1.7});}catch(e){console.warn('terrain unavailable',e);}
   try{
     const [pj,sc,mt]=await Promise.all(['data/projects.json','data/schools.json','data/metro.json']
