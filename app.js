@@ -724,34 +724,129 @@ function clearProjectSearch(){
   renderAll();
 }
 
+// ---- AI search activity ----
+// /api/search streams NDJSON: one {t:...} per line as the agent works, ending
+// with {t:"result"}. We surface the REAL step (geocode / web search / distance
+// maths) instead of a generic spinner, and nothing here blocks the map — the
+// run can always be stopped.
+const AI_TOOL_LABEL={
+  geocode:'Locating',
+  web_search:'Searching the web',
+  haversine_km:'Measuring distances',
+  route_minutes:'Checking drive times',
+  nearest_metro:'Finding nearest metro'
+};
+let aiAbort=null,aiT0=0,aiTick=null,aiStep='',aiRepeat=0,aiToolCount=0;
+function aiMetaEl(){return document.getElementById('projSearchMeta');}
+function aiRender(){
+  const el=aiMetaEl();if(!el)return;
+  const secs=Math.round((Date.now()-aiT0)/1000);
+  el.style.display='block';
+  el.classList.add('working');
+  el.innerHTML='<span class="ai-dot"></span><b>'+escapeHtml(aiStep||'Thinking')+'</b>'+
+    (aiRepeat>1?' <span class="muted">\u00d7'+aiRepeat+'</span>':'')+
+    (secs>=2?' <span class="muted">\u00b7 '+secs+'s</span>':'')+
+    ' \u00b7 <a href="#" onclick="cancelAiSearch();return false">stop</a>';
+}
+function aiBegin(){
+  aiT0=Date.now();aiStep='Thinking';aiRepeat=0;aiToolCount=0;
+  clearInterval(aiTick);aiTick=setInterval(aiRender,1000);aiRender();
+}
+function aiEvent(ev){
+  if(ev.t==='think'){
+    aiStep=aiToolCount?'Weighing the shortlist':'Reading the catalogue';
+    aiRepeat=0;
+  }else if(ev.t==='tool'){
+    const base=AI_TOOL_LABEL[ev.name]||ev.name;
+    const a=ev.args||{};
+    const detail=ev.name==='geocode'&&a.name?' \u201c'+a.name+'\u201d'
+                :ev.name==='web_search'&&a.query?' \u201c'+a.query+'\u201d':'';
+    const label=base+detail;
+    // The agent fires many identical calls at once (19 haversines is normal) —
+    // collapse repeats into a count instead of flickering through them.
+    if(label===aiStep)aiRepeat++;else{aiStep=label;aiRepeat=1;}
+    aiToolCount++;
+  }else return;
+  aiRender();
+}
+function aiStop(){clearInterval(aiTick);aiTick=null;const el=aiMetaEl();if(el)el.classList.remove('working');}
+function aiBtnBusy(on){
+  const b=document.getElementById('mainAiBtn');if(!b)return;
+  if(on){
+    if(!b.dataset.lbl)b.dataset.lbl=b.innerHTML;
+    b.classList.add('busy');b.innerHTML='<span class="spin"></span>Stop';
+    b.title='Stop the AI search';
+  }else{
+    b.classList.remove('busy');
+    if(b.dataset.lbl)b.innerHTML=b.dataset.lbl;
+    b.title='Natural-language search via LLM';
+  }
+}
+function cancelAiSearch(){
+  if(aiAbort){aiAbort.abort();aiAbort=null;}
+  aiStop();aiBtnBusy(false);updateProjectMatchUi();
+}
+function onAiBtn(){if(aiAbort)cancelAiSearch();else aiProjectSearch();}
+// Read the NDJSON stream, feeding each event to the status line.
+async function aiReadStream(r){
+  const reader=r.body.getReader(),dec=new TextDecoder();
+  let buf='',result=null,err=null;
+  for(;;){
+    const {value,done}=await reader.read();
+    if(done)break;
+    buf+=dec.decode(value,{stream:true});
+    let i;
+    while((i=buf.indexOf('\n'))>=0){
+      const line=buf.slice(0,i).trim();buf=buf.slice(i+1);
+      if(!line)continue;
+      let ev;try{ev=JSON.parse(line);}catch(e){continue;}
+      if(ev.t==='result')result=ev;
+      else if(ev.t==='error')err=ev.error;
+      else aiEvent(ev);
+    }
+  }
+  if(err)throw new Error(err);
+  return result||{matches:[],reason:''};
+}
+
 async function aiProjectSearch(){
   const inp=document.getElementById('search');
   if(!inp)return;
   const q=inp.value.trim();
   if(q.length<2){applyProjectSearch(null,'','');return;}
-  const btn=document.getElementById('mainAiBtn');
-  if(btn){btn.classList.add('busy');btn.dataset.lbl=btn.innerHTML;btn.innerHTML='✦…';}
+  if(aiAbort)aiAbort.abort();            // a newer query supersedes the old run
+  const ctrl=new AbortController();aiAbort=ctrl;
+  const mine=()=>aiAbort===ctrl;
+  aiBtnBusy(true);
   // Make sure the unified sidebar list uses this query (drives the Projects group).
   searchTxt=q.toLowerCase();
+  aiBegin();
   try{
-    const r=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
+    const r=await fetch('/api/search',{method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'},
+      body:JSON.stringify({query:q}),signal:ctrl.signal});
     if(!r.ok){
-      const reason=r.status===503?'AI search not configured — using keyword match':('AI error '+r.status+' — using keyword match');
+      const reason=r.status===503?'AI search not configured \u2014 using keyword match':('AI error '+r.status+' \u2014 using keyword match');
       const set=localFuzzy(q)||new Set();
       applyProjectSearch(set,'keyword',reason);
       renderAll();
       return;
     }
-    const data=await r.json();
+    const ct=r.headers.get('content-type')||'';
+    const data=(ct.indexOf('x-ndjson')>=0&&r.body&&r.body.getReader)
+      ?await aiReadStream(r)
+      :await r.json();
+    if(!mine())return;                   // superseded while we were reading
     const names=Array.isArray(data.matches)?data.matches:[];
     applyProjectSearch(new Set(names),'ai',data.reason||'');
     renderAll();
   }catch(e){
+    if(e&&e.name==='AbortError')return;  // cancelled, or superseded
     const set=localFuzzy(q)||new Set();
-    applyProjectSearch(set,'keyword','Network error — using keyword match');
+    applyProjectSearch(set,'keyword','Network error \u2014 using keyword match');
     renderAll();
   }finally{
-    if(btn){btn.classList.remove('busy');btn.innerHTML=btn.dataset.lbl||'✦ Ask AI';}
+    if(mine()){aiAbort=null;aiStop();aiBtnBusy(false);}
   }
 }
 
