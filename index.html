@@ -1939,6 +1939,23 @@
                 flex: 1;
                 min-width: 0;
             }
+            .clearbtn {
+                flex: none;
+                width: 26px;
+                border: 1px solid transparent;
+                border-radius: 50%;
+                background: transparent;
+                color: var(--muted);
+                font-size: 13px;
+                line-height: 1;
+                cursor: pointer;
+                padding: 0;
+            }
+            .clearbtn:hover {
+                color: var(--accent);
+                border-color: var(--line);
+                background: var(--panel2);
+            }
             .aiBtn {
                 flex: none;
                 background: rgba(79, 157, 255, 0.1);
@@ -1983,6 +2000,56 @@
                     transform: rotate(360deg);
                 }
             }
+            /* Skeleton rows while the AI search runs — the sidebar reads as
+               "results are coming", not "nothing found". */
+            .item.skel {
+                cursor: default;
+                pointer-events: none;
+            }
+            .skel-b {
+                border-radius: 4px;
+                background: linear-gradient(
+                    90deg,
+                    var(--panel2) 0%,
+                    color-mix(in srgb, var(--line) 70%, var(--panel2)) 50%,
+                    var(--panel2) 100%
+                );
+                background-size: 200% 100%;
+                animation: shimmer 1.4s ease-in-out infinite;
+            }
+            .skel-b.sk-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                flex: none;
+            }
+            .skel-b.sk-nm {
+                height: 9px;
+                margin-bottom: 5px;
+            }
+            .skel-b.sk-zn {
+                height: 7px;
+                opacity: 0.7;
+            }
+            .skel-b.sk-pr {
+                width: 42px;
+                height: 9px;
+                flex: none;
+            }
+            @keyframes shimmer {
+                0% {
+                    background-position: 200% 0;
+                }
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .skel-b {
+                    animation: none;
+                }
+            }
+
             /* Live activity line: what the agent is doing right now. */
             .searchmeta.working {
                 color: var(--txt);
@@ -2956,6 +3023,17 @@
                                 id="search"
                                 placeholder="Search localities, projects, schools, metro… (Enter for ✦ AI)"
                             />
+                            <button
+                                type="button"
+                                id="clearBtn"
+                                class="clearbtn"
+                                aria-label="Clear search and reset the map"
+                                title="Clear search (Esc)"
+                                onclick="resetSearch()"
+                                style="display: none"
+                            >
+                                ✕
+                            </button>
                             <button
                                 id="mainAiBtn"
                                 class="aiBtn"

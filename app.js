@@ -236,15 +236,30 @@ function openSchoolByCoord(lat,lng,name){panToPoint(lat,lng,15);L.popup({classNa
 // open a metro station result
 function openStationByCoord(lat,lng,name,line){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🚇 '+name+'</b><br>'+line).openOn(map);}
 
+// Placeholder rows shaped like real results, shown while the AI search runs.
+// A natural-language query ("villas 25 min from the airport") matches nothing
+// locally, so without this the list sits on its empty state for the whole run.
+function aiSkeletonHtml(n){
+  let rows='';
+  for(let i=0;i<(n||5);i++){
+    rows+='<div class="item skel"><div class="skel-b sk-dot"></div>'+
+      '<div style="min-width:0;flex:1"><div class="skel-b sk-nm" style="width:'+(58+((i*17)%34))+'%"></div>'+
+      '<div class="skel-b sk-zn" style="width:'+(34+((i*23)%30))+'%"></div></div>'+
+      '<div class="skel-b sk-pr"></div></div>';
+  }
+  return '<div class="srgroup"><div class="srhd"><span class="ai-dot"></span>AI is searching</div>'+rows+'</div>';
+}
+
 function refreshList(){
   const list=document.getElementById('list');
   // unified search mode: show grouped results
   if(searchTxt){
     const res=searchAll(searchTxt);
     const tot=res.localities.length+res.projects.length+res.schools.length+res.stations.length;
-    document.getElementById('listCount').textContent=tot+' results';
+    const busy=!!aiAbort;   // an AI run is in flight
+    document.getElementById('listCount').textContent=busy?'searching…':tot+' results';
     document.getElementById('sortBar').innerHTML='<span class="lbl" style="opacity:.7">localities · projects · schools · metro</span>';
-    if(tot===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
+    if(tot===0){list.innerHTML=busy?aiSkeletonHtml(6):emptyStateHtml(searchTxt);return;}
     const sec=(title,n,html)=>n?'<div class="srgroup"><div class="srhd">'+title+' <span class="srct">'+n+'</span></div>'+html+'</div>':'';
     const locsHtml=res.localities.slice(0,30).map(loc=>{
       const esc=loc.name.replace(/'/g,"\\'");
@@ -282,7 +297,8 @@ function refreshList(){
       sec('🏘️ Localities',res.localities.length,locsHtml)+
       sec('🏗️ Projects',res.projects.length,projHtml)+
       sec('🏫 Schools',res.schools.length,schHtml)+
-      sec('🚇 Metro stations',res.stations.length,stHtml);
+      sec('🚇 Metro stations',res.stations.length,stHtml)+
+      (busy?aiSkeletonHtml(3):'');
     return;
   }
   // projects mode: sortable project list (respects zoneFilter best-effort by locality string)
@@ -513,6 +529,7 @@ ZONES.forEach(z=>{const el=document.createElement('div');el.className='chip'+(z=
 document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();updateHash();});
 document.getElementById('search').oninput=e=>{
   searchTxt=e.target.value.toLowerCase().trim();
+  syncClearBtn();
   // If an AI search was active, switch back to live local filter as soon as the
   // user keeps typing — otherwise the stale AI set keeps overriding the list.
   if(projMatchSet!==null&&projSearchMode==='ai')applyProjectSearch(null,'','');
@@ -703,6 +720,7 @@ function applyProjectSearch(matches,mode,reason){
   if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
 }
 function updateProjectMatchUi(){
+  syncClearBtn();
   const total=PROJECTS.projects.length;
   const matchN=projMatchSet?projMatchSet.size:total;
   const metaEl=document.getElementById('projSearchMeta');
@@ -717,12 +735,7 @@ function updateProjectMatchUi(){
     }
   }
 }
-function clearProjectSearch(){
-  const inp=document.getElementById('search');
-  if(inp){inp.value='';searchTxt='';inp.focus();}
-  applyProjectSearch(null,'','');
-  renderAll();
-}
+function clearProjectSearch(){resetSearch();}
 
 // ---- AI search activity ----
 // /api/search streams NDJSON: one {t:...} per line as the agent works, ending
@@ -749,8 +762,9 @@ function aiRender(){
     ' \u00b7 <a href="#" onclick="cancelAiSearch();return false">stop</a>';
 }
 function aiBegin(){
-  aiT0=Date.now();aiStep='Thinking';aiRepeat=0;aiToolCount=0;
+  aiT0=Date.now();aiStep='Thinking';aiRepeat=0;aiToolCount=0;syncClearBtn();
   clearInterval(aiTick);aiTick=setInterval(aiRender,1000);aiRender();
+  refreshList();
 }
 function aiEvent(ev){
   if(ev.t==='think'){
@@ -784,9 +798,29 @@ function aiBtnBusy(on){
 }
 function cancelAiSearch(){
   if(aiAbort){aiAbort.abort();aiAbort=null;}
-  aiStop();aiBtnBusy(false);updateProjectMatchUi();
+  aiStop();aiBtnBusy(false);updateProjectMatchUi();refreshList();
 }
 function onAiBtn(){if(aiAbort)cancelAiSearch();else aiProjectSearch();}
+// Full reset: stop any run in flight, drop the query and the AI match set, and
+// put the list, the KPI strip and the dimmed map pins back to their defaults.
+function resetSearch(){
+  if(aiAbort){aiAbort.abort();aiAbort=null;}
+  aiStop();aiBtnBusy(false);
+  const inp=document.getElementById('search');
+  if(inp)inp.value='';
+  searchTxt='';
+  applyProjectSearch(null,'','');
+  renderAll();
+  syncClearBtn();
+  if(inp)inp.focus();
+}
+// The clear affordance only earns its space once there is something to clear.
+function syncClearBtn(){
+  const b=document.getElementById('clearBtn');if(!b)return;
+  const inp=document.getElementById('search');
+  const has=!!((inp&&inp.value.trim())||projMatchSet!==null||searchTxt);
+  b.style.display=has?'':'none';
+}
 // Read the NDJSON stream, feeding each event to the status line.
 async function aiReadStream(r){
   const reader=r.body.getReader(),dec=new TextDecoder();
@@ -827,6 +861,7 @@ async function aiProjectSearch(){
       body:JSON.stringify({query:q}),signal:ctrl.signal});
     if(!r.ok){
       const reason=r.status===503?'AI search not configured \u2014 using keyword match':('AI error '+r.status+' \u2014 using keyword match');
+      aiAbort=null;aiStop();aiBtnBusy(false);
       const set=localFuzzy(q)||new Set();
       applyProjectSearch(set,'keyword',reason);
       renderAll();
@@ -837,11 +872,15 @@ async function aiProjectSearch(){
       ?await aiReadStream(r)
       :await r.json();
     if(!mine())return;                   // superseded while we were reading
+    // Retire the run BEFORE rendering: refreshList() keys its skeleton off
+    // aiAbort, so painting first would leave the placeholders under the results.
+    aiAbort=null;aiStop();aiBtnBusy(false);
     const names=Array.isArray(data.matches)?data.matches:[];
     applyProjectSearch(new Set(names),'ai',data.reason||'');
     renderAll();
   }catch(e){
     if(e&&e.name==='AbortError')return;  // cancelled, or superseded
+    aiAbort=null;aiStop();aiBtnBusy(false);
     const set=localFuzzy(q)||new Set();
     applyProjectSearch(set,'keyword','Network error \u2014 using keyword match');
     renderAll();
@@ -1400,7 +1439,7 @@ function initSearchDock(){
   if(inp){
     inp.addEventListener('focus',()=>setDock(true));
     inp.addEventListener('blur',()=>setDock(false));
-    inp.addEventListener('keydown',e=>{if(e.key==='Escape'){inp.value='';inp.blur();setDock(false);}});
+    inp.addEventListener('keydown',e=>{if(e.key==='Escape'){resetSearch();inp.blur();setDock(false);}});
   }
   const ai=$('mainAiBtn');
   if(ai){ai.addEventListener('focus',()=>setDock(true));ai.addEventListener('blur',()=>setDock(false));}
@@ -1414,6 +1453,7 @@ loadCompare();
 placeOverlays();
 placeSearch();
 initSearchDock();
+syncClearBtn();
 const _opened=applyHash();
 renderCompareTray();
 applyPulse();
