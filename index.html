@@ -66,9 +66,26 @@
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+        />
         <script
             defer
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            onerror="window.__cdnFail = 1"
+        ></script>
+        <!-- maplibre-gl + maplibre-gl-leaflet: lets Leaflet render CARTO's vector basemap
+             as a base layer. CARTO raster tiles now require an API key; the vector tiles
+             (loaded via the style URL below) still serve anonymously. -->
+        <script
+            defer
+            src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"
+            onerror="window.__cdnFail = 1"
+        ></script>
+        <script
+            defer
+            src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"
             onerror="window.__cdnFail = 1"
         ></script>
         <script>

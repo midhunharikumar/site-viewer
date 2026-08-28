@@ -84,25 +84,32 @@ const map=L.map('map',{zoomControl:true,attributionControl:true}).setView([12.97
 map.createPane('localityPane');map.getPane('localityPane').style.zIndex=500;
 map.zoomControl.setPosition('bottomright');
 let baseTiles=null;
-// CARTO now requires an API key for basemaps.cartocdn.com/{dark_all,light_all,...}
-// Get a free key at https://carto.com/basemaps/apikey (5M tile requests/mo free tier)
-// and either hard-code it below or set window.CARTO_API_KEY before app.js loads.
+// CARTO raster tiles now demand an API key; the vector basemaps still serve anonymously,
+// so we render them into Leaflet via the maplibre-gl-leaflet plugin. If CARTO extends the
+// key requirement to vector too, api/config.js can drop the key in via window.CARTO_API_KEY
+// and MapLibre picks it up through the transformRequest hook below.
 const CARTO_API_KEY=(typeof window!=='undefined'&&window.CARTO_API_KEY)||'';
+const CARTO_STYLE={
+  dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+  light:'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
+};
+function cartoTransformRequest(url){
+  if(!CARTO_API_KEY) return {url:url};
+  if(url.indexOf('basemaps.cartocdn.com')<0) return {url:url};
+  var sep=url.indexOf('?')<0?'?':'&';
+  return {url:url+sep+'key='+encodeURIComponent(CARTO_API_KEY)};
+}
 function setBasemap(){
-  const variant=curTheme()==='dark'?'dark_all':'light_all';
-  let url,attribution;
-  if(CARTO_API_KEY){
-    url='https://{s}.basemaps.cartocdn.com/'+variant+'/{z}/{x}/{y}{r}.png?api_key='+encodeURIComponent(CARTO_API_KEY);
-    attribution='© OpenStreetMap, © CARTO';
+  var styleUrl=CARTO_STYLE[curTheme()==='dark'?'dark':'light'];
+  if(baseTiles){try{map.removeLayer(baseTiles);}catch(e){} baseTiles=null;}
+  if(typeof L.maplibreGL==='function' && typeof maplibregl!=='undefined'){
+    // Vector basemap via MapLibre — sharper than raster and needs no key today.
+    baseTiles=L.maplibreGL({style:styleUrl, transformRequest:cartoTransformRequest, attribution:'© OpenStreetMap, © CARTO'}).addTo(map);
   } else {
-    // Fallback: OSM standard tiles — always free, no key. Only a light style exists,
-    // so the dark theme will look muted until a CARTO key is configured.
-    url='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-    attribution='© OpenStreetMap contributors';
+    // Fallback if the maplibre CDN failed to load: plain OSM raster. Still no key, still renders.
+    baseTiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
+    try{baseTiles.bringToBack();}catch(e){}
   }
-  if(baseTiles)map.removeLayer(baseTiles);
-  baseTiles=L.tileLayer(url,{attribution:attribution,subdomains:'abcd',maxZoom:19}).addTo(map);
-  baseTiles.bringToBack();
 }
 setBasemap();
 const markers={};
