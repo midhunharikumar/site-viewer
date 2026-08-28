@@ -631,7 +631,7 @@ function livabilityHtml(loc){const Lv=LIVE[loc.name];if(!Lv)return '';
 }
 // ---------- builder projects overlay ----------
 map.createPane('projectPane');map.getPane('projectPane').style.zIndex=520;
-let projectsOn=false;
+let projectsOn=true;   // new builds are on by default; chip carries .active in the markup
 const projectLayers=[];
 const projectIndex=[];   // parallel to projectLayers, holds the source project object
 PROJECTS.projects.forEach(pr=>{
@@ -705,8 +705,6 @@ function applyProjectSearch(matches,mode,reason){
 function updateProjectMatchUi(){
   const total=PROJECTS.projects.length;
   const matchN=projMatchSet?projMatchSet.size:total;
-  const ltEl=document.getElementById('projLegendTitle');
-  if(ltEl)ltEl.textContent='🏗️ New builds — '+matchN+(projMatchSet?'/'+total:'')+' projects';
   const metaEl=document.getElementById('projSearchMeta');
   if(metaEl){
     if(projMatchSet!==null){
@@ -757,24 +755,12 @@ async function aiProjectSearch(){
   }
 }
 
-// Build the legend ONCE at boot. After that we only update the count/meta line.
-function buildProjectsLegend(){
-  const b=PROJECTS.builders;
-  document.getElementById('projLegend').innerHTML=
-    '<div class="lt" id="projLegendTitle">🏗️ New builds — '+PROJECTS.projects.length+' projects</div>'+
-    '<div class="meta" id="projSearchMeta" style="font-size:9.5px;color:var(--muted);margin:0 0 5px;display:none"></div>'+
-    '<div id="projBuilders">'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px 8px">'+
-      Object.keys(b).map(k=>'<span style="display:flex;align-items:center;gap:5px;font-size:9px;line-height:1.4"><span style="width:8px;height:8px;background:'+b[k]+';transform:rotate(45deg);display:inline-block;flex:none"></span>'+k+'</span>').join('')+
-      '</div><div class="muted" style="margin-top:4px">◆ click a diamond for details</div>'+
-    '</div>';
-}
 
 // tiny HTML escape for the reason string
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);document.getElementById('projLegend').style.display=projectsOn?'block':'none';refreshProjects();};
-buildProjectsLegend();refreshProjects();
+document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);refreshProjects();};
+refreshProjects();
 
 // ---------- schools overlay ----------
 
@@ -1247,7 +1233,7 @@ function renderCompareTray(){
 
 // ---- H3: coach + pulse ----
 let interacted=false;
-function clearPulse(){document.querySelectorAll('.leaflet-localityPane-pane path.pulse').forEach(p=>p.classList.remove('pulse'));}
+function clearPulse(){document.querySelectorAll('.leaflet-locality-pane path.pulse').forEach(p=>p.classList.remove('pulse'));}
 function dismissCoach(){interacted=true;const c=$('coachTip');if(c)c.remove();clearPulse();}
 function applyPulse(){[...DATA.localities].sort((a,b)=>b.projCagr-a.projCagr).slice(0,3).forEach(l=>{const m=markers[l.name];if(m&&m._path)m._path.classList.add('pulse');});}
 function createCoach(){const d=document.createElement('div');d.className='coach';d.id='coachTip';d.innerHTML='👆 Tap any area for its 10-yr price trajectory<span class="cx" onclick="dismissCoach()">×</span>';$('mapwrap').appendChild(d);}
@@ -1280,7 +1266,9 @@ placeOverlays();
 const _opened=applyHash();
 renderCompareTray();
 applyPulse();
-if(!_opened){ if(!isMobile()) setTimeout(()=>openDetail('Whitefield'),300); else createCoach(); }
+// No deep link? Stay on the full-city view — openDetail() flies to zoom 13,
+// so auto-opening a locality was silently throwing away the Bangalore-wide map.
+if(!_opened) createCoach();
 
 // ---------- market heat (overheating) panel ----------
 (function(){

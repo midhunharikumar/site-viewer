@@ -1,5 +1,6 @@
 {
 	"scripts": {
+		"dev": "node scripts/dev-server.mjs",
 		"draft": "node scripts/make-newsletter.mjs",
 		"alerts": "node scripts/send-price-alerts.mjs",
 		"newsletter": "node scripts/send-newsletter.mjs"

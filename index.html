@@ -133,8 +133,8 @@
                     0 1px 0 rgba(32, 24, 15, 0.04),
                     0 10px 30px -12px rgba(60, 42, 20, 0.28);
                 /* themed pieces consumed by JS (map pins, charts) + on-map glass */
-                --glass: var(--glass);
-                --sheen: var(--sheen);
+                --glass: rgba(250, 246, 236, 0.9);
+                --sheen: rgba(255, 252, 244, 0.55);
                 --sel-row: rgba(125, 42, 42, 0.07);
                 --pin-stroke: #0b0f14;
                 --pin-sel: #7d2a2a;
@@ -557,7 +557,7 @@
                 position: absolute;
                 inset: 0;
             }
-            .leaflet-localityPane-pane path {
+            .leaflet-locality-pane path {
                 transition:
                     fill 0.5s ease,
                     fill-opacity 0.5s ease,
@@ -566,7 +566,7 @@
                     stroke-width 0.25s ease;
             }
             .leaflet-metroStations-pane path,
-            .leaflet-conceptPane-pane path {
+            .leaflet-concept-pane path {
                 transition:
                     fill 0.5s ease,
                     fill-opacity 0.5s ease,
@@ -1080,11 +1080,6 @@
                     width: 42vw;
                     max-width: 150px;
                 }
-                #projLegend {
-                    max-width: 42vw;
-                    max-height: 120px;
-                    font-size: 9px;
-                }
                 #metroLegend {
                     max-width: 38vw;
                     max-height: 120px;
@@ -1192,6 +1187,14 @@
             }
             #legendStack.collapsed .legendhead .caret {
                 transform: rotate(-90deg);
+            }
+            /* Project search feedback — lives under the sidebar search box
+               (it used to sit in the on-map "New builds" legend). */
+            .searchmeta {
+                font-size: 10px;
+                color: var(--muted);
+                margin: -4px 0 0;
+                line-height: 1.45;
             }
             /* H5: scrubber axis */
             .taxis {
@@ -1584,7 +1587,7 @@
                     opacity: 0;
                 }
             }
-            .leaflet-localityPane-pane path.pulse {
+            .leaflet-locality-pane path.pulse {
                 animation: pulsering 1.8s ease-out infinite;
                 stroke: var(--accent);
             }
@@ -2506,6 +2509,164 @@
                 #sidebar { --peek: 148px; }
             }
         </style>
+        <!-- ============================================================
+             DESKTOP GLASS SHELL (>=861px) — map-first, Zillow-style.
+             The map runs full-bleed under the chrome; the locality list and
+             the detail panel float over it as translucent, blurred cards so
+             the city stays readable behind them. Mobile (<=860px) already has
+             its own map-first sheet and is untouched here.
+             ============================================================ -->
+        <style id="desktop-glass">
+            @media (min-width: 861px) {
+                /* Panel widths drive both the panels and the on-map chrome
+                   that has to stay clear of them. */
+                main {
+                    position: relative;
+                    --rail: clamp(300px, 24vw, 340px); /* locality list */
+                    --dpanel: clamp(340px, 30vw, 430px); /* detail card  */
+                    --gutter: 12px;
+                }
+
+                /* ---- map becomes the canvas; panels sit on top of it ---- */
+                #mapwrap {
+                    position: absolute;
+                    inset: 0;
+                    flex: none;
+                }
+
+                /* ---- shared glass recipe for the two big panels ---- */
+                #sidebar,
+                #detail {
+                    background: color-mix(
+                        in srgb,
+                        var(--panel) 76%,
+                        transparent
+                    );
+                    -webkit-backdrop-filter: blur(20px) saturate(150%);
+                    backdrop-filter: blur(20px) saturate(150%);
+                    border: 1px solid
+                        color-mix(in srgb, var(--line) 78%, transparent);
+                    border-radius: 16px;
+                    box-shadow:
+                        0 1px 2px rgba(20, 14, 6, 0.06),
+                        0 18px 44px -18px rgba(40, 28, 12, 0.45);
+                    overflow: hidden;
+                }
+                /* No backdrop-filter (older Firefox): fall back to near-opaque
+                   paper so the text never sits on raw map tiles. */
+                @supports not (backdrop-filter: blur(1px)) {
+                    #sidebar,
+                    #detail {
+                        background: color-mix(
+                            in srgb,
+                            var(--panel) 95%,
+                            transparent
+                        );
+                    }
+                }
+
+                #sidebar {
+                    position: absolute;
+                    z-index: 640;
+                    top: var(--gutter);
+                    left: var(--gutter);
+                    bottom: var(--gutter);
+                    width: var(--rail);
+                    height: auto;
+                }
+                #detail {
+                    top: var(--gutter);
+                    right: var(--gutter);
+                    bottom: var(--gutter);
+                    height: auto;
+                    width: var(--dpanel);
+                    max-width: none;
+                    transform: translateX(calc(100% + var(--gutter) + 8px));
+                }
+                #detail.open {
+                    transform: none;
+                }
+
+                /* ---- inset surfaces: thinner so the glass reads through ---- */
+                #sidebar .search,
+                #sidebar .chip,
+                #sidebar .seg button,
+                #sidebar .foot,
+                #detail .stat,
+                #detail .chartbox,
+                #detail .drivers,
+                #detail .foot,
+                #detail .cta {
+                    background: color-mix(
+                        in srgb,
+                        var(--panel2) 55%,
+                        transparent
+                    );
+                }
+                #sidebar .chip.active,
+                #sidebar .seg button.active {
+                    background: var(--accent);
+                }
+                #sidebar .controls {
+                    background: transparent;
+                }
+
+                /* ---- on-map chrome: same glass ---- */
+                .timebar,
+                #compareTray,
+                .legend,
+                .legendhead {
+                    background: color-mix(
+                        in srgb,
+                        var(--panel) 80%,
+                        transparent
+                    );
+                    border-color: color-mix(
+                        in srgb,
+                        var(--line) 78%,
+                        transparent
+                    );
+                    -webkit-backdrop-filter: blur(14px) saturate(150%);
+                    backdrop-filter: blur(14px) saturate(150%);
+                }
+
+                /* ---- and keep that chrome clear of the floating panels ---- */
+                .timebar,
+                #compareTray {
+                    left: calc(var(--rail) + var(--gutter) * 2);
+                    right: calc(var(--gutter) * 2);
+                    width: auto;
+                }
+                .timebar {
+                    max-width: 660px;
+                }
+                #legendStack,
+                .timebar,
+                #compareTray,
+                .leaflet-bottom.leaflet-right {
+                    transition:
+                        right 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                        margin-right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                #mapwrap:has(#detail.open) .timebar,
+                #mapwrap:has(#detail.open) #compareTray,
+                #mapwrap:has(#detail.open) #legendStack {
+                    right: calc(var(--dpanel) + var(--gutter) * 2 + 8px);
+                }
+                /* Zoom + attribution live bottom-right; slide them clear too */
+                #mapwrap:has(#detail.open) .leaflet-bottom.leaflet-right {
+                    margin-right: calc(var(--dpanel) + var(--gutter) + 8px);
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    #legendStack,
+                    .timebar,
+                    #compareTray,
+                    .leaflet-bottom.leaflet-right {
+                        transition: none;
+                    }
+                }
+            }
+        </style>
     </head>
     <body>
         <div id="app">
@@ -2602,6 +2763,11 @@
                                 ✦ Ask AI
                             </button>
                         </div>
+                        <div
+                            class="searchmeta"
+                            id="projSearchMeta"
+                            style="display: none"
+                        ></div>
                         <div class="ctl-label">Filter zone</div>
                         <div class="row" id="zoneChips"></div>
                         <div class="ctl-label">
@@ -2679,7 +2845,7 @@
                                         /></svg
                                     >Future lines
                                 </div>
-                                <div class="chip" id="buildsToggle">
+                                <div class="chip active" id="buildsToggle">
                                     <svg
                                         class="ic"
                                         width="13"
@@ -2806,7 +2972,7 @@
                 ></div>
                 <section id="mapwrap">
                     <div id="map"></div>
-                    <div id="legendStack">
+                    <div id="legendStack" class="collapsed">
                         <div
                             class="legendhead"
                             id="legendCollapse"
@@ -2830,16 +2996,6 @@
                             class="legend"
                             id="metroLegend"
                             style="max-width: 170px; display: block"
-                        ></div>
-                        <div
-                            class="legend"
-                            id="projLegend"
-                            style="
-                                max-width: 200px;
-                                max-height: 230px;
-                                overflow: auto;
-                                display: block;
-                            "
                         ></div>
                         <div
                             class="legend"
