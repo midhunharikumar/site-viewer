@@ -696,7 +696,8 @@ async function openRouterTurn({ messages, model, referer, title, withTools, forc
 // it returns a final assistant message with no tool_calls (or we hit a cap).
 // Returns { content, trace } where content is the final JSON string and trace
 // is a short list of tool invocations for debugging.
-async function runAgent({ sys, user, model, referer, title }) {
+async function runAgent({ sys, user, model, referer, title, onEvent }) {
+  const emit = typeof onEvent === "function" ? onEvent : () => {};
   const startedAt = Date.now();
   const trace = [];
   const messages = [
@@ -715,6 +716,7 @@ async function runAgent({ sys, user, model, referer, title }) {
     }
     // On the last iteration, force JSON-only output (no more tool round-trips).
     const isFinal = iter === AGENT_MAX_ITER - 1 || totalToolCalls >= AGENT_MAX_TOOLS;
+    emit({ t: "think", iter });
     const j = await openRouterTurn({
       messages,
       model,
@@ -763,7 +765,9 @@ async function runAgent({ sys, user, model, referer, title }) {
         let args = {};
         try { args = JSON.parse(tc.function?.arguments || "{}"); } catch {}
         const t0 = Date.now();
+        emit({ t: "tool", name: tname, args });
         const out = await executeTool(tc.function?.name, args);
+        emit({ t: "tool_end", name: tname, ms: Date.now() - t0 });
         trace.push({
           iter,
           tool: tc.function?.name,
@@ -783,6 +787,7 @@ async function runAgent({ sys, user, model, referer, title }) {
     }
   }
   // We reached the cap without a clean final answer. Try one last forced-JSON turn.
+  emit({ t: "think", iter: AGENT_MAX_ITER, final: true });
   try {
     const j = await openRouterTurn({
       messages: [
@@ -890,7 +895,36 @@ export default async function handler(req, res) {
     const referer = process.env.OPENROUTER_REFERER || "";
     const title = process.env.OPENROUTER_TITLE || "Bangalore Site";
 
-    const { content, trace } = await runAgent({ sys, user, model, referer, title });
+    // Streaming mode: the client asks for NDJSON and gets one JSON object per
+    // line as the agent works — {t:"think"} / {t:"tool"} / {t:"tool_end"} —
+    // finishing with {t:"result", matches, reason}. Everything above this point
+    // (auth, rate limit, validation) still answers with a normal JSON status
+    // code, because nothing has been written to the socket yet.
+    const wantsStream = String(req.headers?.accept || "").includes(
+      "application/x-ndjson"
+    );
+    let streaming = false;
+    const send = (obj) => {
+      if (!streaming) return;
+      try { res.write(JSON.stringify(obj) + "\n"); } catch {}
+    };
+    if (wantsStream) {
+      res.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+      res.setHeader("Cache-Control", "no-store");
+      // Defeat proxy buffering so events arrive as they happen, not in one lump.
+      res.setHeader("X-Accel-Buffering", "no");
+      res.statusCode = 200;
+      // Push headers now; without this some runtimes hold the response open
+      // and the whole stream lands in one lump at the end.
+      if (typeof res.flushHeaders === "function") res.flushHeaders();
+      streaming = true;
+      send({ t: "start", projects: projects.length });
+    }
+
+    const { content, trace } = await runAgent({
+      sys, user, model, referer, title,
+      onEvent: wantsStream ? send : undefined,
+    });
     const { matches, reason } = parseAgentContent(content, projects.length);
 
     // Translate indexes -> names so the client doesn't depend on array order
@@ -905,10 +939,22 @@ export default async function handler(req, res) {
       `[search] q=${JSON.stringify(query)} model=${model} matches=${names.length} tools=[${toolSummary}]`
     );
 
+    if (streaming) {
+      send({ t: "result", matches: names, reason });
+      res.end();
+      return;
+    }
     res.setHeader("Cache-Control", "no-store");
     res.status(200).json({ matches: names, reason });
   } catch (e) {
     const msg = (e && e.message) || "error";
+    // Once bytes are on the wire we can't change the status code — report the
+    // failure as a final event instead so the client can fall back cleanly.
+    if (res.headersSent) {
+      try { res.write(JSON.stringify({ t: "error", error: String(msg).slice(0, 120) }) + "\n"); } catch {}
+      try { res.end(); } catch {}
+      return;
+    }
     // Map known failure modes to safe codes
     if (msg === "upstream_429")
       return res.status(429).json({ error: "upstream_rate_limited" });

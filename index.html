@@ -1188,6 +1188,97 @@
             #legendStack.collapsed .legendhead .caret {
                 transform: rotate(-90deg);
             }
+            /* ------------------------------------------------------------
+               Floating search dock (desktop) — collapsed to an icon at the
+               bottom of the map, expands when the pointer nears the bottom
+               edge, or on click / keyboard focus. Hidden on mobile, where
+               the search lives at the top of the bottom sheet instead.
+               ------------------------------------------------------------ */
+            #searchDock {
+                display: none;
+            }
+            .dock {
+                pointer-events: auto;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 6px;
+                border-radius: 26px;
+                border: 1px solid var(--line);
+                background: var(--panel);
+                box-shadow: var(--shadow);
+                transition:
+                    border-radius 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                    padding 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .dock-ic {
+                flex: none;
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                border: 0;
+                background: transparent;
+                color: var(--accent);
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .dock-ic:hover {
+                background: color-mix(in srgb, var(--accent) 12%, transparent);
+            }
+            .dockcol {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                pointer-events: none;
+            }
+            /* The pill is always ONE fixed-height row — the result line is a
+               separate chip above it, so a long AI rationale can never wrap
+               inside the collapsed body and stretch it into a tall capsule. */
+            .dockbody {
+                display: flex;
+                align-items: center;
+                height: 38px;
+                width: min(500px, 46vw);
+                overflow: hidden;
+                transition:
+                    width 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.2s ease;
+            }
+            .dockbody .searchwrap {
+                width: 100%;
+                padding-right: 4px;
+            }
+            .dockmeta {
+                pointer-events: auto;
+                max-width: min(520px, 46vw);
+                transition: opacity 0.2s ease;
+            }
+            .dockmeta .searchmeta {
+                margin: 0 0 7px;
+                padding: 5px 11px;
+                border-radius: 12px;
+                border: 1px solid var(--line);
+                background: var(--panel);
+                box-shadow: var(--shadow);
+            }
+            #searchDock.collapsed .dockbody {
+                width: 0;
+                opacity: 0;
+                pointer-events: none;
+            }
+            #searchDock.collapsed .dockmeta {
+                opacity: 0;
+                pointer-events: none;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .dock,
+                .dockbody {
+                    transition: none;
+                }
+            }
+
             /* Project search feedback — lives under the sidebar search box
                (it used to sit in the on-map "New builds" legend). */
             .searchmeta {
@@ -1848,6 +1939,23 @@
                 flex: 1;
                 min-width: 0;
             }
+            .clearbtn {
+                flex: none;
+                width: 26px;
+                border: 1px solid transparent;
+                border-radius: 50%;
+                background: transparent;
+                color: var(--muted);
+                font-size: 13px;
+                line-height: 1;
+                cursor: pointer;
+                padding: 0;
+            }
+            .clearbtn:hover {
+                color: var(--accent);
+                border-color: var(--line);
+                background: var(--panel2);
+            }
             .aiBtn {
                 flex: none;
                 background: rgba(79, 157, 255, 0.1);
@@ -1867,9 +1975,114 @@
                 border-color: var(--accent);
                 background: rgba(79, 157, 255, 0.18);
             }
+            /* Busy = a live "Stop" control, not a dead spinner: the run is
+               always escapable and the map is never blocked. */
             .aiBtn.busy {
-                opacity: 0.6;
-                cursor: wait;
+                cursor: pointer;
+                color: var(--muted);
+            }
+            .aiBtn.busy:hover {
+                color: var(--accent);
+                border-color: var(--accent);
+            }
+            .spin {
+                width: 10px;
+                height: 10px;
+                margin-right: 5px;
+                border-radius: 50%;
+                border: 1.5px solid currentColor;
+                border-top-color: transparent;
+                display: inline-block;
+                animation: spin 0.7s linear infinite;
+            }
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            /* Skeleton rows while the AI search runs — the sidebar reads as
+               "results are coming", not "nothing found". */
+            .item.skel {
+                cursor: default;
+                pointer-events: none;
+            }
+            .skel-b {
+                border-radius: 4px;
+                background: linear-gradient(
+                    90deg,
+                    var(--panel2) 0%,
+                    color-mix(in srgb, var(--line) 70%, var(--panel2)) 50%,
+                    var(--panel2) 100%
+                );
+                background-size: 200% 100%;
+                animation: shimmer 1.4s ease-in-out infinite;
+            }
+            .skel-b.sk-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                flex: none;
+            }
+            .skel-b.sk-nm {
+                height: 9px;
+                margin-bottom: 5px;
+            }
+            .skel-b.sk-zn {
+                height: 7px;
+                opacity: 0.7;
+            }
+            .skel-b.sk-pr {
+                width: 42px;
+                height: 9px;
+                flex: none;
+            }
+            @keyframes shimmer {
+                0% {
+                    background-position: 200% 0;
+                }
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .skel-b {
+                    animation: none;
+                }
+            }
+
+            /* Live activity line: what the agent is doing right now. */
+            .searchmeta.working {
+                color: var(--txt);
+                font-size: 11.5px;
+            }
+            .searchmeta.working b {
+                font-weight: 600;
+            }
+            .ai-dot {
+                width: 6px;
+                height: 6px;
+                margin-right: 6px;
+                border-radius: 50%;
+                background: var(--accent2);
+                display: inline-block;
+                animation: aipulse 1.1s ease-in-out infinite;
+            }
+            @keyframes aipulse {
+                0%,
+                100% {
+                    opacity: 0.35;
+                    transform: scale(0.8);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.15);
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .spin,
+                .ai-dot {
+                    animation: none;
+                }
             }
             @media (max-width: 380px) {
                 .aiBtn {
@@ -2638,7 +2851,13 @@
                     width: auto;
                 }
                 .timebar {
+                    top: var(--gutter);
+                    bottom: auto;
                     max-width: 660px;
+                }
+                /* coach tip clears the scrubber now that it sits up top */
+                .coach {
+                    top: 92px;
                 }
                 #legendStack,
                 .timebar,
@@ -2657,10 +2876,60 @@
                 #mapwrap:has(#detail.open) .leaflet-bottom.leaflet-right {
                     margin-right: calc(var(--dpanel) + var(--gutter) + 8px);
                 }
+                /* ---- floating search dock, bottom-centre of the free map ---- */
+                #searchDock {
+                    position: absolute;
+                    z-index: 620;
+                    bottom: 16px;
+                    left: calc(var(--rail) + var(--gutter) * 2);
+                    right: calc(var(--gutter) * 2);
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                    /* only the pill itself takes clicks; the map stays draggable */
+                    pointer-events: none;
+                    transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                #mapwrap:has(#detail.open) #searchDock {
+                    right: calc(var(--dpanel) + var(--gutter) * 2 + 8px);
+                }
+                #searchDock .dock {
+                    background: color-mix(in srgb, var(--panel) 88%, transparent);
+                    border-color: color-mix(
+                        in srgb,
+                        var(--line) 78%,
+                        transparent
+                    );
+                    -webkit-backdrop-filter: blur(16px) saturate(150%);
+                    backdrop-filter: blur(16px) saturate(150%);
+                }
+                #searchDock .dockmeta .searchmeta {
+                    background: color-mix(in srgb, var(--panel) 88%, transparent);
+                    border-color: color-mix(
+                        in srgb,
+                        var(--line) 78%,
+                        transparent
+                    );
+                    -webkit-backdrop-filter: blur(16px) saturate(150%);
+                    backdrop-filter: blur(16px) saturate(150%);
+                }
+                #searchDock .search {
+                    background: color-mix(
+                        in srgb,
+                        var(--panel2) 55%,
+                        transparent
+                    );
+                    border-radius: 20px;
+                }
+                #searchDock .aiBtn {
+                    border-radius: 20px;
+                }
+
                 @media (prefers-reduced-motion: reduce) {
                     #legendStack,
                     .timebar,
                     #compareTray,
+                    #searchDock,
                     .leaflet-bottom.leaflet-right {
                         transition: none;
                     }
@@ -2755,10 +3024,21 @@
                                 placeholder="Search localities, projects, schools, metro… (Enter for ✦ AI)"
                             />
                             <button
+                                type="button"
+                                id="clearBtn"
+                                class="clearbtn"
+                                aria-label="Clear search and reset the map"
+                                title="Clear search (Esc)"
+                                onclick="resetSearch()"
+                                style="display: none"
+                            >
+                                ✕
+                            </button>
+                            <button
                                 id="mainAiBtn"
                                 class="aiBtn"
                                 title="Natural-language search via LLM — try 'near airport under 1.5 Cr'"
-                                onclick="aiProjectSearch()"
+                                onclick="onAiBtn()"
                             >
                                 ✦ Ask AI
                             </button>
@@ -3002,6 +3282,35 @@
                             id="schoolLegend"
                             style="max-width: 170px; display: block"
                         ></div>
+                    </div>
+                    <div id="searchDock" class="collapsed">
+                        <div class="dockcol">
+                        <div class="dockmeta" id="searchDockMeta"></div>
+                        <div class="dock" id="searchDockPill">
+                            <button
+                                type="button"
+                                id="searchDockBtn"
+                                class="dock-ic"
+                                aria-label="Open search"
+                                aria-expanded="false"
+                                aria-controls="searchDockBody"
+                            >
+                                <svg
+                                    width="17"
+                                    height="17"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.2"
+                                    stroke-linecap="round"
+                                >
+                                    <circle cx="11" cy="11" r="7" />
+                                    <path d="M20 20l-3.6-3.6" />
+                                </svg>
+                            </button>
+                            <div class="dockbody" id="searchDockBody"></div>
+                        </div>
+                        </div>
                     </div>
                     <div class="timebar">
                         <div class="tt">

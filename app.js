@@ -236,15 +236,30 @@ function openSchoolByCoord(lat,lng,name){panToPoint(lat,lng,15);L.popup({classNa
 // open a metro station result
 function openStationByCoord(lat,lng,name,line){panToPoint(lat,lng,15);L.popup({className:'pin'}).setLatLng([lat,lng]).setContent('<b>🚇 '+name+'</b><br>'+line).openOn(map);}
 
+// Placeholder rows shaped like real results, shown while the AI search runs.
+// A natural-language query ("villas 25 min from the airport") matches nothing
+// locally, so without this the list sits on its empty state for the whole run.
+function aiSkeletonHtml(n){
+  let rows='';
+  for(let i=0;i<(n||5);i++){
+    rows+='<div class="item skel"><div class="skel-b sk-dot"></div>'+
+      '<div style="min-width:0;flex:1"><div class="skel-b sk-nm" style="width:'+(58+((i*17)%34))+'%"></div>'+
+      '<div class="skel-b sk-zn" style="width:'+(34+((i*23)%30))+'%"></div></div>'+
+      '<div class="skel-b sk-pr"></div></div>';
+  }
+  return '<div class="srgroup"><div class="srhd"><span class="ai-dot"></span>AI is searching</div>'+rows+'</div>';
+}
+
 function refreshList(){
   const list=document.getElementById('list');
   // unified search mode: show grouped results
   if(searchTxt){
     const res=searchAll(searchTxt);
     const tot=res.localities.length+res.projects.length+res.schools.length+res.stations.length;
-    document.getElementById('listCount').textContent=tot+' results';
+    const busy=!!aiAbort;   // an AI run is in flight
+    document.getElementById('listCount').textContent=busy?'searching…':tot+' results';
     document.getElementById('sortBar').innerHTML='<span class="lbl" style="opacity:.7">localities · projects · schools · metro</span>';
-    if(tot===0){list.innerHTML=emptyStateHtml(searchTxt);return;}
+    if(tot===0){list.innerHTML=busy?aiSkeletonHtml(6):emptyStateHtml(searchTxt);return;}
     const sec=(title,n,html)=>n?'<div class="srgroup"><div class="srhd">'+title+' <span class="srct">'+n+'</span></div>'+html+'</div>':'';
     const locsHtml=res.localities.slice(0,30).map(loc=>{
       const esc=loc.name.replace(/'/g,"\\'");
@@ -282,7 +297,8 @@ function refreshList(){
       sec('🏘️ Localities',res.localities.length,locsHtml)+
       sec('🏗️ Projects',res.projects.length,projHtml)+
       sec('🏫 Schools',res.schools.length,schHtml)+
-      sec('🚇 Metro stations',res.stations.length,stHtml);
+      sec('🚇 Metro stations',res.stations.length,stHtml)+
+      (busy?aiSkeletonHtml(3):'');
     return;
   }
   // projects mode: sortable project list (respects zoneFilter best-effort by locality string)
@@ -513,6 +529,7 @@ ZONES.forEach(z=>{const el=document.createElement('div');el.className='chip'+(z=
 document.querySelectorAll('#metricSeg button,#livSeg button').forEach(b=>b.onclick=()=>{metric=b.dataset.m;document.querySelectorAll('#metricSeg button,#livSeg button').forEach(x=>x.classList.toggle('active',x===b));renderAll();updateHash();});
 document.getElementById('search').oninput=e=>{
   searchTxt=e.target.value.toLowerCase().trim();
+  syncClearBtn();
   // If an AI search was active, switch back to live local filter as soon as the
   // user keeps typing — otherwise the stale AI set keeps overriding the list.
   if(projMatchSet!==null&&projSearchMode==='ai')applyProjectSearch(null,'','');
@@ -703,6 +720,7 @@ function applyProjectSearch(matches,mode,reason){
   if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
 }
 function updateProjectMatchUi(){
+  syncClearBtn();
   const total=PROJECTS.projects.length;
   const matchN=projMatchSet?projMatchSet.size:total;
   const metaEl=document.getElementById('projSearchMeta');
@@ -717,11 +735,112 @@ function updateProjectMatchUi(){
     }
   }
 }
-function clearProjectSearch(){
+function clearProjectSearch(){resetSearch();}
+
+// ---- AI search activity ----
+// /api/search streams NDJSON: one {t:...} per line as the agent works, ending
+// with {t:"result"}. We surface the REAL step (geocode / web search / distance
+// maths) instead of a generic spinner, and nothing here blocks the map — the
+// run can always be stopped.
+const AI_TOOL_LABEL={
+  geocode:'Locating',
+  web_search:'Searching the web',
+  haversine_km:'Measuring distances',
+  route_minutes:'Checking drive times',
+  nearest_metro:'Finding nearest metro'
+};
+let aiAbort=null,aiT0=0,aiTick=null,aiStep='',aiRepeat=0,aiToolCount=0;
+function aiMetaEl(){return document.getElementById('projSearchMeta');}
+function aiRender(){
+  const el=aiMetaEl();if(!el)return;
+  const secs=Math.round((Date.now()-aiT0)/1000);
+  el.style.display='block';
+  el.classList.add('working');
+  el.innerHTML='<span class="ai-dot"></span><b>'+escapeHtml(aiStep||'Thinking')+'</b>'+
+    (aiRepeat>1?' <span class="muted">\u00d7'+aiRepeat+'</span>':'')+
+    (secs>=2?' <span class="muted">\u00b7 '+secs+'s</span>':'')+
+    ' \u00b7 <a href="#" onclick="cancelAiSearch();return false">stop</a>';
+}
+function aiBegin(){
+  aiT0=Date.now();aiStep='Thinking';aiRepeat=0;aiToolCount=0;syncClearBtn();
+  clearInterval(aiTick);aiTick=setInterval(aiRender,1000);aiRender();
+  refreshList();
+}
+function aiEvent(ev){
+  if(ev.t==='think'){
+    aiStep=aiToolCount?'Weighing the shortlist':'Reading the catalogue';
+    aiRepeat=0;
+  }else if(ev.t==='tool'){
+    const base=AI_TOOL_LABEL[ev.name]||ev.name;
+    const a=ev.args||{};
+    const detail=ev.name==='geocode'&&a.name?' \u201c'+a.name+'\u201d'
+                :ev.name==='web_search'&&a.query?' \u201c'+a.query+'\u201d':'';
+    const label=base+detail;
+    // The agent fires many identical calls at once (19 haversines is normal) —
+    // collapse repeats into a count instead of flickering through them.
+    if(label===aiStep)aiRepeat++;else{aiStep=label;aiRepeat=1;}
+    aiToolCount++;
+  }else return;
+  aiRender();
+}
+function aiStop(){clearInterval(aiTick);aiTick=null;const el=aiMetaEl();if(el)el.classList.remove('working');}
+function aiBtnBusy(on){
+  const b=document.getElementById('mainAiBtn');if(!b)return;
+  if(on){
+    if(!b.dataset.lbl)b.dataset.lbl=b.innerHTML;
+    b.classList.add('busy');b.innerHTML='<span class="spin"></span>Stop';
+    b.title='Stop the AI search';
+  }else{
+    b.classList.remove('busy');
+    if(b.dataset.lbl)b.innerHTML=b.dataset.lbl;
+    b.title='Natural-language search via LLM';
+  }
+}
+function cancelAiSearch(){
+  if(aiAbort){aiAbort.abort();aiAbort=null;}
+  aiStop();aiBtnBusy(false);updateProjectMatchUi();refreshList();
+}
+function onAiBtn(){if(aiAbort)cancelAiSearch();else aiProjectSearch();}
+// Full reset: stop any run in flight, drop the query and the AI match set, and
+// put the list, the KPI strip and the dimmed map pins back to their defaults.
+function resetSearch(){
+  if(aiAbort){aiAbort.abort();aiAbort=null;}
+  aiStop();aiBtnBusy(false);
   const inp=document.getElementById('search');
-  if(inp){inp.value='';searchTxt='';inp.focus();}
+  if(inp)inp.value='';
+  searchTxt='';
   applyProjectSearch(null,'','');
   renderAll();
+  syncClearBtn();
+  if(inp)inp.focus();
+}
+// The clear affordance only earns its space once there is something to clear.
+function syncClearBtn(){
+  const b=document.getElementById('clearBtn');if(!b)return;
+  const inp=document.getElementById('search');
+  const has=!!((inp&&inp.value.trim())||projMatchSet!==null||searchTxt);
+  b.style.display=has?'':'none';
+}
+// Read the NDJSON stream, feeding each event to the status line.
+async function aiReadStream(r){
+  const reader=r.body.getReader(),dec=new TextDecoder();
+  let buf='',result=null,err=null;
+  for(;;){
+    const {value,done}=await reader.read();
+    if(done)break;
+    buf+=dec.decode(value,{stream:true});
+    let i;
+    while((i=buf.indexOf('\n'))>=0){
+      const line=buf.slice(0,i).trim();buf=buf.slice(i+1);
+      if(!line)continue;
+      let ev;try{ev=JSON.parse(line);}catch(e){continue;}
+      if(ev.t==='result')result=ev;
+      else if(ev.t==='error')err=ev.error;
+      else aiEvent(ev);
+    }
+  }
+  if(err)throw new Error(err);
+  return result||{matches:[],reason:''};
 }
 
 async function aiProjectSearch(){
@@ -729,29 +848,44 @@ async function aiProjectSearch(){
   if(!inp)return;
   const q=inp.value.trim();
   if(q.length<2){applyProjectSearch(null,'','');return;}
-  const btn=document.getElementById('mainAiBtn');
-  if(btn){btn.classList.add('busy');btn.dataset.lbl=btn.innerHTML;btn.innerHTML='✦…';}
+  if(aiAbort)aiAbort.abort();            // a newer query supersedes the old run
+  const ctrl=new AbortController();aiAbort=ctrl;
+  const mine=()=>aiAbort===ctrl;
+  aiBtnBusy(true);
   // Make sure the unified sidebar list uses this query (drives the Projects group).
   searchTxt=q.toLowerCase();
+  aiBegin();
   try{
-    const r=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:q})});
+    const r=await fetch('/api/search',{method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'},
+      body:JSON.stringify({query:q}),signal:ctrl.signal});
     if(!r.ok){
-      const reason=r.status===503?'AI search not configured — using keyword match':('AI error '+r.status+' — using keyword match');
+      const reason=r.status===503?'AI search not configured \u2014 using keyword match':('AI error '+r.status+' \u2014 using keyword match');
+      aiAbort=null;aiStop();aiBtnBusy(false);
       const set=localFuzzy(q)||new Set();
       applyProjectSearch(set,'keyword',reason);
       renderAll();
       return;
     }
-    const data=await r.json();
+    const ct=r.headers.get('content-type')||'';
+    const data=(ct.indexOf('x-ndjson')>=0&&r.body&&r.body.getReader)
+      ?await aiReadStream(r)
+      :await r.json();
+    if(!mine())return;                   // superseded while we were reading
+    // Retire the run BEFORE rendering: refreshList() keys its skeleton off
+    // aiAbort, so painting first would leave the placeholders under the results.
+    aiAbort=null;aiStop();aiBtnBusy(false);
     const names=Array.isArray(data.matches)?data.matches:[];
     applyProjectSearch(new Set(names),'ai',data.reason||'');
     renderAll();
   }catch(e){
+    if(e&&e.name==='AbortError')return;  // cancelled, or superseded
+    aiAbort=null;aiStop();aiBtnBusy(false);
     const set=localFuzzy(q)||new Set();
-    applyProjectSearch(set,'keyword','Network error — using keyword match');
+    applyProjectSearch(set,'keyword','Network error \u2014 using keyword match');
     renderAll();
   }finally{
-    if(btn){btn.classList.remove('busy');btn.innerHTML=btn.dataset.lbl||'✦ Ask AI';}
+    if(mine()){aiAbort=null;aiStop();aiBtnBusy(false);}
   }
 }
 
@@ -1259,10 +1393,67 @@ function placeOverlays(){
 function toggleLayersPop(){placeOverlays();$('layersPop').classList.toggle('show');}
 window.addEventListener('resize',placeOverlays);
 
+// ---- floating search dock (desktop) ----
+// The search input is a single element shared by both layouts: on mobile it
+// sits at the top of the bottom sheet, on desktop it moves into the dock that
+// floats over the bottom of the map. Same pattern as placeOverlays() above.
+const DOCK_HOVER_PX=130;   // how close to the bottom edge counts as "reaching for it"
+function dockEls(){return {dock:$('searchDock'),body:$('searchDockBody'),metaBox:$('searchDockMeta'),
+  wrap:document.querySelector('.searchwrap'),meta:$('projSearchMeta'),
+  controls:document.querySelector('#sidebar .controls')};}
+function placeSearch(){
+  const e=dockEls(); if(!e.dock||!e.wrap)return;
+  if(isMobile()){
+    if(e.wrap.parentElement!==e.controls){e.controls.prepend(e.wrap);e.wrap.after(e.meta);}
+    setDock(false);
+  }else if(e.wrap.parentElement!==e.body){
+    e.metaBox.appendChild(e.meta);e.body.appendChild(e.wrap);
+  }
+}
+// Keep it open while the user is actually using it, whatever the pointer does.
+function dockBusy(){const i=$('search');return !!(i&&(document.activeElement===i||i.value.trim()));}
+function setDock(open){
+  const e=dockEls(); if(!e.dock)return;
+  const want=open||dockBusy();
+  e.dock.classList.toggle('collapsed',!want);
+  const b=$('searchDockBtn');
+  if(b){b.setAttribute('aria-expanded',want?'true':'false');
+        b.setAttribute('aria-label',want?'Close search':'Open search');}
+}
+function initSearchDock(){
+  const b=$('searchDockBtn'),inp=$('search');
+  if(b)b.onclick=function(){
+    const open=$('searchDock').classList.contains('collapsed');
+    setDock(open); if(open&&inp)inp.focus();
+  };
+  // Pointer proximity to the bottom edge of the map.
+  document.addEventListener('mousemove',function(ev){
+    if(isMobile())return;
+    const w=$('mapwrap'); if(!w)return;
+    const r=w.getBoundingClientRect();
+    const near=ev.clientY>r.bottom-DOCK_HOVER_PX&&ev.clientY<=r.bottom
+             &&ev.clientX>=r.left&&ev.clientX<=r.right;
+    setDock(near);
+  });
+  // Keyboard users never move the mouse — focus has to open it too.
+  if(inp){
+    inp.addEventListener('focus',()=>setDock(true));
+    inp.addEventListener('blur',()=>setDock(false));
+    inp.addEventListener('keydown',e=>{if(e.key==='Escape'){resetSearch();inp.blur();setDock(false);}});
+  }
+  const ai=$('mainAiBtn');
+  if(ai){ai.addEventListener('focus',()=>setDock(true));ai.addEventListener('blur',()=>setDock(false));}
+  setDock(false);
+}
+window.addEventListener('resize',placeSearch);
+
 // ---- init ----
 buildScrubAxis();
 loadCompare();
 placeOverlays();
+placeSearch();
+initSearchDock();
+syncClearBtn();
 const _opened=applyHash();
 renderCompareTray();
 applyPulse();
