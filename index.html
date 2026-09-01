@@ -2748,6 +2748,10 @@
                         window.posthog.init(key, {
                             api_host: "/ingest",
                             ui_host: "https://us.posthog.com",
+                            /* Pin behaviour that we don't set explicitly, so a
+                               posthog-js upgrade can't silently change what
+                               gets captured. Matches the dashboard snippet. */
+                            defaults: "2026-05-30",
                             /* The map is SVG/canvas, so autocapture produces
                                junk selectors for pin clicks while burning the
                                event quota. Every meaningful action is captured
