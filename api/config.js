@@ -28,7 +28,14 @@ export default function handler(req, res) {
   // JSON-encoding the string is the safe way to inline it into JS — it escapes
   // any stray quote/backslash/newline. Empty string if the env var is unset.
   const key = process.env.CARTO_API_KEY || "";
-  const body = "window.CARTO_API_KEY = " + JSON.stringify(key) + ";\n";
+  // PostHog: the project API key is a PUBLIC, write-only ingest key — it is
+  // meant to ship to the browser. It lives here rather than in source so it can
+  // be rotated from the dashboard, and so analytics simply no-ops on any
+  // deployment (or local dev) where the var isn't set.
+  const ph = process.env.POSTHOG_KEY || "";
+  const body =
+    "window.CARTO_API_KEY = " + JSON.stringify(key) + ";\n" +
+    "window.POSTHOG_KEY = " + JSON.stringify(ph) + ";\n";
 
   res.setHeader("Content-Type", "application/javascript; charset=utf-8");
   // Short cache — long enough to avoid a request per navigation, short enough

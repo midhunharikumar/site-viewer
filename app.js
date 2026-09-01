@@ -465,6 +465,7 @@ function toggleSidebar(open){
 function openDetail(name){
   const loc=DATA.localities.find(l=>l.name===name);if(!loc)return;
   selected=name;
+  track('locality_opened',{name:loc.name,zone:loc.zone,metric:metric});
   if(isMobile())toggleSidebar(false);
   document.getElementById('detail').classList.add('open');
   document.getElementById('dName').textContent=loc.name;
@@ -660,6 +661,7 @@ PROJECTS.projects.forEach(pr=>{
   projectIndex.push(pr);
 });
 function showProject(pr){
+  track('project_opened',{name:pr.name,builder:pr.builder,status:pr.status,type:pr.type});
   document.getElementById('detail').classList.add('open');
   document.getElementById('dName').textContent=pr.name;
   document.getElementById('dSub').textContent='🏗️ '+pr.builder+' · '+pr.loc;
@@ -719,6 +721,12 @@ function applyProjectSearch(matches,mode,reason){
   // Ensure overlay is on if user searched
   if(matches!==null&&!projectsOn)document.getElementById('buildsToggle').click();
 }
+function aiQuotaNote(){
+  const left=aiUsesLeft();
+  if(left===Infinity||projSearchMode!=='ai')return '';
+  return ' · <span class="muted">'+(left>0?left+' free AI search'+(left===1?'':'es')+' left'
+        :'<a href="#" onclick="showAiGate(\'\');return false">unlock more</a>')+'</span>';
+}
 function updateProjectMatchUi(){
   syncClearBtn();
   const total=PROJECTS.projects.length;
@@ -728,7 +736,7 @@ function updateProjectMatchUi(){
     if(projMatchSet!==null){
       const modeBadge=projSearchMode==='ai'?'<span class="ai" style="color:var(--accent2)">✦ AI</span> · ':(projSearchMode==='keyword'?'kw · ':'');
       metaEl.style.display='block';
-      metaEl.innerHTML=modeBadge+'<b style="color:var(--txt)">'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>';
+      metaEl.innerHTML=modeBadge+'<b style="color:var(--txt)">'+matchN+'</b> of '+total+' match'+(projSearchReason?' · '+escapeHtml(projSearchReason):'')+' · <a href="#" onclick="clearProjectSearch();return false" style="color:var(--accent)">clear</a>'+aiQuotaNote();
     }else{
       metaEl.style.display='none';
       metaEl.innerHTML='';
@@ -736,6 +744,76 @@ function updateProjectMatchUi(){
   }
 }
 function clearProjectSearch(){resetSearch();}
+
+// ---- analytics ----
+// Thin wrapper so every call site is safe when PostHog is absent (no key set,
+// blocked, or still loading). Events are explicit rather than autocaptured —
+// see the loader comment in index.html.
+function track(name,props){
+  try{if(window.posthog&&window.posthog.capture)window.posthog.capture(name,props||{});}catch(e){}
+}
+function identifyUser(email){
+  try{if(window.posthog&&window.posthog.identify)window.posthog.identify(email,{email:email});}catch(e){}
+}
+
+// ---- AI gate ----
+// Two free AI searches, then an email. This is a lead gate, not a security
+// boundary: it lives in localStorage and anyone can clear it. The real spend
+// control is the per-IP rate limit in api/search.js.
+const AI_FREE_USES=2;
+const AI_USES_KEY='bv_ai_uses', AI_UNLOCK_KEY='bv_ai_unlocked';
+let aiPendingQuery='';
+function aiUses(){try{return parseInt(localStorage.getItem(AI_USES_KEY)||'0',10)||0;}catch(e){return 0;}}
+function aiUnlocked(){try{return localStorage.getItem(AI_UNLOCK_KEY)==='1';}catch(e){return false;}}
+function aiUsesLeft(){return aiUnlocked()?Infinity:Math.max(0,AI_FREE_USES-aiUses());}
+function noteAiUse(){
+  if(aiUnlocked())return;
+  try{localStorage.setItem(AI_USES_KEY,String(aiUses()+1));}catch(e){}
+}
+function showAiGate(q){
+  aiPendingQuery=q||'';
+  const m=document.getElementById('aiGateModal');if(!m)return;
+  const u=document.getElementById('aiGateUsed');if(u)u.textContent=String(AI_FREE_USES);
+  const msg=document.getElementById('aiGateMsg');if(msg)msg.innerHTML='';
+  m.style.display='flex';
+  const inp=document.getElementById('aiGateEmail');if(inp)setTimeout(()=>inp.focus(),50);
+  track('ai_gate_shown',{query_len:(q||'').length,uses:aiUses()});
+}
+function dismissAiGate(){
+  const m=document.getElementById('aiGateModal');if(m)m.style.display='none';
+  track('ai_gate_dismissed',{});
+}
+function submitAiGate(){
+  const inp=document.getElementById('aiGateEmail'),
+        btn=document.getElementById('aiGateBtn'),
+        msg=document.getElementById('aiGateMsg');
+  const email=(inp&&inp.value||'').trim();
+  if(!isEmail(email)){if(msg)msg.innerHTML='<div class="caperr">Please enter a valid email.</div>';if(inp)inp.focus();return;}
+  const rec={kind:'ai-unlock',email,meta:{query:aiPendingQuery.slice(0,120)},when:new Date().toISOString()};
+  saveLeadLocal(rec);
+  const finish=()=>{
+    try{localStorage.setItem(AI_UNLOCK_KEY,'1');}catch(e){}
+    setEnhancedConversionData(email);
+    identifyUser(email);
+    track('ai_gate_submitted',{query_len:aiPendingQuery.length});
+    track('lead_submitted',{kind:'ai-unlock'});
+    if(btn)btn.classList.remove('busy');
+    const m=document.getElementById('aiGateModal');if(m)m.style.display='none';
+    toast('Unlocked ✓');
+    // Run the query they were blocked on.
+    if(aiPendingQuery){
+      const si=document.getElementById('search');
+      if(si&&!si.value.trim())si.value=aiPendingQuery;
+      aiProjectSearch();
+    }
+  };
+  if(btn)btn.classList.add('busy');
+  if(LEAD_ENDPOINT){
+    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)})
+      .then(r=>{if(!r.ok)throw new Error('http '+r.status);finish();})
+      .catch(()=>finish());   // saved locally + unlocked regardless; don't punish a network blip
+  }else finish();
+}
 
 // ---- AI search activity ----
 // /api/search streams NDJSON: one {t:...} per line as the agent works, ending
@@ -848,6 +926,7 @@ async function aiProjectSearch(){
   if(!inp)return;
   const q=inp.value.trim();
   if(q.length<2){applyProjectSearch(null,'','');return;}
+  if(aiUsesLeft()<=0){showAiGate(q);return;}
   if(aiAbort)aiAbort.abort();            // a newer query supersedes the old run
   const ctrl=new AbortController();aiAbort=ctrl;
   const mine=()=>aiAbort===ctrl;
@@ -855,6 +934,7 @@ async function aiProjectSearch(){
   // Make sure the unified sidebar list uses this query (drives the Projects group).
   searchTxt=q.toLowerCase();
   aiBegin();
+  track('ai_search_started',{query_len:q.length,uses_left:aiUsesLeft()===Infinity?-1:aiUsesLeft(),unlocked:aiUnlocked()});
   try{
     const r=await fetch('/api/search',{method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'},
@@ -862,6 +942,7 @@ async function aiProjectSearch(){
     if(!r.ok){
       const reason=r.status===503?'AI search not configured \u2014 using keyword match':('AI error '+r.status+' \u2014 using keyword match');
       aiAbort=null;aiStop();aiBtnBusy(false);
+      track('ai_search',{mode:'keyword',reason:'http_'+r.status,query_len:q.length});
       const set=localFuzzy(q)||new Set();
       applyProjectSearch(set,'keyword',reason);
       renderAll();
@@ -876,11 +957,16 @@ async function aiProjectSearch(){
     // aiAbort, so painting first would leave the placeholders under the results.
     aiAbort=null;aiStop();aiBtnBusy(false);
     const names=Array.isArray(data.matches)?data.matches:[];
+    // Only a genuine AI answer burns a free use — a keyword fallback shouldn't.
+    noteAiUse();
+    track('ai_search',{mode:'ai',matches:names.length,ms:Date.now()-aiT0,
+      tool_calls:aiToolCount,query_len:q.length,uses_left:aiUsesLeft()===Infinity?-1:aiUsesLeft()});
     applyProjectSearch(new Set(names),'ai',data.reason||'');
     renderAll();
   }catch(e){
-    if(e&&e.name==='AbortError')return;  // cancelled, or superseded
+    if(e&&e.name==='AbortError'){track('ai_search_cancelled',{ms:Date.now()-aiT0,tool_calls:aiToolCount});return;}
     aiAbort=null;aiStop();aiBtnBusy(false);
+    track('ai_search',{mode:'keyword',reason:'network',query_len:q.length});
     const set=localFuzzy(q)||new Set();
     applyProjectSearch(set,'keyword','Network error \u2014 using keyword match');
     renderAll();
@@ -893,7 +979,7 @@ async function aiProjectSearch(){
 // tiny HTML escape for the reason string
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);refreshProjects();};
+document.getElementById('buildsToggle').onclick=function(){projectsOn=!projectsOn;this.classList.toggle('active',projectsOn);track('overlay_toggled',{layer:'new_builds',on:projectsOn});refreshProjects();};
 refreshProjects();
 
 // ---------- schools overlay ----------
@@ -1243,6 +1329,8 @@ function submitLead(kind,inputEl,btnEl,msgEl,meta){
   if(!isEmail(email)){if(msgEl)msgEl.innerHTML='<div class="caperr">Please enter a valid email.</div>';inputEl.focus();return;}
   const rec={kind,email,meta:meta||null,when:new Date().toISOString()};
   saveLeadLocal(rec);
+  identifyUser(email);
+  track('lead_submitted',{kind:kind});
   const done=()=>{setEnhancedConversionData(email);if(msgEl)msgEl.innerHTML='<div class="capok">✓ You\'re in — confirmation on the way.</div>';inputEl.value='';btnEl&&btnEl.classList.remove('busy');toast('Subscribed ✓');};
   if(LEAD_ENDPOINT){btnEl&&btnEl.classList.add('busy');
     fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(r=>{if(!r.ok)throw new Error('http '+r.status);return done();}).catch(()=>{if(msgEl)msgEl.innerHTML='<div class="capok">✓ Saved locally.</div>';btnEl&&btnEl.classList.remove('busy');});

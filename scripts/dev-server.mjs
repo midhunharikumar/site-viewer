@@ -58,7 +58,22 @@ async function readBody(req) {
   return raw;
 }
 
+// Routes that reach a real external system when the matching env var is set.
+// .env.local carries production credentials, so hitting these from local dev
+// writes to the live Google Sheet / sends real mail. Stub them unless the
+// developer explicitly opts in with ALLOW_REAL_SIDE_EFFECTS=1.
+const SIDE_EFFECT_ROUTES = new Set(["lead", "cron/newsletter", "cron/alerts"]);
+
 async function serveApi(req, res, route) {
+  if (SIDE_EFFECT_ROUTES.has(route) && process.env.ALLOW_REAL_SIDE_EFFECTS !== "1") {
+    const body = await readBody(req);
+    console.log(`[dev] STUBBED /api/${route} (set ALLOW_REAL_SIDE_EFFECTS=1 to let it through):`,
+      JSON.stringify(body).slice(0, 200));
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify({ ok: true, stubbed: true }));
+    return;
+  }
   const file = path.join(ROOT, "api", route + ".js");
   try { await fs.access(file); }
   catch { res.statusCode = 404; return res.end("no such api route: " + route); }

@@ -2729,6 +2729,53 @@
              the city stays readable behind them. Mobile (<=860px) already has
              its own map-first sheet and is untouched here.
              ============================================================ -->
+        <script>
+            /* PostHog — loaded lazily through our own /ingest proxy (see
+               vercel.json rewrites) so ad blockers don't drop the data, and
+               after first paint so it never competes with the map for
+               bandwidth. window.POSTHOG_KEY comes from /api/config at runtime;
+               with no key set this whole block is a no-op. */
+            (function () {
+                function boot() {
+                    var key = window.POSTHOG_KEY;
+                    if (!key || window.__phBooted) return;
+                    window.__phBooted = true;
+                    var s = document.createElement("script");
+                    s.src = "/ingest/static/array.js";
+                    s.async = true;
+                    s.onload = function () {
+                        if (!window.posthog || !window.posthog.init) return;
+                        window.posthog.init(key, {
+                            api_host: "/ingest",
+                            ui_host: "https://us.posthog.com",
+                            /* The map is SVG/canvas, so autocapture produces
+                               junk selectors for pin clicks while burning the
+                               event quota. Every meaningful action is captured
+                               explicitly in app.js via track() instead. */
+                            autocapture: false,
+                            capture_pageview: true,
+                            /* Anonymous visitors don't get person profiles —
+                               keeps the bill down until someone identifies. */
+                            person_profiles: "identified_only",
+                            session_recording: {
+                                /* We collect emails. Never record their input. */
+                                maskAllInputs: true,
+                            },
+                        });
+                        if (typeof window.__phReady === "function") window.__phReady();
+                    };
+                    document.head.appendChild(s);
+                }
+                // /api/config defines the key; it may land before or after us.
+                if (window.addEventListener) {
+                    window.addEventListener("load", function () {
+                        if (window.requestIdleCallback)
+                            requestIdleCallback(boot, { timeout: 3000 });
+                        else setTimeout(boot, 1200);
+                    });
+                }
+            })();
+        </script>
         <style id="desktop-glass">
             @media (min-width: 861px) {
                 /* Panel widths drive both the panels and the on-map chrome
@@ -2960,7 +3007,8 @@
                     class="aboutbtn"
                     onclick="
                         document.getElementById('overheatModal').style.display =
-                            'flex'
+                            'flex';
+                        track('heat_index_viewed', {});
                     "
                     title="Is the market overheating?"
                 >
@@ -3506,6 +3554,43 @@
                     dataset + curated market indicators.
                 </div>
                 <div id="ohBody"><div class="muted">Loading…</div></div>
+            </div>
+        </div>
+        <div
+            id="aiGateModal"
+            class="modal-bg"
+            onclick="if (event.target === this) dismissAiGate();"
+        >
+            <div class="modal" style="max-width: 430px">
+                <button class="x" aria-label="Close" onclick="dismissAiGate()">
+                    ×
+                </button>
+                <h2 style="margin: 0 0 4px">✦ Keep searching with AI</h2>
+                <div
+                    class="muted"
+                    style="font-size: 12.5px; line-height: 1.5; margin-bottom: 12px"
+                >
+                    You've used your
+                    <b id="aiGateUsed">2</b> free AI searches. Drop your email to
+                    keep going — it also gets you the monthly Bengaluru market
+                    report and price alerts. No spam, unsubscribe any time.
+                </div>
+                <div class="searchwrap" style="margin-bottom: 8px">
+                    <input
+                        class="search"
+                        id="aiGateEmail"
+                        type="email"
+                        autocomplete="email"
+                        placeholder="you@email.com"
+                    />
+                    <button class="btn" id="aiGateBtn" onclick="submitAiGate()">
+                        Unlock
+                    </button>
+                </div>
+                <div id="aiGateMsg"></div>
+                <div class="muted" style="font-size: 10.5px; margin-top: 10px">
+                    Your last query is kept and runs as soon as you unlock.
+                </div>
             </div>
         </div>
         <div
