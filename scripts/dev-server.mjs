@@ -58,12 +58,33 @@ async function readBody(req) {
   return raw;
 }
 
+// Routes that reach a real external system when the matching env var is set.
+// .env.local carries production credentials, so hitting these from local dev
+// writes to the live Google Sheet / sends real mail. Stub them unless the
+// developer explicitly opts in with ALLOW_REAL_SIDE_EFFECTS=1.
+const SIDE_EFFECT_ROUTES = new Set(["lead", "cron/newsletter", "cron/alerts"]);
+
 async function serveApi(req, res, route) {
+  if (SIDE_EFFECT_ROUTES.has(route) && process.env.ALLOW_REAL_SIDE_EFFECTS !== "1") {
+    const body = await readBody(req);
+    console.log(`[dev] STUBBED /api/${route} (set ALLOW_REAL_SIDE_EFFECTS=1 to let it through):`,
+      JSON.stringify(body).slice(0, 200));
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify({ ok: true, stubbed: true }));
+    return;
+  }
   const file = path.join(ROOT, "api", route + ".js");
   try { await fs.access(file); }
   catch { res.statusCode = 404; return res.end("no such api route: " + route); }
   try {
     // Cache-bust so handler edits are picked up without a restart.
+    // Handlers set production Cache-Control (e.g. /api/config caches for 5
+    // minutes). In dev that just serves stale env vars after you change one,
+    // so force revalidation on every API response.
+    const setHeader = res.setHeader.bind(res);
+    res.setHeader = (k, v) =>
+      setHeader(k, /^cache-control$/i.test(k) ? "no-store" : v);
     const mod = await import(pathToFileURL(file).href + "?t=" + Date.now());
     req.body = await readBody(req);
     req.query = Object.fromEntries(new URL(req.url, "http://x").searchParams);
@@ -98,8 +119,38 @@ async function serveStatic(req, res, pathname) {
   }
 }
 
+// Mirror the /ingest/* rewrites in vercel.json so the PostHog reverse proxy
+// behaves the same locally as in production — otherwise the loader 404s on
+// /ingest/static/array.js and analytics silently never boots in dev.
+const PH_ASSETS = "https://us-assets.i.posthog.com";
+const PH_API = "https://us.i.posthog.com";
+async function serveIngest(req, res, rest, search) {
+  const base = rest.startsWith("static/") ? PH_ASSETS : PH_API;
+  const target = base + "/" + rest + (search || "");
+  try {
+    const init = { method: req.method, headers: {} };
+    const ct = req.headers["content-type"];
+    if (ct) init.headers["content-type"] = ct;
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      const chunks = [];
+      for await (const c of req) chunks.push(c);
+      init.body = Buffer.concat(chunks);
+    }
+    const upstream = await fetch(target, init);
+    res.statusCode = upstream.status;
+    const type = upstream.headers.get("content-type");
+    if (type) res.setHeader("Content-Type", type);
+    res.end(Buffer.from(await upstream.arrayBuffer()));
+  } catch (e) {
+    console.error("[ingest]", e.message);
+    res.statusCode = 502;
+    res.end("ingest proxy error");
+  }
+}
+
 http.createServer(async (req, res) => {
-  const { pathname } = new URL(req.url, "http://localhost");
+  const { pathname, search } = new URL(req.url, "http://localhost");
+  if (pathname.startsWith("/ingest/")) return serveIngest(req, res, pathname.slice(8), search);
   if (pathname.startsWith("/api/")) return serveApi(req, res, pathname.slice(5));
   return serveStatic(req, res, pathname);
 }).listen(PORT, () => {
