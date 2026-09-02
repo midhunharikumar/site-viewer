@@ -49,7 +49,7 @@
         </script>
         <meta
             name="viewport"
-            content="width=device-width, initial-scale=1, viewport-fit=cover"
+            content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
         />
         <title>
             BengaluruValue — Bangalore Property Price Map, Index &amp; Metro
@@ -2513,6 +2513,13 @@
                 html, body { overscroll-behavior: none; }
                 #app { height: 100dvh; }
 
+                /* How far down the floating top bar reaches: its own height
+                   plus whatever the device reserves for the status bar / notch
+                   (env() is 0 on desktop-sized viewports, ~47-59px on a phone).
+                   Everything that floats near the top of the map offsets from
+                   this, so the clearance can never drift out of sync again. */
+                :root { --topbar: calc(max(6px, env(safe-area-inset-top)) + 44px); }
+
                 /* Slim, translucent floating top bar */
                 header {
                     position: absolute;
@@ -2687,8 +2694,14 @@
                 body.mtime-on .timebar { transform: none; opacity: 1; pointer-events: auto; }
 
                 #legendStack {
-                    top: calc(max(6px, env(safe-area-inset-top)) + 46px);
+                    top: calc(var(--topbar) + 12px);
                     right: 10px;
+                }
+                /* The coach tip sat at top:16px with no allowance for the top
+                   bar, so it rendered clipped behind it on every phone. */
+                .coach {
+                    top: calc(var(--topbar) + 12px);
+                    max-width: calc(100vw - 24px);
                 }
                 /* Legends collapsed to a compact key by default on phones */
                 #legendStack:not(.collapsed) .legend { font-size: 9.5px; }
@@ -2714,7 +2727,7 @@
                 #compareTray { bottom: calc(var(--peek, 132px) + env(safe-area-inset-bottom)); }
 
                 /* Leaflet zoom control clear of the top bar */
-                .leaflet-top.leaflet-left { top: calc(max(6px, env(safe-area-inset-top)) + 44px); }
+                .leaflet-top.leaflet-left { top: calc(var(--topbar) + 10px); }
             }
 
             /* Tablet portrait (600–860): a touch more sheet height at rest */
