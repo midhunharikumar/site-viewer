@@ -19,21 +19,21 @@
    "lat": 12.94,
    "lng": 77.748,
    "type": "Apartments (28ac)",
-   "status": "Pre-launch",
-   "price": "from ₹1.1Cr",
-   "note": "Phase 2 of 127-ac Raintree Park township.",
+   "status": "Launched",
+   "price": "from ₹1.45Cr",
+   "note": "Phase 2 of 127-ac Raintree Park township; officially launched 9 Jan 2026, K-RERA PRM/KA/RERA/1251/446/PR/010126/008374; ~2,000 apartments in 14 towers on 24 ac; possession Jun 2030.",
    "color": "#e11d48"
   },
   {
    "builder": "Prestige",
    "name": "Prestige Park Street",
    "loc": "Devanahalli",
-   "lat": 13.249,
-   "lng": 77.712,
-   "type": "Apartments",
+   "lat": 13.24,
+   "lng": 77.72,
+   "type": "Apartments (5ac)",
    "status": "Pre-launch",
-   "price": "from ₹85L",
-   "note": "Airport corridor; launch ~Oct 2026.",
+   "price": "₹72L–₹1.98Cr",
+   "note": "Palya Village, Devanahalli airport corridor; 480 units in two 2B+G+30 towers; 1/2/3 BHK + Study (685–1,650 sqft); base ~₹12,410/sqft; formal launch 5 Oct 2026; possession Oct 2030.",
    "color": "#e11d48"
   },
   {
@@ -614,14 +614,14 @@
   },
   {
    "builder": "Embassy",
-   "name": "Embassy Hebbal",
+   "name": "Embassy Astra (Sky Terraces)",
    "loc": "Hebbal",
    "lat": 13.049,
    "lng": 77.591,
-   "type": "Apartments (10ac)",
-   "status": "Announced",
-   "price": "–",
-   "note": "Prime Hebbal lakeside-adjacent.",
+   "type": "Apartments (ultra-luxury sky terraces)",
+   "status": "Pre-launch",
+   "price": "from ₹3.95Cr",
+   "note": "Ultra-luxury 3 & 4 BHK sky terraces at Hebbal; 3 BHK 2,050–2,100 sqft from ₹3.95 Cr, 4 BHK+SR 2,950–3,000 sqft from ₹5.50 Cr; K-RERA pending; targeted completion Dec 2030.",
    "color": "#14b8a6"
   },
   {
@@ -1411,9 +1411,9 @@
    "lat": 12.858,
    "lng": 77.584,
    "type": "Apartments",
-   "status": "Upcoming",
-   "price": "from ₹70L",
-   "note": "12-ac, 3-tower, 630-unit launch on Bannerghatta Rd.",
+   "status": "Launched",
+   "price": "from ₹1.22Cr",
+   "note": "RERA PRM/KA/RERA/1251/310/PR/230326/008543; 4.1 ac, 5 towers x 17 floors, 333 units (2/2.5/3/4 BHK); possession Dec 2028; Bannerghatta Rd metro corridor.",
    "color": "#c026d3"
   },
   {
@@ -1664,8 +1664,8 @@
    "lng": 77.5963,
    "type": "Villas",
    "status": "Pre-launch",
-   "price": "–",
-   "note": "5.4-acre premium villa project, 5 rows of villas; launch ~Oct 2026, possession Oct 2030.",
+   "price": "from ₹4.0Cr",
+   "note": "Ultra-low-density 5.4-ac gated villa enclave: 25 villas (3 & 4 BHK duplex, 3,508–5,808 sqft); official launch 2 Oct 2026.",
    "color": "#e11d48"
   },
   {
@@ -1731,13 +1731,13 @@
   {
    "builder": "Brigade",
    "name": "Brigade Granada",
-   "loc": "Whitefield–Hoskote Rd",
+   "loc": "Sannatammanahalli, Whitefield–Kadugodi Rd",
    "lat": 13.004,
    "lng": 77.774,
-   "type": "Apartments (20.19ac)",
+   "type": "Apartments (~40ac)",
    "status": "Launched",
    "price": "from ₹1.45Cr",
-   "note": "20.19-acre integrated township; 14 high-rise towers, ~2,000 units of 2.5/3/4 BHK.",
+   "note": "~40-acre integrated township at Sannatammanahalli on Whitefield–Kadugodi Rd; 14 high-rise towers, ~2,000 apartments in 1/2/3/4 BHK; official launch Aug 2026, possession 2030.",
    "color": "#f59e0b"
   },
   {
@@ -1814,14 +1814,14 @@
   },
   {
    "builder": "Casagrand",
-   "name": "Casagrand Kogilu",
+   "name": "Casagrand Estancia",
    "loc": "Kogilu, Yelahanka",
-   "lat": 13.1145,
-   "lng": 77.608,
-   "type": "Apartments",
-   "status": "Pre-launch",
-   "price": "–",
-   "note": "Premium apartment development off Yelahanka, 2026 launch.",
+   "lat": 13.108,
+   "lng": 77.596,
+   "type": "Apartments (7.32ac)",
+   "status": "Launched",
+   "price": "from ₹93L",
+   "note": "429 units of 2/3/4 BHK across 7.32 acres in Kogilu; 22,500 sq ft clubhouse and 73+ amenities; prices ₹93L (2 BHK 1,323 sqft) to ₹1.81 Cr (4 BHK 2,655 sqft).",
    "color": "#f472b6"
   },
   {
@@ -2219,18 +2219,6 @@
    "price": "₹75L–₹3.3Cr",
    "note": "NY-themed 8.62-acre phase within Sobha Townpark; 1/2/3/4 BHK. RERA PRM/KA/RERA/1251/308/PR/230125/007418-007421; possession Dec 2027–Jun 2029.",
    "color": "#8b5cf6"
-  },
-  {
-   "builder": "Adarsh",
-   "name": "Adarsh CDP Road (codename)",
-   "loc": "CDP Rd, Varthur",
-   "lat": 12.941,
-   "lng": 77.746,
-   "type": "Apartments (12ac)",
-   "status": "Pre-launch",
-   "price": "–",
-   "note": "11 towers (2B+G+25), 1,248 units of 2/3 BHK; RERA filing pending; expected launch H2 2026.",
-   "color": "#d946ef"
   },
   {
    "builder": "Casagrand",
@@ -2927,6 +2915,222 @@
    "price": "from ₹1.79Cr",
    "note": "K-RERA PRM/KA/RERA/1251/446/PR/111225/008328 (11 Dec 2025). 2/3/4 BHK, 1,280–2,295 sqft; possession Dec 2029.",
    "color": "#0d9488"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Woodside",
+   "loc": "Yelahanka",
+   "lat": 13.1,
+   "lng": 77.596,
+   "type": "Rowhouses",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "13.31-ac low-density row-house community; 132 units of 3 & 4 BHK duplex homes; positioned as premium low-density Yelahanka enclave.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Bhartiya",
+   "name": "Bhartiya Garden Estate (Nikoo Homes 7)",
+   "loc": "Navarathna Agrahara, Sadahalli",
+   "lat": 13.198,
+   "lng": 77.66,
+   "type": "Apartments (29ac township)",
+   "status": "Launched",
+   "price": "from ₹1.2Cr",
+   "note": "29-ac large-format township near KIAL: ~1,850 units across 10 towers x 22 floors; possession 2029. Airport-corridor flagship.",
+   "color": "#be185d"
+  },
+  {
+   "builder": "Assetz",
+   "name": "Assetz Codename MIWA",
+   "loc": "KIADB Aerospace Park, Bagalur",
+   "lat": 13.145,
+   "lng": 77.688,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "from ₹1.55Cr",
+   "note": "Eco-luxury 3 & 4 BHK inside KIADB Aerospace Park; sustainable water/waste systems; airport corridor.",
+   "color": "#a855f7"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Park Cubix",
+   "loc": "Devanahalli",
+   "lat": 13.245,
+   "lng": 77.708,
+   "type": "Apartments (18ac)",
+   "status": "Pre-launch",
+   "price": "from ₹40L",
+   "note": "18-ac mid-segment high-rise (1/2/3 BHK) adjacent to KIADB Aerospace SEZ / NH-44; targets airport-corridor first-time buyers.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Aspire",
+   "loc": "Chikkabidarakallu, Tumkur Rd",
+   "lat": 13.045,
+   "lng": 77.512,
+   "type": "Apartments (21ac)",
+   "status": "Launched",
+   "price": "from ₹1.05Cr",
+   "note": "21-ac 2 & 3 BHK, 192 units (multi-phase, possession Jul 2032–Sep 2033). Opp. Nagasandra metro on Tumkur Rd corridor; grand allotment 13 Jun 2026.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Assetz",
+   "name": "Assetz 22 & Crest",
+   "loc": "Yeshwanthpur",
+   "lat": 13.028,
+   "lng": 77.554,
+   "type": "Apartments (1.79ac)",
+   "status": "Under construction",
+   "price": "from ₹2.58Cr",
+   "note": "Compact luxury tower; 3 BHK 1,518–1,986 sqft; 122 units; ~1.2 km from Yeshwanthpur metro and Orion Mall; possession Oct 2026.",
+   "color": "#a855f7"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Limousine Homes",
+   "loc": "Rajajinagar (Magadi Rd)",
+   "lat": 12.987,
+   "lng": 77.552,
+   "type": "Apartments (3.85ac)",
+   "status": "Launched",
+   "price": "from ₹2.49Cr",
+   "note": "19-storey condo tower; 378 homes of 3.5, 4.5 & 5.5 BHK; metro-connected Rajajinagar micro-market with reported ~28% 1-yr appreciation.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Shapoorji",
+   "name": "Shapoorji Sequoia (ParkWest T11)",
+   "loc": "Binnypet",
+   "lat": 12.977,
+   "lng": 77.556,
+   "type": "Apartments (G+30)",
+   "status": "Launched",
+   "price": "from ₹2.6Cr",
+   "note": "Final tower of ParkWest 2.0 township: G+30, 182 units (3 & 4 BHK, 2,174–2,838 sqft); possession Feb 2029.",
+   "color": "#7c2d12"
+  },
+  {
+   "builder": "Total Environment",
+   "name": "Total Environment Sarjapur (Dommasandra)",
+   "loc": "Dommasandra, Sarjapur Rd",
+   "lat": 12.872,
+   "lng": 77.771,
+   "type": "Apartments (22.25ac)",
+   "status": "Pre-launch",
+   "price": "from ₹4.37Cr",
+   "note": "22.25-ac master plan: 6 towers, 1,188 units (3 & 4 BHK, 2,400–4,200 sqft); ~40% landscape; RERA pending; possession 2030+.",
+   "color": "#84cc16"
+  },
+  {
+   "builder": "Nambiar",
+   "name": "Nambiar Whitefield (Kannamangala)",
+   "loc": "Kannamangala, Whitefield",
+   "lat": 13.023,
+   "lng": 77.762,
+   "type": "Apartments (12ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "12-ac 3/3.5/4 BHK township play on Whitefield's outer belt; low-density positioning; K-RERA pending.",
+   "color": "#4338ca"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Lifestyle Legacy",
+   "loc": "IVC Rd, Devanahalli",
+   "lat": 13.246,
+   "lng": 77.681,
+   "type": "Villas",
+   "status": "Pre-launch",
+   "price": "from ₹6.5Cr",
+   "note": "Ultra-luxury 3 & 4 BHK villas on IVC Rd airport corridor; part of Sobha's premium villa expansion 2026.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Adarsh",
+   "name": "Adarsh CDP Road Varthur",
+   "loc": "CDP Road, Varthur",
+   "lat": 12.942,
+   "lng": 77.748,
+   "type": "Apartments (12ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Proposed 1,248 units across 11 towers x 25 floors on 12+ acres; adds tier-1 supply into Varthur near Whitefield/Sarjapur.",
+   "color": "#d946ef"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Verano",
+   "loc": "Sarjapur Road (Sarjapura, Anekal Taluk)",
+   "lat": 12.857,
+   "lng": 77.781,
+   "type": "Apartments (10ac)",
+   "status": "Pre-launch",
+   "price": "from ₹85L",
+   "note": "10-ac master plan, 12 towers (G+27), ~1,150 units of 1/2/3 BHK (650–1,700 sqft); sustainable high-rise positioning on outer Sarjapur.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Sanna Amanikere",
+   "loc": "Sanna Amanikere, Devanahalli (off NH-44)",
+   "lat": 13.232,
+   "lng": 77.618,
+   "type": "Apartments (9.73ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "9.73-acre airport-corridor apartment community; land acquired Jun 2026; ~0.89M sqft potential, GDV ~₹800 Cr; 2/3/3.5 BHK planned; K-RERA pending.",
+   "color": "#a3e635"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Gunjur",
+   "loc": "Gunjur, Varthur Rd (SH-35)",
+   "lat": 12.9169,
+   "lng": 77.7451,
+   "type": "Apartments (39ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "39-acre integrated township on Whitefield–Sarjapur corridor, ~6 towers G+21, ~2,500 apartments in 2/3/4 BHK; Q3 2026 launch, completion targeted Mar 2031, GDV ~₹7,200 Cr.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Parklane",
+   "loc": "KIADB Phase 2, STRR, Devanahalli",
+   "lat": 13.2437,
+   "lng": 77.7085,
+   "type": "Apartments (11.91ac)",
+   "status": "Launched",
+   "price": "from ₹56L",
+   "note": "Launched 25 Sep 2026 on 11.91 ac in KIADB Phase 2, Devanahalli (STRR / airport corridor). 1,788 units of 1/2/3 BHK across 9 towers; K-RERA PRM/KA/RERA/1251/309/PR/150926/008941; possession Dec 2030; GDV ~₹1,750 Cr.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Florenne",
+   "loc": "Soukya Rd, Whitefield",
+   "lat": 13.005,
+   "lng": 77.767,
+   "type": "Rowhouses (20ac)",
+   "status": "Launched",
+   "price": "from ₹5.40Cr",
+   "note": "Low-rise G+3 rowhouses on ~20 acres off Soukya Rd, East Bangalore; 218 units — 4 BHK Optima/Premia/Luxe + 5 BHK Luxe (3,725–5,523 sqft); EOI opened 15 Sep 2026, launched 20 Sep 2026; K-RERA PRM/KA/RERA/1251/309/PR/150926/008942 & /008943.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "L&T Realty",
+   "name": "L&T Realty Jakkur",
+   "loc": "Thanisandra Main Rd, Jakkur",
+   "lat": 13.08,
+   "lng": 77.62,
+   "type": "Apartments (12.6ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "12.6-acre premium township on Thanisandra Main Rd near Jakkur; 2/3/4 BHK; pre-launch active Sep 2026 with pricing on enquiry; K-RERA registration pending.",
+   "color": "#0ea5e9"
   }
  ],
  "builders": {
@@ -2967,7 +3171,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 244,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 27 August 2026."
+  "count": 261,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 28 September 2026 (Sep 13 baseline; +3 tier-1 launches [Prestige Parklane, Godrej Florenne, L&T Realty Jakkur]; refined Prestige Park Street pricing/note and Prestige Evergreen Pre-launch→Launched)."
  }
 }
