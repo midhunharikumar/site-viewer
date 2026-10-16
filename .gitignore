@@ -5,3 +5,11 @@
 node_modules
 .claude
 scripts/.alert-state.json
+
+# Scheduled-update run artifacts (not meant to be committed)
+.update-cache/
+UPDATE_REPORT_*.md
+scripts/complete-update-*.sh
+
+# Loose format-patch dumps — SEO rounds etc.
+*.patch
