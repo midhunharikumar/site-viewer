@@ -3131,6 +3131,18 @@
    "price": "–",
    "note": "12.6-acre premium township on Thanisandra Main Rd near Jakkur; 2/3/4 BHK; pre-launch active Sep 2026 with pricing on enquiry; K-RERA registration pending.",
    "color": "#0ea5e9"
+  },
+  {
+   "builder": "Bhartiya",
+   "name": "Nikoo Homes 9",
+   "loc": "KIADB Aerospace Park, Bagalur",
+   "lat": 13.1385,
+   "lng": 77.6835,
+   "type": "Apartments (13.5ac)",
+   "status": "Launched",
+   "price": "₹62L–₹2.66Cr",
+   "note": "13.5-ac addition to Bhartiya City on Hennur–Bagalur Rd: 8 towers (2B+G+18/23), 1,550+ homes of Studio/1/1.5/2/2.5/3/3.5/3-loft (506–2,190 sqft); K-RERA PRM/KA/RERA/1251/309/PR/100926/008930 (reg 10 Sep 2026); possession Dec 2030.",
+   "color": "#be185d"
   }
  ],
  "builders": {
@@ -3171,7 +3183,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 261,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 28 September 2026 (Sep 13 baseline; +3 tier-1 launches [Prestige Parklane, Godrej Florenne, L&T Realty Jakkur]; refined Prestige Park Street pricing/note and Prestige Evergreen Pre-launch→Launched)."
+  "count": 262,
+  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 16 October 2026 (Sep 28 baseline; +1 tier-1 launch [Bhartiya Nikoo Homes 9, KIADB Aerospace Park/Bagalur]). "
  }
 }
