@@ -127,7 +127,7 @@
    "lat": 12.9,
    "lng": 77.73,
    "type": "Apartments",
-   "status": "Launched",
+   "status": "Under construction",
    "price": "from ₹79L",
    "note": "Between two IT corridors; possession Dec 2028.",
    "color": "#f59e0b"
@@ -595,9 +595,9 @@
    "lat": 13.22,
    "lng": 77.67,
    "type": "Apartments",
-   "status": "Pre-launch",
+   "status": "Launched",
    "price": "–",
-   "note": "Inside 288-ac Embassy Springs township.",
+   "note": "8 towers (B+G+18) on 14 acres with 2/3/3.5/4 BHK and 3BHK penthouses; RERA PRM/KA/RERA/1250/303/PR/201125/008265 (Nov 2025); 2 BHK sold out; possession Dec 2031.",
    "color": "#14b8a6"
   },
   {
@@ -3143,6 +3143,150 @@
    "price": "₹62L–₹2.66Cr",
    "note": "13.5-ac addition to Bhartiya City on Hennur–Bagalur Rd: 8 towers (2B+G+18/23), 1,550+ homes of Studio/1/1.5/2/2.5/3/3.5/3-loft (506–2,190 sqft); K-RERA PRM/KA/RERA/1251/309/PR/100926/008930 (reg 10 Sep 2026); possession Dec 2030.",
    "color": "#be185d"
+  },
+  {
+   "builder": "Mahindra",
+   "name": "Mahindra Sadahalli",
+   "loc": "Sadahalli, Devanahalli",
+   "lat": 13.213,
+   "lng": 77.683,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "June 2026 pre-launch window by Mahindra Lifespaces; 2/3/4 BHK; estimated 1,200–1,600 units across ~9–17 acres; K-RERA registration pending; indicative first handover 2030–31.",
+   "color": "#fb923c"
+  },
+  {
+   "builder": "Vaishnavi",
+   "name": "Vaishnavi Vistara",
+   "loc": "Doddakallasandra, Kanakapura Rd",
+   "lat": 12.886,
+   "lng": 77.546,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "₹92L–₹2.42Cr",
+   "note": "3.27 acres, 3 towers (3B+G+18), 144 units in 1/2/3 BHK (680–1,789 sqft); launch 15 Oct 2026; K-RERA registration applied; possession Dec 2031.",
+   "color": "#9f1239"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Uttarahalli (Kanakapura Rd)",
+   "loc": "Uttarahalli / Kanakapura Rd",
+   "lat": 12.904,
+   "lng": 77.546,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "₹3.09Cr–₹4.26Cr",
+   "note": "Premium 3 BHK (2,010–2,158 sqft) and 4 BHK (2,685 sqft); environmental clearance granted 13 May 2026 (SIA/KA/INFRA2/570476/2026); RERA pending; est. possession Dec 2029.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand Amor",
+   "loc": "Begur, Bannerghatta Rd",
+   "lat": 12.869,
+   "lng": 77.624,
+   "type": "Apartments (~8ac)",
+   "status": "Launched",
+   "price": "₹1.05Cr–₹1.49Cr",
+   "note": "~8 acres, 2/3 BHK (1,232–1,750 sqft); RERA PRM/KA/RERA/1251/310/PR/140324/006701; possession Feb 2028.",
+   "color": "#f472b6"
+  },
+  {
+   "builder": "SNN",
+   "name": "SNN Raj Viviente",
+   "loc": "Arekere, Bannerghatta Rd",
+   "lat": 12.892,
+   "lng": 77.597,
+   "type": "Apartments",
+   "status": "Upcoming",
+   "price": "₹4.49Cr+",
+   "note": "Boutique 64-flat luxury project on Bannerghatta Rd; possession from Jul 2026.",
+   "color": "#b45309"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Codename Diamond",
+   "loc": "Vajarahalli, Kanakapura Rd",
+   "lat": 12.858,
+   "lng": 77.558,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "New luxury high-rise codename launch at Vajarahalli (listed Oct 2026); configurations, pricing and K-RERA registration pending.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Garden Breez (Prestige City Ph7)",
+   "loc": "Yamare, Ittangur, Sarjapur Rd",
+   "lat": 12.878,
+   "lng": 77.779,
+   "type": "Apartments (~10ac)",
+   "status": "Pre-launch",
+   "price": "₹2.28Cr+",
+   "note": "Phase 7 of Prestige City Sarjapur; 3 towers (2B+G+27), ~350 units on ~10 acres; 3 BHK 1,900–2,200 sqft and 4 BHK 2,400–2,600 sqft; K-RERA pending; possession Dec 2030.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Codename Tech Living",
+   "loc": "Panathur Main Rd",
+   "lat": 12.945,
+   "lng": 77.715,
+   "type": "Apartments (~5ac)",
+   "status": "Pre-launch",
+   "price": "₹1.2Cr+",
+   "note": "Mid-2026 codename launch; G+18, ~400 homes on ~5 acres; 2 BHK (~1,100–1,150 sqft) and 3 BHK (up to ~1,550 sqft); K-RERA in progress.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Parc",
+   "loc": "Balagere, Varthur",
+   "lat": 12.945,
+   "lng": 77.722,
+   "type": "Apartments (~6ac)",
+   "status": "Pre-launch",
+   "price": "₹1.4Cr–₹2.4Cr",
+   "note": "July 2026 launch window; ~400 apartments across G+19 elevations on ~6 acres; 2 and 3 BHK; K-RERA pending; JDA with ~₹1,000Cr GDV.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Lodha",
+   "name": "Lodha Elanza",
+   "loc": "Sarjapur Rd",
+   "lat": 12.878,
+   "lng": 77.779,
+   "type": "Apartments",
+   "status": "Launched",
+   "price": "₹1.8Cr+",
+   "note": "3 BHK and 3 BHK+study on Sarjapur Rd; RERA PRM/KA/RERA/1251/308/PR/191225/008353 (Dec 2025); completion by 2031.",
+   "color": "#dc2626"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha OneWorld",
+   "loc": "Greater Whitefield (Old Madras Rd near Hoskote)",
+   "lat": 13.07,
+   "lng": 77.797,
+   "type": "Apartments (48ac township)",
+   "status": "Launched",
+   "price": "₹1.65Cr+",
+   "note": "48-acre township; 14 wings rising to 45–46 floors; 2/3/4 BHK Luxe and Grande variants (1,063–2,415 sqft); 6 phases, each separately K-RERA registered.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand Moondance",
+   "loc": "Kumbalgodu, off Mysore Rd",
+   "lat": 12.9045,
+   "lng": 77.4748,
+   "type": "Apartments (8.6ac)",
+   "status": "Launched",
+   "price": "₹89L–₹1.33Cr",
+   "note": "2 and 3 BHK (1,173–1,866 sqft), 504 units across 5 B+G+4 low-rise blocks on 8.6 acres; launched 21 May 2026; RERA PRM/KA/RERA/1251/310/PR/200526/008667; possession Apr/Dec 2029.",
+   "color": "#f472b6"
   }
  ],
  "builders": {
@@ -3183,7 +3327,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 262,
-  "note": "A-tier builder projects launched ~2024-2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 16 October 2026 (Sep 28 baseline; +1 tier-1 launch [Bhartiya Nikoo Homes 9, KIADB Aerospace Park/Bagalur]). "
+  "count": 274,
+  "note": "A-tier builder projects launched ~2024–2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 28 October 2026 (Oct 16 baseline; +12 new tier-1 launches/pre-launches across North, South, East, West; status updates for 2 existing projects). "
  }
 }
