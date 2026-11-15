@@ -1922,14 +1922,14 @@
   },
   {
    "builder": "Sattva",
-   "name": "Sattva Jigani",
-   "loc": "Jigani, off Bannerghatta-Anekal Rd (near E-City)",
-   "lat": 12.7869,
-   "lng": 77.6385,
-   "type": "Apartments (~9ac)",
+   "name": "Sattva Amritya",
+   "loc": "Jigani Main Rd (behind HCL)",
+   "lat": 12.7855,
+   "lng": 77.641,
+   "type": "Apartments (6ac)",
    "status": "Launched",
-   "price": "from ₹85L",
-   "note": "3 high-rise towers (B+G+31, ~100m), 432 low-density 2 & 3 BHK (1,050–1,700 sqft), 70%+ open; 2–3 km from E-City, 4 km from Bommasandra metro; K-RERA pending.",
+   "price": "₹71L–₹1.91Cr",
+   "note": "Launched 12 Nov 2026 (final brand name for the project previously tracked as the Sattva Jigani codename). 3 towers of 2B+G+31, 1/2/2.5/3 BHK (791–1,781 sqft BUA); K-RERA possession Dec 2030.",
    "color": "#3b82f6"
   },
   {
@@ -2606,14 +2606,14 @@
   },
   {
    "builder": "DivyaSree",
-   "name": "DivyaSree Yelahanka",
-   "loc": "Yelahanka New Town, off Bellary Rd (NH-44)",
-   "lat": 13.102,
-   "lng": 77.595,
-   "type": "Apartments (5.5ac, 3 towers, 270 units)",
-   "status": "Announced",
-   "price": "–",
-   "note": "Large-format 3-tower community of 270 apartments along the planned Hebbal–Yelahanka–Airport metro alignment.",
+   "name": "DivyaSree Quiet Side",
+   "loc": "Yelahanka New Town, off Bellary Rd",
+   "lat": 13.1007,
+   "lng": 77.5963,
+   "type": "Apartments (5ac)",
+   "status": "Launched",
+   "price": "₹2.99Cr–₹3.49Cr",
+   "note": "Launched 5 Nov 2026 (final brand name for what earlier appeared as the DivyaSree Yelahanka 5.5ac/270-unit announcement). 3 towers B+G+23, ~260 3BHK homes (2,100–2,500 sqft); 85% open space; GDV >₹800Cr. K-RERA PRM/KA/RERA/1251/472/PR/291026/009050 (29 Oct 2026); possession Dec 2031.",
    "color": "#1d4ed8"
   },
   {
@@ -3287,6 +3287,90 @@
    "price": "₹89L–₹1.33Cr",
    "note": "2 and 3 BHK (1,173–1,866 sqft), 504 units across 5 B+G+4 low-rise blocks on 8.6 acres; launched 21 May 2026; RERA PRM/KA/RERA/1251/310/PR/200526/008667; possession Apr/Dec 2029.",
    "color": "#f472b6"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Autograph",
+   "loc": "Konadasapura, Budigere Cross (Whitefield–Kadugodi Rd)",
+   "lat": 13.018,
+   "lng": 77.738,
+   "type": "Apartments (40ac township)",
+   "status": "Launched",
+   "price": "₹1.07Cr–₹3.99Cr",
+   "note": "K-RERA registered 7 Nov 2026 (PRM/KA/RERA/1251/446/PR/071126/009091). 40-acre integrated township, 14 towers G+48, ~2,000 units, 1–4 BHK (730–2,760 sqft). Positioned as the formal township launch on the Konadasapura parcel; note possible overlap with Brigade Granada branding at Sannatammanahalli.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Queens Towers",
+   "loc": "Attibele, Hosur Rd / NH-44",
+   "lat": 12.7791,
+   "lng": 77.7718,
+   "type": "Apartments (36ac)",
+   "status": "Pre-launch",
+   "price": "₹70L–₹3Cr",
+   "note": "Pre-bookings opened 5 Nov 2026 per EstateHive new-launch tracker. 36 acres, 572 units, 1/2/3/3.5/4 BHK (550–2,400 sqft); near Oxford Medical College, Thirumagondanahalli.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Aurelia",
+   "loc": "Mullur, off Sarjapur Rd (near Kodathi/Wipro SEZ)",
+   "lat": 12.903,
+   "lng": 77.728,
+   "type": "Apartments (24ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "~24–27.6 acres, 11 wings / 3 towers in 4 blocks, 2,200–2,285 units, 1–4 BHK (1,100–2,600 sqft). Sobha updates page dated 6 Nov 2026; K-RERA pending; tentative formal launch Q1 2027.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha Liora",
+   "loc": "Hope Farm, Whitefield (Immadihalli Main Rd)",
+   "lat": 12.993,
+   "lng": 77.744,
+   "type": "Apartments (7ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "4 towers 2B+G+17, ~420 units, 3 BHK (1,800–1,900 sqft), 3 BHK+study (2,100–2,200) and 4 BHK (2,400–2,500). Listed in Sobha updates 7 Oct 2026; K-RERA under process; possession Dec 2030.",
+   "color": "#8b5cf6"
+  },
+  {
+   "builder": "Assetz",
+   "name": "Assetz Naru & Nami",
+   "loc": "Whitefield-Hoskote Rd, Hoskote",
+   "lat": 13.038,
+   "lng": 77.794,
+   "type": "Apartments (9.4ac)",
+   "status": "Launched",
+   "price": "₹1.70Cr+",
+   "note": "K-RERA registered 8 Oct 2026 (PRM/KA/RERA/1250/304/PR/081026/009004). 2 towers 2B+G+32, 512 units, 3 BHK only; possession Jan 2032.",
+   "color": "#a855f7"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Panathur Road",
+   "loc": "Panathur, off Marathahalli–ORR",
+   "lat": 12.943,
+   "lng": 77.712,
+   "type": "Apartments (5ac)",
+   "status": "Pre-launch",
+   "price": "₹1.20Cr+",
+   "note": "~5 acres, ~350 units, 2–3 BHK (1,150–1,600 sqft); channel bookings open in pre-launch. K-RERA filing expected Q3–Q4 2026; coverage dated 21 Sep 2026.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Attibele (codename)",
+   "loc": "Attibele (Arehalli / Balluru / Bhaktipura / Dasanapuram)",
+   "lat": 12.782,
+   "lng": 77.765,
+   "type": "Residential development",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Purva Blue Home Ventures Pvt Ltd (Puravankara-linked) lodged SEIAA Terms of Reference filing on 16 Oct 2026. Project cost ~₹1,600Cr; format (apartments/plots/mix), units and K-RERA all unconfirmed; pre-RERA, pre-launch.",
+   "color": "#ec4899"
   }
  ],
  "builders": {
@@ -3327,7 +3411,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 274,
-  "note": "A-tier builder projects launched ~2024–2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 28 October 2026 (Oct 16 baseline; +12 new tier-1 launches/pre-launches across North, South, East, West; status updates for 2 existing projects). "
+  "count": 281,
+  "note": "A-tier builder projects launched ~2024–2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 13 November 2026 (Oct 28 baseline; +7 new tier-1 launches/pre-launches across East, North, South; 2 status/branding updates: Sattva Jigani → Sattva Amritya launched, DivyaSree Yelahanka → DivyaSree Quiet Side launched)."
  }
 }
