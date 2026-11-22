@@ -3371,6 +3371,198 @@
    "price": "–",
    "note": "Purva Blue Home Ventures Pvt Ltd (Puravankara-linked) lodged SEIAA Terms of Reference filing on 16 Oct 2026. Project cost ~₹1,600Cr; format (apartments/plots/mix), units and K-RERA all unconfirmed; pre-RERA, pre-launch.",
    "color": "#ec4899"
+  },
+  {
+   "builder": "Embassy",
+   "name": "Embassy Paradiso",
+   "loc": "Devanahalli (airport corridor)",
+   "lat": 13.247,
+   "lng": 77.709,
+   "type": "Plotted / Villa plots",
+   "status": "Launched",
+   "price": "–",
+   "note": "Boutique plotted development in Devanahalli; first of Embassy's six new North Bengaluru projects (₹10,300 Cr pipeline). Launch phase sold out at ~₹204 Cr.",
+   "color": "#14b8a6"
+  },
+  {
+   "builder": "Shriram",
+   "name": "Shriram Yelahanka Row Houses",
+   "loc": "Yelahanka, Doddaballapur Rd / NH-44",
+   "lat": 13.108,
+   "lng": 77.595,
+   "type": "Row Houses (4ac)",
+   "status": "Announced",
+   "price": "–",
+   "note": "JDA signed Oct 2025 for 4-acre premium row-housing project in Yelahanka; ~₹600 Cr GDV targeting luxury segment on Doddaballapur Rd / NH-44 corridor.",
+   "color": "#eab308"
+  },
+  {
+   "builder": "SNN",
+   "name": "SNN Duomont",
+   "loc": "Kudlu Gate / Hongasandra, Hosur Rd",
+   "lat": 12.8832,
+   "lng": 77.6466,
+   "type": "Apartments (ultra-luxury)",
+   "status": "Launched",
+   "price": "from ₹3.5Cr",
+   "note": "Ultra-luxury 3 & 4 BHK launched mid-2026 near Kudlu Gate / Hongasandra on Hosur Rd corridor; SNN's premium South Bengaluru flagship.",
+   "color": "#b45309"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Banashankari",
+   "loc": "Banashankari, South Bengaluru",
+   "lat": 12.925,
+   "lng": 77.549,
+   "type": "Apartments (7.5ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "JDA signed Sep 2025; ₹1,200 Cr GDV, 7.5-acre premium residential project on prime Banashankari land; pre-launch activity underway for FY26 formal launch.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Sattva",
+   "name": "Sattva Aqua Vista",
+   "loc": "Bannerghatta, South Bengaluru",
+   "lat": 12.816,
+   "lng": 77.577,
+   "type": "Apartments (lakefront)",
+   "status": "Launched",
+   "price": "–",
+   "note": "Lakefront residences launched 2026 along Bannerghatta corridor; premium high-rise with lake-facing amenities; part of Sattva's premium Bangalore expansion.",
+   "color": "#3b82f6"
+  },
+  {
+   "builder": "Shriram",
+   "name": "Shriram Villaments Bannerghatta",
+   "loc": "Bannerghatta Rd, South Bengaluru",
+   "lat": 12.835,
+   "lng": 77.595,
+   "type": "Villaments (5ac)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "JDA for 5-acre Bannerghatta Rd plot; ₹350 Cr GDV, premium villaments; pre-launch for 2026-27 formal launch; extends Shriram's southern footprint.",
+   "color": "#eab308"
+  },
+  {
+   "builder": "Prestige",
+   "name": "Prestige Falcon City Reserve",
+   "loc": "Konanakunte / Kanakapura Rd",
+   "lat": 12.88,
+   "lng": 77.557,
+   "type": "Apartments (luxury township)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "New luxury township extension in the Falcon City cluster on Kanakapura Rd; distinct from Falcon City Luxe; pre-launch Oct-Nov 2026 as reserve-tier premium high-rise.",
+   "color": "#e11d48"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Cornerstone Utopia Ph1",
+   "loc": "Varthur Rd, Whitefield",
+   "lat": 12.942,
+   "lng": 77.75,
+   "type": "Apartments (integrated township)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Pre-launch of Phase 1 of Brigade's future-ready integrated township on Varthur Rd, Whitefield; multi-use campus residential + commercial (Eden, Paradise, Elysium clusters).",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Whitefield-Kadugodi (40ac)",
+   "loc": "Whitefield-Kadugodi corridor",
+   "lat": 12.995,
+   "lng": 77.767,
+   "type": "Apartments (40ac integrated)",
+   "status": "Announced",
+   "price": "–",
+   "note": "40-acre integrated project unveiled on the Whitefield-Kadugodi corridor; residential + mixed-use township with proximity to Kadugodi Tree Park metro.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Puravankara",
+   "name": "Purva Balagere (5.5ac JDA)",
+   "loc": "Balagere, Panathur-Varthur",
+   "lat": 12.957,
+   "lng": 77.722,
+   "type": "Apartments (5.5ac luxury)",
+   "status": "Announced",
+   "price": "–",
+   "note": "JDA for 5.5-acre land parcel at Balagere (East Bengaluru) with potential GDV of ₹1,000+ Cr; luxury housing adjacent to Varthur-ORR.",
+   "color": "#ec4899"
+  },
+  {
+   "builder": "Sumadhura",
+   "name": "Sumadhura East Bengaluru (17ac JDA)",
+   "loc": "East Bengaluru, Whitefield belt",
+   "lat": 12.973,
+   "lng": 77.754,
+   "type": "Apartments (17ac)",
+   "status": "Announced",
+   "price": "–",
+   "note": "17-acre East Bengaluru JDA eyeing ₹3,500 Cr GDV; luxury residential in the Whitefield corridor.",
+   "color": "#0d9488"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Panorama Phase II",
+   "loc": "Kambipura, Mysore Rd",
+   "lat": 12.9203,
+   "lng": 77.4738,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Phase II of Brigade Panorama on Mysore Rd (Kambipura); 2 & 3 BHK apartments, continuation of the community near NICE Rd / Kengeri metro corridor.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Brigade",
+   "name": "Brigade Tumkur Road",
+   "loc": "Tumkur Rd, West Bangalore",
+   "lat": 13.045,
+   "lng": 77.512,
+   "type": "Apartments",
+   "status": "Announced",
+   "price": "–",
+   "note": "Joint-development residential project announced by Brigade on Tumkur Rd corridor; near Nelamangala/Dasarahalli growth belt along NH-48.",
+   "color": "#f59e0b"
+  },
+  {
+   "builder": "Godrej",
+   "name": "Godrej Mysore Road",
+   "loc": "Mysore Rd (near Kengeri)",
+   "lat": 12.908,
+   "lng": 77.48,
+   "type": "Apartments",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Godrej Properties pre-launch on Mysore Rd near Kengeri metro corridor; premium high-rise 2/3 BHK configurations.",
+   "color": "#22c55e"
+  },
+  {
+   "builder": "Casagrand",
+   "name": "Casagrand RR Nagar",
+   "loc": "Rajarajeshwari Nagar",
+   "lat": 12.9237,
+   "lng": 77.5167,
+   "type": "Apartments (low-rise)",
+   "status": "Pre-launch",
+   "price": "–",
+   "note": "Low-rise housing project launched by Casagrand in RR Nagar near Mysore Rd; follows Casagrand Moondance in the same West Bangalore corridor.",
+   "color": "#f472b6"
+  },
+  {
+   "builder": "Sobha",
+   "name": "Sobha 25 Richmond",
+   "loc": "Richmond Road, Ashok Nagar",
+   "lat": 12.962,
+   "lng": 77.603,
+   "type": "Apartments (ultra-luxury high-rise)",
+   "status": "Launched",
+   "price": "from ₹5.5Cr",
+   "note": "Boutique ultra-luxury 3 & 4 BHK tower on Richmond Road, Ashok Nagar; central Bangalore heritage neighbourhood; launched for sale in 2026.",
+   "color": "#8b5cf6"
   }
  ],
  "builders": {
@@ -3411,7 +3603,7 @@
   "Radiance": "#ea580c"
  },
  "meta": {
-  "count": 281,
-  "note": "A-tier builder projects launched ~2024–2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 13 November 2026 (Oct 28 baseline; +7 new tier-1 launches/pre-launches across East, North, South; 2 status/branding updates: Sattva Jigani → Sattva Amritya launched, DivyaSree Yelahanka → DivyaSree Quiet Side launched)."
+  "count": 297,
+  "note": "A-tier builder projects launched ~2024–2026 or announced/upcoming. Coordinates approximate (locality/landmark). Updated 22 November 2026 (Nov 13 baseline; +16 new tier-1 projects across North, South, East, West, Central — announcements, pre-launches and launches; count 281→297)."
  }
 }
